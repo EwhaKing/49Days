@@ -12,6 +12,13 @@ public class Bottle : MonoBehaviour
     GameObject Fill;
     Sprite sprite;
 
+    void Awake() 
+    {
+        Cabinet.AfterCabinetInit += () => {
+            FillDecision();
+            Debug.Log($"{ingredientName} 초기화: {Cabinet.Instance.ingredientCounts[ingredientName]}개");
+        };
+    }
     void Start() 
     {
         Fill = transform.Find("Fill").gameObject;
@@ -22,11 +29,6 @@ public class Bottle : MonoBehaviour
             return;
         }
         Fill.GetComponent<SpriteRenderer>().sprite = sprite;
-
-        Cabinet.Instance.AfterCabinetInit += () => {
-            FillDecision();
-            Debug.Log($"{ingredientName} 초기화: {Cabinet.Instance.ingredientCounts[ingredientName]}개");
-        };
     }
 
     void OnMouseUp() 
