@@ -12,7 +12,7 @@ public class TeaIngredient : MonoBehaviour
 
     public bool isChopped {get; private set;}                 // 손질 여부
 
-    public OxidizedDegree oxidizedDegree {get; private set;}  // 산화 정도 (0, 50, 100, 탐)
+    public OxidizedDegree oxidizedDegree {get; private set;}  // 산화 정도 (x, 0, 50, 100, 탐)
 
     public ResultStatus roasted {get; private set;}           // 덖은 여부 (x, 성공, 실패) 
 
@@ -21,7 +21,7 @@ public class TeaIngredient : MonoBehaviour
     // 순서 리스트 (순서: 손질, 산화, 덖기, 유념)
     public List<ProcessStep> processSequence {get; private set;} = new List<ProcessStep>();  
 
-    // 상태에 따른 이미지 딕셔너리: Start에서 재료 이름을 통해 Resources.Load함
+    // 상태에 따른 이미지 딕셔너리: Init에서 재료 이름을 통해 Resources.Load함
     public Dictionary<SpriteStatus, Sprite> spriteVariants {get; private set;} = new Dictionary<SpriteStatus, Sprite>();
 
 
@@ -93,12 +93,20 @@ public class TeaIngredient : MonoBehaviour
 
     void changeSprite(SpriteStatus newStatus)
     {
+        if (!spriteVariants.ContainsKey(newStatus))
+        {
+            Debug.LogWarning($"{ingredientName}은(는) {newStatus}에 해당하는 스프라이트가 없습니다.");
+            return;
+        }
         spriteStatus = newStatus;
         spriteRenderer.sprite = spriteVariants[spriteStatus];
     }
 
-    void Start()
+    public void Init(IngredientName ingredientName, IngredientType ingredientType)
     {
+        this.ingredientName = ingredientName;
+        this.ingredientType = ingredientType;
+
         foreach (SpriteStatus status in Utills.GetValues<SpriteStatus>())
         {
             string spriteName = $"{ingredientName.ToLowerString()}_{status.ToLowerString()}";
@@ -106,10 +114,6 @@ public class TeaIngredient : MonoBehaviour
             if (sprite != null)
             {
                 spriteVariants[status] = sprite;
-            }
-            else
-            {
-                Debug.LogError($"스프라이트를 찾을 수 없음: {spriteName}");
             }
         }
 

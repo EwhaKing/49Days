@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum IngredientName
 {
-    Hub,
+    TeaLeaf,
     Rose,
     Honey
 }
@@ -26,9 +26,10 @@ public enum SpriteStatus
     Roasted      // 덖은 상태
 }
 
-public enum OxidizedDegree  
+public enum OxidizedDegree
 {
-    None,        // 산화 없음 = 0
+    None,        // 산화 안함 = x
+    Zero,        // 산화 미미 = 0
     Half,        // 반산화 = 50
     Full,        // 완전 산화 = 100
     Over         // 탐
