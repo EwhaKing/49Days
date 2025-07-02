@@ -10,11 +10,23 @@ public class Bottle : MonoBehaviour
     [SerializeField] GameObject ingredientPrefab;
 
     GameObject Fill;
+    Sprite sprite;
 
     void Start() 
     {
         Fill = transform.Find("Fill").gameObject;
-        Cabinet.Instance.AfterCabinetInit += FillDecision;
+        sprite = Resources.Load<Sprite>($"Arts/{ingredientName.ToLowerString()}_default");
+        if (sprite == null)
+        {
+            Debug.LogError($"{ingredientName}의 Fill 스프라이트를 찾을 수 없습니다.");
+            return;
+        }
+        Fill.GetComponent<SpriteRenderer>().sprite = sprite;
+
+        Cabinet.Instance.AfterCabinetInit += () => {
+            FillDecision();
+            Debug.Log($"{ingredientName} 초기화: {Cabinet.Instance.ingredientCounts[ingredientName]}개");
+        };
     }
 
     void OnMouseUp() 
@@ -51,6 +63,10 @@ public class Bottle : MonoBehaviour
         if (Cabinet.Instance.ingredientCounts[ingredientName] == 0)
         {
             Fill.SetActive(false);
+        }
+        else
+        {
+            Fill.SetActive(true);
         }
     }
 }

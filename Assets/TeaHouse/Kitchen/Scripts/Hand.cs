@@ -16,7 +16,7 @@ public class Hand : SceneSingleton<Hand>
 
     public void Grab (GameObject teaIngredientObject)  // 잡기: 커서가 재료를 잡음
     {
-        if(handIngredient != null) return;
+        if (handIngredient != null) return;
         
         handIngredient = teaIngredientObject.GetComponent<TeaIngredient>();
         teaIngredientObject.GetComponent<FollowMouse>().enabled = true;
