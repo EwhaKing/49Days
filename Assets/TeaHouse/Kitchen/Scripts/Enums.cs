@@ -6,6 +6,7 @@ public enum IngredientName
 {
     TeaLeaf,
     Rose,
+    SolomonsSeal,
     Honey
 }
 
