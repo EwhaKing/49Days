@@ -46,7 +46,11 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
+<<<<<<< HEAD
   m_Motion: {fileID: 7400000, guid: 1334798668bf28d4d9aff1637d744161, type: 2}
+=======
+  m_Motion: {fileID: 0}
+>>>>>>> abee588 (feat: 주전자 기본)
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -66,7 +70,11 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
+<<<<<<< HEAD
     m_Controller: {fileID: 9100000}
+=======
+    m_Controller: {fileID: 0}
+>>>>>>> abee588 (feat: 주전자 기본)
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
