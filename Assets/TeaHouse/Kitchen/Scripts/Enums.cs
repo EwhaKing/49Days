@@ -7,7 +7,8 @@ public enum IngredientName
     TeaLeaf,
     Rose,
     SolomonsSeal,
-    Honey
+    Honey,
+    Water
 }
 
 public enum IngredientType
