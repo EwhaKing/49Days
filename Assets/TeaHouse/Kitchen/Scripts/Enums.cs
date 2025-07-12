@@ -10,6 +10,21 @@ public enum IngredientName
     Honey
 }
 
+public static class IngredientNameExtensions
+{ 
+    public static string ToKorean(this IngredientName ingredient)
+    {
+        switch (ingredient)
+        {
+            case IngredientName.TeaLeaf: return "찻잎";
+            case IngredientName.Rose: return "장미";
+            case IngredientName.SolomonsSeal: return "둥굴레";
+            case IngredientName.Honey: return "꿀";
+            default: return ingredient.ToString();
+        }
+    }
+}
+
 public enum IngredientType
 {
     TeaLeaf,     // 찻잎
@@ -50,4 +65,5 @@ public enum ProcessStep
     Roast,            // 덖기
     Roll              // 유념
 }
+
 
