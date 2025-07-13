@@ -115,6 +115,7 @@ public class Oxidizer : MonoBehaviour
 
         // 조건 통과 → 산화 시작
         currentIngredient = ingredient;
+        currentIngredient.gameObject.SetActive(false);
         Hand.Instance.Drop();
 
         backgroundRenderer.sprite = closedSprite;
@@ -126,8 +127,6 @@ public class Oxidizer : MonoBehaviour
 
         Debug.Log($"{ingredient.name}의 산화를 시작합니다.");
     }
-
-
 
     void Update()
     {
@@ -147,7 +146,7 @@ public class Oxidizer : MonoBehaviour
 
         if (elapsedTime >= totalTime)
         {
-            CompleteOxidation(OxidizedDegree.Over);
+            StartCoroutine(CompleteOxidation(OxidizedDegree.Over));
         }
     }
 
@@ -156,14 +155,21 @@ public class Oxidizer : MonoBehaviour
         if (currentIngredient == null) return;
 
         OxidizedDegree degree = GetOxidizedDegreeFromGauge();
-        CompleteOxidation(degree);
+        StartCoroutine(CompleteOxidation(degree));
     }
 
-    void CompleteOxidation(OxidizedDegree degree)
+    IEnumerator CompleteOxidation(OxidizedDegree degree)
     {
         currentIngredient.Oxidize(degree);  // TeaIngredient의 Oxidize 메서드 호출
         ApplyColorByOxidation(currentIngredient, degree);
+        currentIngredient.gameObject.SetActive(true);
         Hand.Instance.Grab(currentIngredient.gameObject);
+
+        // 산화 후 0.5초간 열림 상태 유지
+        backgroundRenderer.sprite = openSprite;
+        gaugeArrow.SetActive(false);
+        gaugePlate.SetActive(false);
+        yield return new WaitForSeconds(0.5f);
 
         ResetOxidizer();
     }
@@ -212,6 +218,7 @@ public class Oxidizer : MonoBehaviour
         backgroundRenderer.sprite = closedSprite;
 
         gaugeArrow.SetActive(true);
+        arrowTransform.rotation = Quaternion.Euler(0, 0, 0);
         gaugePlate.SetActive(true);
         foreach (var plate in gaugePlates)
             plate.SetActive(false);
