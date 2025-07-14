@@ -30,6 +30,7 @@ public class TeaPot : MonoBehaviour
         }
         Instance = this;
     }
+
     void Update()
     {
         if (currentState == State.Brewing)
@@ -61,9 +62,18 @@ public class TeaPot : MonoBehaviour
         TeaIngredient ing = Hand.Instance.handIngredient.GetComponent<TeaIngredient>();
         if (ing == null) return;
 
+        //애니메이션으로 재료 떨어지는 부분 추가
         GameObject ingredientObj = Hand.Instance.Drop();
         ingredientObj.transform.SetParent(ingredientParent);
-        ingredientObj.transform.localPosition = Vector3.zero;
+
+        // 애니메이션으로 자연스럽게 떨어지게
+        Vector3 targetPos = ingredientParent.position;
+        Vector3 startAbove = targetPos + new Vector3(0.3f, 2.5f, 0); // 다병보다 1.5 위에서 떨어짐 (원래 x=0이 맞는데 좀 예쁘게 수정하고자...)
+        ingredientObj.transform.position = startAbove; // 시작 위치 조정
+        ing.PlayDropAnimation(targetPos, 2.0f);
+
+
+
         ingredients.Add(ing);
 
         if (!waterPoured && ing.ingredientType != IngredientType.Additional)
@@ -125,6 +135,9 @@ public class TeaPot : MonoBehaviour
         }
 
         // 평가 및 처리 책임은 외부 시스템에서 담당
+
+        //주방 초기화!!
+        FinishTea();
     }
 
     public void FinishTea()
@@ -144,4 +157,17 @@ public class TeaPot : MonoBehaviour
             tea = null;
         }
     }
+
+    //초기화 버튼이 있으면 좋을 것 같은데?...
+    // UI 버튼에서 호출할 초기화 함수
+    // [UnityEditor에서 Button에 연결 가능]
+    // 현재는 사용 안 하므로 주석 처리
+
+    /*
+    public void OnClickResetButton()
+    {
+        Debug.Log("초기화 버튼 눌림");
+        FinishTea();
+    }
+    */
 }

@@ -84,7 +84,7 @@ public class Kettle : MonoBehaviour
                     break;
             }
             Temperature = Mathf.Clamp(Temperature + delta, 0f, 100f);
-            Debug.Log($"[온도] 상태: {currentState}, 현재 온도: {Temperature:F2}");
+            // Debug.Log($"[온도] 상태: {currentState}, 현재 온도: {Temperature:F2}");
             UpdateNeedleRotation();
         }
 
@@ -101,7 +101,8 @@ public class Kettle : MonoBehaviour
             //{
             //     smokeAnimator.SetBool("isSmoking", shouldShow);
             // }
-            Debug.Log($"[연기] 온도: {Temperature}, isSmoking: {shouldShow}");
+
+            //Debug.Log($"[연기] 온도: {Temperature}, isSmoking: {shouldShow}");
         }
     }
 
@@ -142,7 +143,7 @@ public class Kettle : MonoBehaviour
             spriteRenderer.color = new Color(currentColor.r, currentColor.g, currentColor.b, newAlpha);
 
             //디버그
-            Debug.Log($"[연기 상태] alpha={newAlpha:F2}, sprite={(spriteRenderer.sprite != null ? spriteRenderer.sprite.name : "null")}");
+            //  Debug.Log($"[연기 상태] alpha={newAlpha:F2}, sprite={(spriteRenderer.sprite != null ? spriteRenderer.sprite.name : "null")}");
         }
     }
 
@@ -336,31 +337,33 @@ public class Kettle : MonoBehaviour
     }
 
 
-    //참고용으로 보려고 색깔 입혀놓음
-    void OnDrawGizmosSelected()
-    {
-        if (hookPosition != null)
+    /*
+        //참고용으로 보려고 색깔 입혀놓음
+        void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(hookPosition.position, hookSnapDistance);
-        }
+            if (hookPosition != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(hookPosition.position, hookSnapDistance);
+            }
 
-        if (teapotPosition != null)
-        {
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(teapotPosition.position, pourRadius);
-        }
+            if (teapotPosition != null)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawWireSphere(teapotPosition.position, pourRadius);
+            }
 
-        if (kettleSpoutPosition != null)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(kettleSpoutPosition.position, pourRadius);
-        }
+            if (kettleSpoutPosition != null)
+            {
+                Gizmos.color = Color.magenta;
+                Gizmos.DrawWireSphere(kettleSpoutPosition.position, pourRadius);
+            }
 
-        if (kettleHandlePosition != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(kettleHandlePosition.position, hookSnapDistance);
+            if (kettleHandlePosition != null)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(kettleHandlePosition.position, hookSnapDistance);
+            }
         }
-    }
+        */
 }
