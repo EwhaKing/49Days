@@ -1,11 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class TeaPot : MonoBehaviour
+
+public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 {
     enum State { Empty, Ready, Brewing, Done }
     State currentState = State.Empty;
+
+    //다병에 마우스 오버 시 팝업
+    [SerializeField] GameObject ingredientTooltipPanel2; //나중에 이름 바꾸기
+    [SerializeField] GameObject ingredientImagePrefab; // 재료 하나당 표시할 프리팹 (Image)
+    [SerializeField] Transform ingredientListParent; // 재료 이미지들을 담을 부모 오브젝트
+                                                     //reset 버튼
+    [SerializeField] GameObject resetButton;
 
     [SerializeField] Transform ingredientParent;
     [SerializeField] Transform waterEffect;
@@ -18,24 +27,29 @@ public class TeaPot : MonoBehaviour
 
     public Tea tea;  // 외부에서 접근 가능하게
 
-    //싱글톤
-    public static TeaPot Instance { get; private set; }
-
-    void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
-
     void Update()
     {
         if (currentState == State.Brewing)
         {
             timer += Time.deltaTime;
+        }
+
+        // ✅ 마우스 클릭 시 버튼 숨기기 (다병 아닌 경우)
+        if (Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.transform != this.transform)  // 클릭한 대상이 다병이 아니면
+                {
+                    resetButton?.SetActive(false);
+                }
+            }
+            else
+            {
+                // 아무 것도 안 누른 빈 공간 클릭
+                resetButton?.SetActive(false);
+            }
         }
     }
 
@@ -47,11 +61,19 @@ public class TeaPot : MonoBehaviour
             return;
         }
 
+        bool wasHoldingIngredient = Hand.Instance.handIngredient != null;
+
         TryInsertIngredient();
 
         if (currentState == State.Brewing)
         {
             TryClickBell();
+        }
+
+        // ✅ 클릭 직전 손이 비어 있었을 때만 버튼 표시
+        if (!wasHoldingIngredient)
+        {
+            resetButton?.SetActive(true);
         }
     }
 
@@ -61,6 +83,13 @@ public class TeaPot : MonoBehaviour
 
         TeaIngredient ing = Hand.Instance.handIngredient.GetComponent<TeaIngredient>();
         if (ing == null) return;
+
+        // 중복 재료 방지 //나중에 알림창으로 해야 됨. 
+        if (ingredients.Exists(i => i.ingredientName == ing.ingredientName))
+        {
+            Debug.LogWarning($"{ing.ingredientName}은 이미 추가된 재료입니다.");
+            return;
+        }
 
         //애니메이션으로 재료 떨어지는 부분 추가
         GameObject ingredientObj = Hand.Instance.Drop();
@@ -109,7 +138,8 @@ public class TeaPot : MonoBehaviour
         if (currentState != State.Ready && currentState != State.Empty) return;
 
         // Tea 인스턴스 생성
-        tea = new GameObject("Tea").AddComponent<Tea>();
+        //tea = new GameObject("Tea").AddComponent<Tea>(); //
+        tea = new Tea();
         tea.ingredients = ingredients;
         tea.temperature = (int)waterTemp;
         tea.isWaterFirst = !ingredientAddedBeforeWater; // 재료보다 먼저 물을 부었는지
@@ -149,25 +179,126 @@ public class TeaPot : MonoBehaviour
         waterPoured = false;
         ingredientAddedBeforeWater = false;
 
-        waterEffect?.gameObject.SetActive(false);
+        //   waterEffect?.gameObject.SetActive(false); // 물 효과 비활성화인데 이거 나중에 다시 살려야 함. 
+
+        // ✅ 재료 오브젝트 제거 추가
+        foreach (Transform child in ingredientParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        ClearIngredientListUI();
+        ingredientTooltipPanel2?.SetActive(false);
 
         if (tea != null)
         {
-            Destroy(tea.gameObject);
+            Destroy(tea);
             tea = null;
         }
+        Debug.Log("🔥 ingredientParent 자식 개수: " + ingredientParent.childCount);
+
     }
 
-    //초기화 버튼이 있으면 좋을 것 같은데?...
     // UI 버튼에서 호출할 초기화 함수
-    // [UnityEditor에서 Button에 연결 가능]
-    // 현재는 사용 안 하므로 주석 처리
 
-    /*
     public void OnClickResetButton()
     {
         Debug.Log("초기화 버튼 눌림");
         FinishTea();
     }
-    */
+
+
+    void OnMouseEnter()
+    {
+        if (currentState == State.Empty) return;  //상태가 비었으면 재료 UI 안 띄움
+
+        if (ingredientTooltipPanel2 != null)
+        {
+            ingredientTooltipPanel2.SetActive(true);
+            ShowIngredientListUI();
+        }
+    }
+
+
+    void OnMouseExit()
+    {
+        if (ingredientTooltipPanel2 != null)
+        {
+            ingredientTooltipPanel2.SetActive(false);
+            ClearIngredientListUI();
+        }
+    }
+
+    void ShowIngredientListUI()
+    {
+        ClearIngredientListUI();
+
+        if (ingredients.Count == 0)
+        {
+            Debug.Log("재료가 없어서 UI 생성 안 함");
+            return;
+        }
+
+        foreach (TeaIngredient ing in ingredients)
+        {
+            SpriteRenderer sr = ing.GetComponent<SpriteRenderer>();
+            if (sr != null && sr.sprite != null)
+            {
+                GameObject imgObj = Instantiate(ingredientImagePrefab, ingredientListParent);
+                UnityEngine.UI.Image img = imgObj.GetComponent<UnityEngine.UI.Image>();
+                if (img != null)
+                    img.sprite = sr.sprite;
+            }
+        }
+
+        // 🟡 레이아웃 갱신 먼저
+        RectTransform listRect = ingredientListParent.GetComponent<RectTransform>();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(listRect);
+
+        // 로그 찍기
+        foreach (Transform child in ingredientListParent)
+        {
+            RectTransform childRect = child.GetComponent<RectTransform>();
+            Debug.Log($"📦 Child Width: {childRect.rect.width}");
+        }
+
+        UpdateBackgroundSize();
+    }
+    void UpdateBackgroundSize()
+    {
+        int itemCount = ingredientListParent.childCount;
+        if (itemCount == 0) return;
+
+        // HorizontalLayoutGroup 설정 가져오기
+        HorizontalLayoutGroup layout = ingredientListParent.GetComponent<HorizontalLayoutGroup>();
+        if (layout == null) return;
+
+        float itemWidth = ((RectTransform)ingredientListParent.GetChild(0)).sizeDelta.x;
+        float spacing = layout.spacing;
+        float paddingLeft = layout.padding.left;
+        float paddingRight = layout.padding.right;
+        float extraBackgroundPadding = 10f; // 픽셀 단위 여유 padding
+
+        float listWidth = (itemWidth * itemCount) + (spacing * Mathf.Max(0, itemCount - 1)) + paddingLeft + paddingRight;
+        float finalWidth = listWidth + extraBackgroundPadding;
+
+        RectTransform bgRect = ingredientTooltipPanel2.transform.Find("Background").GetComponent<RectTransform>();
+        Vector2 size = bgRect.sizeDelta;
+        size.x = finalWidth;
+        bgRect.sizeDelta = size;
+
+        Debug.Log($"✅ 계산된 width: item({itemWidth}) × count({itemCount}) + spacing({spacing}) + padding({paddingLeft}+{paddingRight}) + extra({extraBackgroundPadding}) = {finalWidth}");
+    }
+
+    void ClearIngredientListUI()
+    {
+        Debug.Log("IngredientListUI cleared");
+        foreach (Transform child in ingredientListParent)
+        {
+            Debug.Log("삭제된 UI 이미지: " + child.name);
+            Destroy(child.gameObject);
+        }
+    }
+
+
 }

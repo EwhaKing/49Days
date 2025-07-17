@@ -90,7 +90,7 @@ public class Kettle : MonoBehaviour
 
         if (heldSmokeObject != null && kettleSpoutPosition != null)
         {
-            heldSmokeObject.transform.position = kettleSpoutPosition.position;
+            heldSmokeObject.transform.position = kettleSpoutPosition.position + new Vector3(-6.18f, -0.74f, 0); // 연기 내 이미지 때문에 벡터 조정
 
             bool shouldShow = Temperature >= 85f;
 
@@ -111,7 +111,7 @@ public class Kettle : MonoBehaviour
     {
         if (heldSmokeObject != null)
         {
-            heldSmokeObject.transform.position = kettleSpoutPosition.position;
+            heldSmokeObject.transform.position = kettleSpoutPosition.position + new Vector3(-6.18f, -0.74f, 0); // 연기 내 이미지 때문에 벡터 조정;
 
             // 주전자(Z축) 회전값의 절반만 연기에 적용
             float parentZ = transform.eulerAngles.z;
