@@ -13,10 +13,10 @@ public class Kettle : MonoBehaviour
     public float Temperature { get; private set; } = 100;
 
     [SerializeField] float tempChangePerSec = 2f;
-    [SerializeField] float pourRadius = 2f;
+    [SerializeField] float pourRadius = 1f;
     [SerializeField] float hookSnapDistance = 1.2f;
     [SerializeField] Transform gaugeNeedle;
-    [SerializeField] Transform firePosition;
+    [SerializeField] Transform stovePosition;
     [SerializeField] Transform hookPosition;
     [SerializeField] Transform teapotPosition;
     [SerializeField] Transform kettleHandlePosition; //주전자 손잡이 위치 (고리에 걸기 위하여)
@@ -28,17 +28,14 @@ public class Kettle : MonoBehaviour
 
 
     //주전자 회전 관련 변수들 
-    [SerializeField] float pourDuration = 4f;
-    [SerializeField] float pourAngle = 5f; // 시계 방향 기울기
+    [SerializeField] float pourDuration = 2f;
+    [SerializeField] float pourAngle = 15f; // 시계 방향 기울기
     bool isPouring = false;
     Quaternion originalRotation;
     // [SerializeField] Transform kettlePivot; // 회전용 빈 부모 오브젝트
 
-
-
-
     public TeaPot teapot; // Inspector에서 할당
-    GameObject heldSmokeObject;         // Drop()으로 받은 오브젝트 저장
+    GameObject heldSmokeObject;
     Animator smokeAnimator;
 
     Vector3 dragOffset;
@@ -49,7 +46,7 @@ public class Kettle : MonoBehaviour
     {
         Debug.Log("[피벗 위치] " + transform.position);
         Debug.Log("[바닥 위치] " + kettleBottomPosition.position);
-        Debug.Log("[화로 위치] " + firePosition.position);
+        Debug.Log("[화로 위치] " + stovePosition.position);
 
 
         SetToFire(); // 시작 시 화로 위치로 이동
@@ -64,7 +61,7 @@ public class Kettle : MonoBehaviour
 
     void Update()
     {
-        // Debug.Log($"[위치 확인] 주전자: {transform.position}, 바닥: {kettleBottomPosition.position}, 화로: {firePosition.position}");
+        // Debug.Log($"[위치 확인] 주전자: {transform.position}, 바닥: {kettleBottomPosition.position}, 화로: {stovePosition.position}");
 
 
         //물 붓는 동안에는 움직이지 마세요
@@ -80,11 +77,17 @@ public class Kettle : MonoBehaviour
                     delta = tempChangePerSec * Time.deltaTime;
                     break;
                 case KettleState.OnHook:
-                    delta = -tempChangePerSec * Time.deltaTime;
+                    if (Temperature > 50f)
+                        delta = -tempChangePerSec * Time.deltaTime;
+                    else if (Temperature <= 50f && Temperature > 25f) //25~50도 사이에서는 온도 천천히 감소
+                        delta = -tempChangePerSec / 2 * Time.deltaTime;
+                    else if (Temperature == 25f)
+                        delta = 0f;
+
                     break;
             }
             Temperature = Mathf.Clamp(Temperature + delta, 0f, 100f);
-            // Debug.Log($"[온도] 상태: {currentState}, 현재 온도: {Temperature:F2}");
+            //Debug.Log($"[온도] 상태: {currentState}, 현재 온도: {Temperature:F2}");
             UpdateNeedleRotation();
         }
 
@@ -96,11 +99,6 @@ public class Kettle : MonoBehaviour
 
             if (!heldSmokeObject.activeSelf)
                 heldSmokeObject.SetActive(true);
-
-            //if (smokeAnimator != null)
-            //{
-            //     smokeAnimator.SetBool("isSmoking", shouldShow);
-            // }
 
             //Debug.Log($"[연기] 온도: {Temperature}, isSmoking: {shouldShow}");
         }
@@ -197,11 +195,11 @@ public class Kettle : MonoBehaviour
                 Debug.Log($"[좌표] 주둥이 위치: {kettleSpoutPosition.position}");
                 Debug.Log($"[좌표] 고리 위치: {hookPosition.position}");
                 Debug.Log($"[좌표] 다병 위치: {teapotPosition.position}");
-                Debug.Log($"[좌표] 화로 위치: {firePosition.position}");
+                Debug.Log($"[좌표] 화로 위치: {stovePosition.position}");
         */
         float distToTeapot = Vector3.Distance(kettleSpoutPosition.position, teapot.pourPosition.position);
         float distToHook = Vector3.Distance(kettleHandlePosition.position, hookPosition.position);
-        float distToFire = Vector3.Distance(kettleBottomPosition.position, firePosition.position);
+        float distToFire = Vector3.Distance(kettleBottomPosition.position, stovePosition.position);
 
 
         /*
@@ -258,9 +256,9 @@ public class Kettle : MonoBehaviour
 
     public void SetToFire()
     {
-        // kettleBottomPosition이 firePosition 위치에 정확히 맞도록 KettleObject의 위치 조정
+        // kettleBottomPosition이 stovePosition 위치에 정확히 맞도록 KettleObject의 위치 조정
         Vector3 offset = kettleBottomPosition.position - transform.position;
-        transform.position = firePosition.position - offset;
+        transform.position = stovePosition.position - offset;
 
         currentState = KettleState.OnFire;
         Debug.Log($"[SetToFire] 최종 주전자 위치: {transform.position}");
@@ -336,34 +334,4 @@ public class Kettle : MonoBehaviour
         }
     }
 
-
-    /*
-        //참고용으로 보려고 색깔 입혀놓음
-        void OnDrawGizmosSelected()
-        {
-            if (hookPosition != null)
-            {
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(hookPosition.position, hookSnapDistance);
-            }
-
-            if (teapotPosition != null)
-            {
-                Gizmos.color = Color.cyan;
-                Gizmos.DrawWireSphere(teapotPosition.position, pourRadius);
-            }
-
-            if (kettleSpoutPosition != null)
-            {
-                Gizmos.color = Color.magenta;
-                Gizmos.DrawWireSphere(kettleSpoutPosition.position, pourRadius);
-            }
-
-            if (kettleHandlePosition != null)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(kettleHandlePosition.position, hookSnapDistance);
-            }
-        }
-        */
 }

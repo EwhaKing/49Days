@@ -36,17 +36,15 @@ public class TeaIngredient : MonoBehaviour
     {
         Vector3 start = transform.position;
         float time = 0f;
-        //   float horizontalRange = 0.8f; // 좌우 흔들림 폭
-        //  float frequency = 1.0f; // 흔들림 속도
+
+        Vector3 offset = new Vector3(-0.2f, 0f, 0f);
 
         while (time < duration)
         {
             float t = time / duration;
             float y = Mathf.Lerp(start.y, targetPos.y, t);
-            //   float x = Mathf.Lerp(start.x, targetPos.x, t) + Mathf.Sin(t * Mathf.PI * frequency) * horizontalRange;
-            //   float z = Mathf.Lerp(start.z, targetPos.z, t);
 
-            transform.position = new Vector3(start.x, y, start.z);
+            transform.position = new Vector3(start.x, y, start.z) + offset;
 
             time += Time.deltaTime;
             yield return null;

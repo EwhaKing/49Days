@@ -10,7 +10,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     State currentState = State.Empty;
 
     //다병에 마우스 오버 시 팝업
-    [SerializeField] GameObject ingredientTooltipPanel2; //나중에 이름 바꾸기
+    [SerializeField] GameObject ingredientTooltipPanel;
     [SerializeField] GameObject ingredientImagePrefab; // 재료 하나당 표시할 프리팹 (Image)
     [SerializeField] Transform ingredientListParent; // 재료 이미지들을 담을 부모 오브젝트
                                                      //reset 버튼
@@ -20,12 +20,24 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     [SerializeField] Transform waterEffect;
     public Transform pourPosition;
 
+    GameObject teapotSmoke;
+    Animator smokeAnimator;
+
     List<TeaIngredient> ingredients = new List<TeaIngredient>();
     float timer = 0f;
     bool waterPoured = false;
     bool ingredientAddedBeforeWater = false;
 
     public Tea tea;  // 외부에서 접근 가능하게
+
+    void Start()
+    {
+        teapotSmoke = transform.Find("teapotsmokeanimation")?.gameObject;
+        if (teapotSmoke != null)
+            smokeAnimator = teapotSmoke.GetComponent<Animator>();
+        else
+            Debug.LogWarning("[연기] teapotsmokeanimation를 찾을 수 없습니다.");
+    }
 
     void Update()
     {
@@ -81,7 +93,9 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     {
         if (Hand.Instance.handIngredient == null) return;
 
-        TeaIngredient ing = Hand.Instance.handIngredient.GetComponent<TeaIngredient>();
+        // Drop() 먼저 실행해서 '손에 들린 실제 오브젝트'를 가져온다
+        GameObject ingredientObj = Hand.Instance.Drop();
+        TeaIngredient ing = ingredientObj.GetComponent<TeaIngredient>();
         if (ing == null) return;
 
         // 중복 재료 방지 //나중에 알림창으로 해야 됨. 
@@ -91,8 +105,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             return;
         }
 
-        //애니메이션으로 재료 떨어지는 부분 추가
-        GameObject ingredientObj = Hand.Instance.Drop();
         ingredientObj.transform.SetParent(ingredientParent);
 
         // 애니메이션으로 자연스럽게 떨어지게
@@ -100,8 +112,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         Vector3 startAbove = targetPos + new Vector3(0.3f, 2.5f, 0); // 다병보다 1.5 위에서 떨어짐 (원래 x=0이 맞는데 좀 예쁘게 수정하고자...)
         ingredientObj.transform.position = startAbove; // 시작 위치 조정
         ing.PlayDropAnimation(targetPos, 2.0f);
-
-
 
         ingredients.Add(ing);
 
@@ -131,6 +141,9 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         {
             Debug.Log($"[추가재료] {ing.ingredientName} 추가됨");
         }
+
+        Debug.Log($"🧩 다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
+
     }
 
     public void PourWater(float waterTemp)
@@ -151,6 +164,13 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         // waterEffect?.gameObject.SetActive(true); // 물 효과
 
         Debug.Log($"우림 시작: {waterTemp}도");
+
+        if (smokeAnimator != null)
+        {
+            teapotSmoke.SetActive(true);           // 연기 오브젝트를 켜고
+            smokeAnimator.SetTrigger("Play");      // 애니메이션 트리거 작동
+        }
+
     }
 
     void TryClickBell()
@@ -188,7 +208,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         }
 
         ClearIngredientListUI();
-        ingredientTooltipPanel2?.SetActive(false);
+        ingredientTooltipPanel?.SetActive(false);
 
         if (tea != null)
         {
@@ -212,9 +232,9 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     {
         if (currentState == State.Empty) return;  //상태가 비었으면 재료 UI 안 띄움
 
-        if (ingredientTooltipPanel2 != null)
+        if (ingredientTooltipPanel != null)
         {
-            ingredientTooltipPanel2.SetActive(true);
+            ingredientTooltipPanel.SetActive(true);
             ShowIngredientListUI();
         }
     }
@@ -222,15 +242,16 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     void OnMouseExit()
     {
-        if (ingredientTooltipPanel2 != null)
+        if (ingredientTooltipPanel != null)
         {
-            ingredientTooltipPanel2.SetActive(false);
+            ingredientTooltipPanel.SetActive(false);
             ClearIngredientListUI();
         }
     }
 
     void ShowIngredientListUI()
     {
+
         ClearIngredientListUI();
 
         if (ingredients.Count == 0)
@@ -244,10 +265,13 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             SpriteRenderer sr = ing.GetComponent<SpriteRenderer>();
             if (sr != null && sr.sprite != null)
             {
+                Debug.Log($"🧪 Tooltip에 들어갈 스프라이트: {sr.sprite?.name}");
                 GameObject imgObj = Instantiate(ingredientImagePrefab, ingredientListParent);
                 UnityEngine.UI.Image img = imgObj.GetComponent<UnityEngine.UI.Image>();
                 if (img != null)
                     img.sprite = sr.sprite;
+                img.color = sr.color;  // ✅ 색상까지 복사
+                Debug.Log($"🖼 UI Image에 할당된 스프라이트: {img.sprite?.name}");
             }
         }
 
@@ -275,19 +299,16 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         float itemWidth = ((RectTransform)ingredientListParent.GetChild(0)).sizeDelta.x;
         float spacing = layout.spacing;
-        float paddingLeft = layout.padding.left;
-        float paddingRight = layout.padding.right;
-        float extraBackgroundPadding = 10f; // 픽셀 단위 여유 padding
 
-        float listWidth = (itemWidth * itemCount) + (spacing * Mathf.Max(0, itemCount - 1)) + paddingLeft + paddingRight;
-        float finalWidth = listWidth + extraBackgroundPadding;
 
-        RectTransform bgRect = ingredientTooltipPanel2.transform.Find("Background").GetComponent<RectTransform>();
+        float finalWidth = (itemWidth * itemCount) + (spacing * Mathf.Max(0, itemCount - 1));
+
+        RectTransform bgRect = ingredientTooltipPanel.transform.Find("Background").GetComponent<RectTransform>();
         Vector2 size = bgRect.sizeDelta;
         size.x = finalWidth;
         bgRect.sizeDelta = size;
 
-        Debug.Log($"✅ 계산된 width: item({itemWidth}) × count({itemCount}) + spacing({spacing}) + padding({paddingLeft}+{paddingRight}) + extra({extraBackgroundPadding}) = {finalWidth}");
+        //Debug.Log($"✅ 계산된 width: item({itemWidth}) × count({itemCount}) + spacing({spacing}) + padding({paddingLeft}+{paddingRight}) ) = {finalWidth}");
     }
 
     void ClearIngredientListUI()
