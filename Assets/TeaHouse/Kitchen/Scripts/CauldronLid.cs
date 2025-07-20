@@ -14,33 +14,43 @@ public class CauldronLid : MonoBehaviour
         Roasted
     }
 
-    enum IngredientState
-    {
-        Default,
-        Roasted,
-        Burnt
-    }
-
-    [SerializeField] GameObject roastingIngredientPrefab;       // 복제를 위한 RoastingIngredient 프리팹
+    [Header("프리팹 설정")]
+    [SerializeField] private GameObject roastingIngredientPrefab;       // 복제를 위한 RoastingIngredient 프리팹
     [SerializeField] private Transform spawnAreaCenter;         // 복제 RoastingIngredient가 생성될 중심 위치
-    [SerializeField] private int spawnIngredientNum = 6;        // 복제할 재료의 수
-    [SerializeField] private float roastDuration = 8f;          // 덖기 미니게임 총 시간
-    [SerializeField] private float darkenInterval = 2f;         // 덖기 단계 올라가는(Darken) 시간 간격
-    public float spawnRadius = 1.5f;                              // 재료 생성 반경
+    [SerializeField] private GameObject cursorFollowerPrefab;
+    private GameObject currentCursorFollower;
+
+    [Header("미니게임 설정")]
+    [SerializeField] private int spawnIngredientNum;            // 복제할 재료의 수
+    [SerializeField] private float roastDuration;               // 덖기 미니게임 총 시간
+    [SerializeField] private float darkenInterval;              // 덖기 단계 올라가는(Darken) 시간 간격
+    [SerializeField] private float spawnRadius;                 // 재료 생성 반경
 
     private GameObject currentIngredient;                       // 현재 가마솥에 들어간 재료
-    private List<RoastingIngredient> activeIngredients = new(); // 활성화 상태인 복제 RoastingIngredients
-    private float roastTimer = 0f;                              // 덖기 타이머
-    CauldronState cauldronState = CauldronState.Idle;
+    private readonly List<RoastingIngredient> activeIngredients = new(); // 활성화 상태인 복제 RoastingIngredients
+    private float roastTimer;                                   // 덖기 타이머
+    private CauldronState cauldronState;
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     void Start()
     {
         ClearCauldronLid();
+    }
+
+    void OnMouseEnter()
+    {
+        // TODO: 마우스 오버 시 스프라이트 커짐 + 하이라이트    
     }
 
     private void OnMouseUp()
@@ -65,31 +75,22 @@ public class CauldronLid : MonoBehaviour
                 {
                     Debug.LogWarning($"손에 재료를 든 상태로 다른 재료를 들 수 없습니다. 현재 {Hand.Instance.handIngredient.name}을(를) 쥐고 있습니다.");
                 }
-                if (Hand.Instance.handIngredient == null && currentIngredient != null && activeIngredients.Count > 0)
+                if (Hand.Instance.handIngredient == null && currentIngredient != null)
                 {
                     Debug.Log("덖기 완료된 재료를 수거합니다.");
-
                     currentIngredient.SetActive(true);
                     Hand.Instance.Grab(currentIngredient.gameObject);
-                    currentIngredient = null;
-                    cauldronState = CauldronState.Idle;
-
-                    foreach (var ingredient in activeIngredients)       // 복제 재료 제거
-                    {
-                        if (ingredient != null)
-                            Destroy(ingredient.gameObject);
-                    }
-                    activeIngredients.Clear();
-                    return;
+                    ClearCauldronLid();
                 }
                 break;
         }
     }
 
-    void SpawnRoastingIngredient(TeaIngredient ingredient, Sprite ingredientSprite)
+    void SpawnRoastingIngredient(TeaIngredient ingredient)
     {
         for (int i = 0; i < spawnIngredientNum; i++)
         {
+            // 가마솥 안에서 랜덤 위치를 지정해 미니게임 재료 생성
             Vector2 offset = UnityEngine.Random.insideUnitCircle * spawnRadius;
             Vector3 spawnPos = spawnAreaCenter.position + new Vector3(offset.x, offset.y, 0f);
             GameObject roastingObject = Instantiate(roastingIngredientPrefab, spawnPos, Quaternion.identity);
@@ -97,10 +98,25 @@ public class CauldronLid : MonoBehaviour
             RoastingIngredient roastingIngredient = roastingObject.GetComponent<RoastingIngredient>();
             if (roastingIngredient != null)
             {
-                roastingIngredient.Init(ingredient, ingredientSprite);
+                roastingIngredient.Init(ingredient, spawnAreaCenter);
+                roastingIngredient.OnBurnt += HandleIngredientBurnt;
+                activeIngredients.Add(roastingIngredient);
             }
         }
-        Debug.Log($"덖기용 {ingredient.ingredientType}를 {spawnIngredientNum}개 생성했습니다.");
+        Debug.Log($"{currentIngredient.name}을(를) {spawnIngredientNum}개 생성했습니다.");
+    }
+
+    void ClearRoastingIngredient()
+    {
+        foreach (var ingredient in activeIngredients)       // 복제 재료 제거
+        {
+            if (ingredient != null)
+            {
+                ingredient.OnBurnt -= HandleIngredientBurnt;
+                Destroy(ingredient.gameObject);
+            }
+        }
+        activeIngredients.Clear();
     }
 
     private bool ValidateRoastingCondition()
@@ -137,9 +153,7 @@ public class CauldronLid : MonoBehaviour
 
         // 위 조건 이외론 손에 든 재료 Drop
         currentIngredient = Hand.Instance.Drop();
-        // currentIngredient.transform.position = transform.position;
         Debug.Log($"{handIngredient.spriteStatus} 상태 {handIngredient.ingredientName}을(를) 가마솥에 넣었습니다.");
-
         currentIngredient.SetActive(false);
         return true;
     }
@@ -147,19 +161,18 @@ public class CauldronLid : MonoBehaviour
     private void StartRoasting()
     {
         if (!ValidateRoastingCondition()) return;
+
         cauldronState = CauldronState.Roasting;
         roastTimer = 0f;
 
         TeaIngredient ingredient = currentIngredient.GetComponent<TeaIngredient>();
-        Sprite sprite = currentIngredient.GetComponent<SpriteRenderer>()?.sprite;
-        SpawnRoastingIngredient(ingredient, sprite);
+        SpawnRoastingIngredient(ingredient);
+        // activeIngredients.AddRange(FindObjectsOfType<RoastingIngredient>());
 
-        activeIngredients.Clear();
-        activeIngredients.AddRange(FindObjectsOfType<RoastingIngredient>());
+        currentCursorFollower = Instantiate(cursorFollowerPrefab);
 
         StartCoroutine(RoastingRoutine());
         Debug.Log("덖기 시작");
-
     }
 
     private IEnumerator RoastingRoutine()
@@ -171,57 +184,54 @@ public class CauldronLid : MonoBehaviour
 
             foreach (var ingredient in activeIngredients)
             {
-                if (ingredient != null)
-                {
-                    ingredient.DarkenColor();
-                }
+                ingredient.DarkenColor();
             }
         }
-        bool success = activeIngredients.All(roastingIngredient => roastingIngredient != null && !roastingIngredient.IsBurnt);
+        bool success = activeIngredients.All(roastingIngredient => !roastingIngredient.IsBurnt);
         StopRoasting(success);
     }
 
-    public void OnIngredientBurned()
+    private void HandleIngredientBurnt()
     {
         if (cauldronState != CauldronState.Roasting) return;
 
-        cauldronState = CauldronState.Roasted;
-
-        currentIngredient.GetComponent<SpriteRenderer>().color = Color.black;
-
+        Debug.Log("한 개라도 탄 순간 덖기는 실패 처리합니다.");
         StopAllCoroutines();
-
-        Debug.Log("한 개라도 탄 순간 덖기 실패 처리.");
 
         foreach (var ingredient in activeIngredients)
         {
-            if (ingredient != null)
-            {
-                ingredient.Burn();
-            }
+            ingredient.Burn();
         }
-
         StopRoasting(false);
     }
 
 
     private void StopRoasting(bool success)
     {
+        cauldronState = CauldronState.Roasted;
+
         TeaIngredient original = currentIngredient.GetComponent<TeaIngredient>();
         original.Roast(success);
+
         if (success)
         {
             currentIngredient.GetComponent<SpriteRenderer>().color = new Color(0.4f, 0.3f, 0.2f);
         }
+        else
+        {
+            currentIngredient.GetComponent<SpriteRenderer>().color = Color.black;
+        }
 
         foreach (var ingredient in activeIngredients)
         {
-            if (ingredient != null)
-            {
-                ingredient.Stop();
-            }
+            ingredient.Stop();
         }
-        cauldronState = CauldronState.Roasted;
+
+        if (currentCursorFollower != null)
+        {
+            Destroy(currentCursorFollower);
+        }
+        
         Debug.Log($"덖기에 {(success ? "성공" : "실패")}했습니다.");
     }
 
@@ -233,6 +243,9 @@ public class CauldronLid : MonoBehaviour
 
     void ClearCauldronLid()
     {
-        
+        cauldronState = CauldronState.Idle;
+        currentIngredient = null;
+        ClearRoastingIngredient();
+        roastTimer = 0f;
     }
 }
