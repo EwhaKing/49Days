@@ -60,13 +60,13 @@ public class Kettle : MonoBehaviour
 
 
         if (stovePosition == null)
-            stovePosition = GameObject.Find("StovePosition")?.transform;
+            stovePosition = GameObject.Find("stovePosition")?.transform;
 
         if (hookPosition == null)
-            hookPosition = GameObject.Find("KettleHookPosition")?.transform;
+            hookPosition = GameObject.Find("kettleHookPosition")?.transform;
 
         if (teapotPosition == null)
-            teapotPosition = GameObject.Find("PourPosition")?.transform;
+            teapotPosition = GameObject.Find("pourPosition")?.transform;
 
         if (teapot == null)
             teapot = GameObject.FindObjectOfType<TeaPot>();
