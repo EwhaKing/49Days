@@ -63,6 +63,13 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
                 resetButton?.SetActive(false);
             }
         }
+        /* ui 오브젝트 로그
+                if (Input.GetMouseButtonDown(0))
+                {
+                    GameObject clickedObj = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+                    Debug.Log("🧭 현재 클릭된 UI 오브젝트: " + (clickedObj != null ? clickedObj.name : "없음"));
+                }
+        */
     }
 
     void OnMouseUp()

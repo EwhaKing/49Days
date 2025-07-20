@@ -77,7 +77,17 @@ public class Kettle : MonoBehaviour
     void Update()
     {
         // Debug.Log($"[위치 확인] 주전자: {transform.position}, 바닥: {kettleBottomPosition.position}, 화로: {stovePosition.position}");
+        if (stovePosition == null)
+            stovePosition = GameObject.Find("stovePosition")?.transform;
 
+        if (hookPosition == null)
+            hookPosition = GameObject.Find("kettleHookPosition")?.transform;
+
+        if (teapotPosition == null)
+            teapotPosition = GameObject.Find("pourPosition")?.transform;
+
+        if (teapot == null)
+            teapot = GameObject.FindObjectOfType<TeaPot>();
 
         //물 붓는 동안에는 움직이지 마세요
         if (isPouring) return;
