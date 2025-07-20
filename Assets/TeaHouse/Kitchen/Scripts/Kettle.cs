@@ -57,6 +57,21 @@ public class Kettle : MonoBehaviour
             smokeAnimator = heldSmokeObject.GetComponent<Animator>();
         else
             Debug.LogWarning("[연기] SmokeObject를 찾을 수 없습니다.");
+
+
+        if (stovePosition == null)
+            stovePosition = GameObject.Find("StovePosition")?.transform;
+
+        if (hookPosition == null)
+            hookPosition = GameObject.Find("KettleHookPosition")?.transform;
+
+        if (teapotPosition == null)
+            teapotPosition = GameObject.Find("PourPosition")?.transform;
+
+        if (teapot == null)
+            teapot = GameObject.FindObjectOfType<TeaPot>();
+
+
     }
 
     void Update()
