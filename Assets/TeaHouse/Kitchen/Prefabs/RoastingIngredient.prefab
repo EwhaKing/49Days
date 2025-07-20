@@ -166,7 +166,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.7
   m_LinearDrag: 5
   m_AngularDrag: 3
   m_GravityScale: 0
@@ -193,8 +193,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32dcbef8d297b66468e86374b57308de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  centralGravityForce: 1
-  burnTime: 4
+  centralGravityForce: 0.5
+  burnTime: 3
   maxRoastTime: 8
   teaSingle: {fileID: 21300000, guid: 31c21a027b638774fa95fa141c93b329, type: 3}
   roseSingle: {fileID: 21300000, guid: d0ff328247171ee429ee1c68d4c2c5cf, type: 3}
