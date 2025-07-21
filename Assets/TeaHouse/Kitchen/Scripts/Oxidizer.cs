@@ -8,7 +8,7 @@ public class Oxidizer : MonoBehaviour
     {
         ClosedIdle,     // 기본 상태
         OpenReady,      // 찻잎 Grab + 산화기 마우스오버 상태
-        Oxidizing,       // 미니게임 진행 중
+        Oxidizing,      // 미니게임 진행 중
         OverReady       // 탐 상태에서 유저 클릭 대기 상태
     }
 
@@ -126,6 +126,14 @@ public class Oxidizer : MonoBehaviour
         gaugeAngle = (elapsedTime / totalTime) * 360f;                  // 5초 동안 360도 회전
         arrowTransform.rotation = Quaternion.Euler(0, 0, -gaugeAngle);  // 시계 방향 회전
 
+        if (elapsedTime >= totalTime)
+        {
+            elapsedTime = totalTime; // 시간 초과 방지
+            state = OxidizerState.OverReady;
+            StartCoroutine(CompleteOxidation(OxidizedDegree.Over));
+            return;
+        }
+
         // 게이지 판 활성화 로직
         if (elapsedTime >= (currentTick + 1) * 1f &&
             currentTick + 1 < gaugePlates.Count)
@@ -133,17 +141,13 @@ public class Oxidizer : MonoBehaviour
             currentTick++;
             gaugePlates[currentTick].SetActive(true);
         }
-
-        if (elapsedTime >= totalTime)
-        {
-            state = OxidizerState.OverReady;
-            StartCoroutine(CompleteOxidation(OxidizedDegree.Over));
-        }
     }
 
     void HandleEarlyFinish()
     {
         if (currentIngredient == null) return;
+
+        state = OxidizerState.ClosedIdle;
 
         OxidizedDegree degree = GetOxidizedDegreeFromGauge();
         StartCoroutine(CompleteOxidation(degree));
@@ -171,14 +175,14 @@ public class Oxidizer : MonoBehaviour
 
     IEnumerator DelayedReset()
     {
-        currentIngredient.gameObject.SetActive(true);
-        Hand.Instance.Grab(currentIngredient.gameObject);
-
         // 시각적 리셋
         backgroundRenderer.sprite = openSprite;
         arrowTransform.rotation = Quaternion.Euler(0, 0, 0);
         foreach (var plate in gaugePlates)
             plate.SetActive(false);
+
+        currentIngredient.gameObject.SetActive(true);
+        Hand.Instance.Grab(currentIngredient.gameObject);
 
         yield return new WaitForSeconds(0.5f);
         ResetOxidizer();
@@ -213,11 +217,11 @@ public class Oxidizer : MonoBehaviour
         switch (degree)
         {
             case OxidizedDegree.Zero:
-                sr.color = new Color(0.8f, 1f, 0.8f); break;    // 초록
+                sr.color = new Color(0.8f, 1f, 0.8f); break;     // 초록
             case OxidizedDegree.Half:
-                sr.color = new Color(1f, 0.8f, 0.3f); break;    // 노랑
+                sr.color = new Color(1f, 0.8f, 0.3f); break;     // 노랑
             case OxidizedDegree.Full:
-                sr.color = new Color(0.8f, 0.4f, 0.2f); break;  // 주황
+                sr.color = new Color(0.8f, 0.4f, 0.2f); break;   // 주황
             case OxidizedDegree.Over:
                 sr.color = new Color(0.2f, 0.13f, 0.05f); break; // 검정
         }
