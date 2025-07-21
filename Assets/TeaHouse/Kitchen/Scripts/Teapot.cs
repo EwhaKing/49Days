@@ -28,7 +28,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     bool waterPoured = false;
     bool ingredientAddedBeforeWater = false;
 
-    public Tea tea;  // 외부에서 접근 가능하게
+    private Tea tea;  // 외부에서 접근 가능하게
 
     void Start()
     {
@@ -46,24 +46,19 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             timer += Time.deltaTime;
         }
 
-        // ✅ 마우스 클릭 시 버튼 숨기기 (다병 아닌 경우)
-        if (Input.GetMouseButtonDown(0))
+    }
+
+    /*리셋버튼 로그용.
+        void LateUpdate()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (resetButton != null)
             {
-                if (hit.transform != this.transform)  // 클릭한 대상이 다병이 아니면
-                {
-                    resetButton?.SetActive(false);
-                }
-            }
-            else
-            {
-                // 아무 것도 안 누른 빈 공간 클릭
-                resetButton?.SetActive(false);
+                Vector3 worldPos = resetButton.transform.position;
+                Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+                Debug.Log($"[📍ResetButton 위치] 월드: {worldPos}, 스크린: {screenPos}");
             }
         }
-    }
+    */
 
     void OnMouseUp()
     {
@@ -79,7 +74,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         if (currentState == State.Brewing)
         {
-            TryClickBell();
+            getTea();
         }
 
         // ✅ 클릭 직전 손이 비어 있었을 때만 버튼 표시
@@ -106,6 +101,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         }
 
         ingredientObj.transform.SetParent(ingredientParent);
+
+        ing.GetComponent<SpriteRenderer>().sortingOrder = 1;
 
         // 애니메이션으로 자연스럽게 떨어지게
         Vector3 targetPos = ingredientParent.position;
@@ -173,9 +170,9 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     }
 
-    void TryClickBell()
+    public Tea getTea()
     {
-        if (currentState != State.Brewing) return;
+        if (currentState != State.Brewing) return null;
 
         currentState = State.Done;
 
@@ -188,6 +185,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         //주방 초기화!!
         FinishTea();
+
+        return tea;  // 완성된 차 객체 반환
     }
 
     public void FinishTea()
@@ -212,9 +211,9 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         if (tea != null)
         {
-            Destroy(tea);
             tea = null;
         }
+
         Debug.Log("🔥 ingredientParent 자식 개수: " + ingredientParent.childCount);
 
     }
@@ -237,6 +236,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             ingredientTooltipPanel.SetActive(true);
             ShowIngredientListUI();
         }
+
+        //리셋버튼 뜨고
     }
 
 
@@ -247,6 +248,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             ingredientTooltipPanel.SetActive(false);
             ClearIngredientListUI();
         }
+
+        //리셋버튼 꺼짐
     }
 
     void ShowIngredientListUI()
@@ -286,29 +289,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             Debug.Log($"📦 Child Width: {childRect.rect.width}");
         }
 
-        UpdateBackgroundSize();
-    }
-    void UpdateBackgroundSize()
-    {
-        int itemCount = ingredientListParent.childCount;
-        if (itemCount == 0) return;
-
-        // HorizontalLayoutGroup 설정 가져오기
-        HorizontalLayoutGroup layout = ingredientListParent.GetComponent<HorizontalLayoutGroup>();
-        if (layout == null) return;
-
-        float itemWidth = ((RectTransform)ingredientListParent.GetChild(0)).sizeDelta.x;
-        float spacing = layout.spacing;
-
-
-        float finalWidth = (itemWidth * itemCount) + (spacing * Mathf.Max(0, itemCount - 1));
-
-        RectTransform bgRect = ingredientTooltipPanel.transform.Find("Background").GetComponent<RectTransform>();
-        Vector2 size = bgRect.sizeDelta;
-        size.x = finalWidth;
-        bgRect.sizeDelta = size;
-
-        //Debug.Log($"✅ 계산된 width: item({itemWidth}) × count({itemCount}) + spacing({spacing}) + padding({paddingLeft}+{paddingRight}) ) = {finalWidth}");
     }
 
     void ClearIngredientListUI()
