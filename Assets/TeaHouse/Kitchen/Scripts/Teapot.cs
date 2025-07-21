@@ -48,17 +48,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     }
 
-    /*리셋버튼 로그용.
-        void LateUpdate()
-        {
-            if (resetButton != null)
-            {
-                Vector3 worldPos = resetButton.transform.position;
-                Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
-                Debug.Log($"[📍ResetButton 위치] 월드: {worldPos}, 스크린: {screenPos}");
-            }
-        }
-    */
 
     void OnMouseUp()
     {
@@ -68,8 +57,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             return;
         }
 
-        bool wasHoldingIngredient = Hand.Instance.handIngredient != null;
-
         TryInsertIngredient();
 
         if (currentState == State.Brewing)
@@ -77,11 +64,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             getTea();
         }
 
-        // ✅ 클릭 직전 손이 비어 있었을 때만 버튼 표시
-        if (!wasHoldingIngredient)
-        {
-            resetButton?.SetActive(true);
-        }
     }
 
     void TryInsertIngredient()
@@ -219,7 +201,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     }
 
     // UI 버튼에서 호출할 초기화 함수
-
     public void OnClickResetButton()
     {
         Debug.Log("초기화 버튼 눌림");
@@ -237,9 +218,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             ShowIngredientListUI();
         }
 
-        //리셋버튼 뜨고
     }
-
 
     void OnMouseExit()
     {
@@ -248,8 +227,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             ingredientTooltipPanel.SetActive(false);
             ClearIngredientListUI();
         }
-
-        //리셋버튼 꺼짐
     }
 
     void ShowIngredientListUI()
