@@ -74,7 +74,7 @@ public class Oxidizer : MonoBehaviour
             case OxidizerState.Oxidizing:
                 if (Hand.Instance.handIngredient != null)
                 {
-                    Debug.LogWarning("손에 재료가 이미 들려있습니다.");
+                    Debug.Log("손에 재료가 이미 들려있습니다.");
                     break;
                 }
                 HandleEarlyFinish();        // 중간 클릭 → 즉시 산화 완료 + Grab
@@ -83,7 +83,7 @@ public class Oxidizer : MonoBehaviour
             case OxidizerState.OverReady:   // Over 상태 후 클릭 → Grab 및 리셋
                 if (Hand.Instance.handIngredient != null)
                 {
-                    Debug.LogWarning("손에 재료가 이미 들려있습니다.");
+                    Debug.Log("손에 재료가 이미 들려있습니다.");
                     break;
                 }
                 StartCoroutine(DelayedReset());
@@ -99,7 +99,7 @@ public class Oxidizer : MonoBehaviour
         if (ingredient.processSequence.Contains(ProcessStep.Roast) ||
             ingredient.processSequence.Contains(ProcessStep.Roll))
         {
-            Debug.LogWarning($"{ingredient.name}은(는) 조리 단계(유념/덖기)를 거쳐 산화할 수 없습니다.");
+            Debug.Log($"{ingredient.name}은(는) 조리 단계(유념/덖기)를 거쳐 산화할 수 없습니다.");
             return;
         }
 
