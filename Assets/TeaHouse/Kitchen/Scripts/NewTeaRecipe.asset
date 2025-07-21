@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
+  m_Name: NewTeaRecipe
+  m_EditorClassIdentifier: 
+  teaName: 0
+  ingredients: 00000000
+  teaType: 1
+  temperature: 70
+  brewTime: 5
+  additionalIngredient: 4

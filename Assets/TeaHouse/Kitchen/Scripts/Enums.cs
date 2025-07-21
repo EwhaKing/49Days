@@ -4,11 +4,17 @@ using UnityEngine;
 
 public enum IngredientName
 {
+    None,        // None은 재료가 없는 상태를 나타냄 (추가 재료가 없는 경우를 위함)
     TeaLeaf,
     Rose,
     SolomonsSeal,
     Honey,
     Water
+
+    // 차 평가 중 TeaLeaf가 산화 정도에 따라 다음 중 하나로 바뀜, 주방 내에선 다른 영향 없음
+    TeaLeaf_Black,
+    TeaLeaf_Oolong,
+    TeaLeaf_Green
 }
 
 public static class IngredientNameExtensions
@@ -66,5 +72,4 @@ public enum ProcessStep
     Roast,            // 덖기
     Roll              // 유념
 }
-
 

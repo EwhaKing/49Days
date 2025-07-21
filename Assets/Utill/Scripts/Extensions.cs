@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public static class Extensions
 {
@@ -11,6 +12,11 @@ public static class Extensions
     public static string ToLowerString(this Enum value)
     {
         return value.ToString().ToLowerInvariant();
+    }
+
+    public static bool EqualIgnoreOrder<T>(this List<T> a, List<T> b)
+    {
+        return a.Count == b.Count && !a.Except(b).Any() && !b.Except(a).Any();
     }
 
 }

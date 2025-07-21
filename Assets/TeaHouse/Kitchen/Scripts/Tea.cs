@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tea : MonoBehaviour
+public class Tea
 {
     public List<TeaIngredient> ingredients;  // 들어간 재료 리스트
 

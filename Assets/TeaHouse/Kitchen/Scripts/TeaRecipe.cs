@@ -1,0 +1,17 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "NewTeaRecipe", menuName = "TeaRecipe")]
+public class TeaRecipe : ScriptableObject
+{
+    public TeaName teaName;  // 차 이름
+
+    public List<IngredientName> ingredients;  // 차에 들어가는 재료 리스트
+
+    public int temperature;  // 우려낼 때의 물 온도 (섭씨)
+
+    public int brewTime;  // 우려내는 시간 (초)
+
+    public IngredientName additionalIngredient;  // 추가 재료 (없으면 None)
+}
