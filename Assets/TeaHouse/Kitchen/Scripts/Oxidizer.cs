@@ -8,7 +8,8 @@ public class Oxidizer : MonoBehaviour
     {
         ClosedIdle,     // 기본 상태
         OpenReady,      // 찻잎 Grab + 산화기 마우스오버 상태
-        Oxidizing       // 미니게임 진행 중
+        Oxidizing,      // 미니게임 진행 중
+        OverReady       // 탐 상태에서 유저 클릭 대기 상태
     }
 
     [Header("산화기 외형")]
@@ -43,14 +44,12 @@ public class Oxidizer : MonoBehaviour
         if (state == OxidizerState.ClosedIdle &&
             ingredient != null &&
             ingredient.ingredientType == IngredientType.TeaLeaf &&
-            (ingredient.oxidizedDegree == OxidizedDegree.None || 
+            (ingredient.oxidizedDegree == OxidizedDegree.None ||
              ingredient.oxidizedDegree == OxidizedDegree.Zero))
         {
-            // 산화기 열기 + 게이지 숨기기
+            // 산화기 열기
             state = OxidizerState.OpenReady;
             backgroundRenderer.sprite = openSprite;
-            gaugeArrow.SetActive(false);
-            gaugePlate.SetActive(false);
         }
     }
 
@@ -61,8 +60,6 @@ public class Oxidizer : MonoBehaviour
             // 산화기 다시 닫기
             state = OxidizerState.ClosedIdle;
             backgroundRenderer.sprite = closedSprite;
-            gaugeArrow.SetActive(true);
-            gaugePlate.SetActive(true); 
         }
     }
 
@@ -75,7 +72,21 @@ public class Oxidizer : MonoBehaviour
                 break;
 
             case OxidizerState.Oxidizing:
+                if (Hand.Instance.handIngredient != null)
+                {
+                    Debug.Log("손에 재료가 이미 들려있습니다.");
+                    break;
+                }
                 HandleEarlyFinish();        // 중간 클릭 → 즉시 산화 완료 + Grab
+                break;
+
+            case OxidizerState.OverReady:   // Over 상태 후 클릭 → Grab 및 리셋
+                if (Hand.Instance.handIngredient != null)
+                {
+                    Debug.Log("손에 재료가 이미 들려있습니다.");
+                    break;
+                }
+                StartCoroutine(DelayedReset());
                 break;
         }
     }
@@ -84,32 +95,11 @@ public class Oxidizer : MonoBehaviour
     {
         TeaIngredient ingredient = Hand.Instance.handIngredient;
 
-        // Null 체크
-        if (ingredient == null)
-        {
-            Debug.LogError("산화기에 넣으려는 재료가 null입니다.");
-            return;
-        }
-
         // 이미 조리 단계를 거친 재료 거부 (덖기/유념)
         if (ingredient.processSequence.Contains(ProcessStep.Roast) ||
             ingredient.processSequence.Contains(ProcessStep.Roll))
         {
-            Debug.LogWarning($"{ingredient.name}은(는) 조리 단계(유념/덖기)를 거쳐 산화할 수 없습니다.");
-            return;
-        }
-
-        // 산화도 50 이상 거부
-        if (ingredient.oxidizedDegree >= OxidizedDegree.Half)
-        {
-            Debug.LogWarning($"{ingredient.name}은(는) 이미 산화되어 다시 산화할 수 없습니다. 현재 산화도: {ingredient.oxidizedDegree}");
-            return;
-        }
-
-        // 찻잎이 아닌 경우 거부
-        if (ingredient.ingredientType != IngredientType.TeaLeaf)
-        {
-            Debug.LogWarning($"{ingredient.name}은(는) 찻잎이 아니므로 산화할 수 없습니다.");
+            Debug.Log($"{ingredient.name}은(는) 조리 단계(유념/덖기)를 거쳐 산화할 수 없습니다.");
             return;
         }
 
@@ -136,17 +126,20 @@ public class Oxidizer : MonoBehaviour
         gaugeAngle = (elapsedTime / totalTime) * 360f;                  // 5초 동안 360도 회전
         arrowTransform.rotation = Quaternion.Euler(0, 0, -gaugeAngle);  // 시계 방향 회전
 
+        if (elapsedTime >= totalTime)
+        {
+            elapsedTime = totalTime; // 시간 초과 방지
+            state = OxidizerState.OverReady;
+            StartCoroutine(CompleteOxidation(OxidizedDegree.Over));
+            return;
+        }
+
         // 게이지 판 활성화 로직
-        if (elapsedTime >= (currentTick + 1) * 1f && 
+        if (elapsedTime >= (currentTick + 1) * 1f &&
             currentTick + 1 < gaugePlates.Count)
         {
             currentTick++;
             gaugePlates[currentTick].SetActive(true);
-        }
-
-        if (elapsedTime >= totalTime)
-        {
-            StartCoroutine(CompleteOxidation(OxidizedDegree.Over));
         }
     }
 
@@ -154,25 +147,47 @@ public class Oxidizer : MonoBehaviour
     {
         if (currentIngredient == null) return;
 
+        state = OxidizerState.ClosedIdle;
+
         OxidizedDegree degree = GetOxidizedDegreeFromGauge();
         StartCoroutine(CompleteOxidation(degree));
     }
 
     IEnumerator CompleteOxidation(OxidizedDegree degree)
     {
-        currentIngredient.Oxidize(degree);  // TeaIngredient의 Oxidize 메서드 호출
+        currentIngredient.Oxidize(degree);
         ApplyColorByOxidation(currentIngredient, degree);
+
+        if (state == OxidizerState.OverReady)
+        {
+            // 산화기 닫힌 상태 + 게이지 유지
+            backgroundRenderer.sprite = closedSprite;
+            foreach (var plate in gaugePlates)
+                plate.SetActive(true);
+            yield break;
+        }
+        else
+        {
+            // 바로 Grab 및 리셋
+            StartCoroutine(DelayedReset());
+        }
+    }
+
+    IEnumerator DelayedReset()
+    {
+        // 시각적 리셋
+        backgroundRenderer.sprite = openSprite;
+        arrowTransform.rotation = Quaternion.Euler(0, 0, 0);
+        foreach (var plate in gaugePlates)
+            plate.SetActive(false);
+
         currentIngredient.gameObject.SetActive(true);
         Hand.Instance.Grab(currentIngredient.gameObject);
 
-        // 산화 후 0.5초간 열림 상태 유지
-        backgroundRenderer.sprite = openSprite;
-        gaugeArrow.SetActive(false);
-        gaugePlate.SetActive(false);
         yield return new WaitForSeconds(0.5f);
-
         ResetOxidizer();
     }
+
 
     OxidizedDegree GetOxidizedDegreeFromGauge()
     {
@@ -202,13 +217,13 @@ public class Oxidizer : MonoBehaviour
         switch (degree)
         {
             case OxidizedDegree.Zero:
-                sr.color = new Color(0.8f, 1f, 0.8f); break;    // 초록
+                sr.color = new Color(0.8f, 1f, 0.8f); break;     // 초록
             case OxidizedDegree.Half:
-                sr.color = new Color(1f, 0.8f, 0.3f); break;    // 노랑
+                sr.color = new Color(1f, 0.8f, 0.3f); break;     // 노랑
             case OxidizedDegree.Full:
-                sr.color = new Color(0.8f, 0.4f, 0.2f); break;  // 주황
+                sr.color = new Color(0.8f, 0.4f, 0.2f); break;   // 주황
             case OxidizedDegree.Over:
-                sr.color = Color.black; break;                  // 검정
+                sr.color = new Color(0.2f, 0.13f, 0.05f); break; // 검정
         }
     }
 
@@ -217,9 +232,7 @@ public class Oxidizer : MonoBehaviour
         state = OxidizerState.ClosedIdle;
         backgroundRenderer.sprite = closedSprite;
 
-        gaugeArrow.SetActive(true);
         arrowTransform.rotation = Quaternion.Euler(0, 0, 0);
-        gaugePlate.SetActive(true);
         foreach (var plate in gaugePlates)
             plate.SetActive(false);
 
