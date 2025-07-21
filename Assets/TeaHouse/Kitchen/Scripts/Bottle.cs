@@ -16,9 +16,10 @@ public class Bottle : MonoBehaviour
     GameObject Fill;
     Sprite sprite;
 
-    void Awake() 
+    void Awake()
     {
-        Cabinet.AfterCabinetInit += () => {
+        Cabinet.AfterCabinetInit += () =>
+        {
             FillDecision();
             countText.text = Cabinet.Instance.ingredientCounts[ingredientName] + "개";
             Debug.Log($"{ingredientName} 초기화: {Cabinet.Instance.ingredientCounts[ingredientName]}개");
@@ -42,7 +43,7 @@ public class Bottle : MonoBehaviour
         nameText.text = ingredientName.ToKorean();
     }
 
-    void OnMouseUp() 
+    void OnMouseUp()
     {
         if (Hand.Instance.handIngredient != null)
         {
@@ -74,12 +75,12 @@ public class Bottle : MonoBehaviour
         FillDecision();
     }
 
-    void OnMouseEnter() 
+    void OnMouseEnter()
     {
         nameTag.SetActive(true);
     }
 
-    void OnMouseExit() 
+    void OnMouseExit()
     {
         nameTag.SetActive(false);
     }

@@ -1,28 +1,57 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TeaIngredient : MonoBehaviour
 {
-    public IngredientName ingredientName {get; private set;}  // 재료 이름 
+    public IngredientName ingredientName { get; private set; }  // 재료 이름 
 
-    public IngredientType ingredientType {get; private set;}  // 종류 (찻잎, 꽃, 대용차재료, 추가 재료)
+    public IngredientType ingredientType { get; private set; }  // 종류 (찻잎, 꽃, 대용차재료, 추가 재료)
 
-    public SpriteStatus spriteStatus {get; private set;}      // 상태 (기본 상태, 손질된 상태, 유념된 상태, 뭉개진 상태, 덖은 상태)
+    public SpriteStatus spriteStatus { get; private set; }      // 상태 (기본 상태, 손질된 상태, 유념된 상태, 뭉개진 상태, 덖은 상태)
 
-    public bool isChopped {get; private set;}                 // 손질 여부
+    public bool isChopped { get; private set; }                 // 손질 여부
 
-    public OxidizedDegree oxidizedDegree {get; private set;}  // 산화 정도 (x, 0, 50, 100, 탐)
+    public OxidizedDegree oxidizedDegree { get; private set; }  // 산화 정도 (x, 0, 50, 100, 탐)
 
-    public ResultStatus roasted {get; private set;}           // 덖은 여부 (x, 성공, 실패) 
+    public ResultStatus roasted { get; private set; }           // 덖은 여부 (x, 성공, 실패) 
 
-    public ResultStatus rolled {get; private set;}            // 유념 여부 (x, 성공, 실패)
+    public ResultStatus rolled { get; private set; }            // 유념 여부 (x, 성공, 실패)
 
     // 순서 리스트 (순서: 손질, 산화, 덖기, 유념)
-    public List<ProcessStep> processSequence {get; private set;} = new List<ProcessStep>();  
+    public List<ProcessStep> processSequence { get; private set; } = new List<ProcessStep>();
 
     // 상태에 따른 이미지 딕셔너리: Init에서 재료 이름을 통해 Resources.Load함
-    public Dictionary<SpriteStatus, Sprite> spriteVariants {get; private set;} = new Dictionary<SpriteStatus, Sprite>();
+    public Dictionary<SpriteStatus, Sprite> spriteVariants { get; private set; } = new Dictionary<SpriteStatus, Sprite>();
+
+    //애니메이션 추가(재료가 떨어지는 애니메이션)
+    public void PlayDropAnimation(Vector3 targetPosition, float duration = 0.4f)
+    {
+        spriteRenderer.sortingOrder = 1;
+        StartCoroutine(DropAnimation(targetPosition, duration));
+    }
+
+    IEnumerator DropAnimation(Vector3 targetPos, float duration)
+    {
+        Vector3 start = transform.position;
+        float time = 0f;
+
+        Vector3 offset = new Vector3(-0.2f, 0f, 0f);
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            float y = Mathf.Lerp(start.y, targetPos.y, t);
+
+            transform.position = new Vector3(start.x, y, start.z) + offset;
+
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = targetPos;
+    }
 
 
     /// <summary>
