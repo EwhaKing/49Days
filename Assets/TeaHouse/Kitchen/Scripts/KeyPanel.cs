@@ -55,6 +55,17 @@ public class KeyPanel : MonoBehaviour
             Image image = cell.GetComponent<Image>();
             StartCoroutine(IncorrectEffect(rect, image));
             currentIndex++;
+            if (currentIndex > 9)
+            {
+                if (mistakeCount >= 4)
+                {
+                    OnComplete?.Invoke(false);
+                }
+                else
+                {
+                    OnComplete?.Invoke(true);
+                }
+            }
             if (mistakeCount >= 4)
                 OnComplete?.Invoke(false);
         }
