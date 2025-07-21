@@ -59,11 +59,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         TryInsertIngredient();
 
-        if (currentState == State.Brewing)
-        {
-            getTea();
-        }
-
     }
 
     void TryInsertIngredient()
