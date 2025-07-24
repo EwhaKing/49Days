@@ -1,100 +1,168 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Numerics;
-using TMPro;
+using UnityEditor.EditorTools;
 using UnityEngine;
-using UnityEngine.VFX;
 
 public class RoastingIngredient : MonoBehaviour
 {
-    
-    private float timeLastStirred = 0f;
-    private float roastTimer = 0f;
-    private bool isBurnt = false;
-    public bool IsBurnt => isBurnt;
-    [SerializeField] private float burnTime = 3f;
-    [SerializeField] private float maxRoastTime = 8f;
-    
+    public event Action OnBurnt;
+
+    public bool IsBurnt { get; private set; }
+    [Tooltip("가마솥 중간으로 모이게 하는 중력")]
+    [SerializeField] private float centralGravityForce;
+
+    private enum IngredientState
+    {
+        Default,
+        Roasting,
+        Roasted,
+        Burnt
+    }
+
+    [SerializeField] private float burnTime;
+    [SerializeField] private float maxRoastTime;
+    [SerializeField] private Sprite[] teaSingle;
+    [SerializeField] private Sprite[] roseSingle;
+
+    private float timeLastStirred;
+    private float roastTimer;
+    private IngredientState ingredientState;
     private SpriteRenderer spriteRenderer;
     private new Rigidbody2D rigidbody2D;
-
-    // private bool isRoasting = false;
-    // private bool isComplete = false;
-    // public bool IsRoastingComplete => isComplete;
-
-    // [SerializeField] private float pushRadius = 0.5f;
-    // [SerializeField] private float pushForce = 0.5f;
+    private Dictionary<IngredientName, Sprite> spriteMap;
+    private Transform cauldronCenter;
 
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
-        }
-
+        spriteRenderer = transform.Find("RoastingVisual")?.GetComponent<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
-        if (rigidbody2D == null)
-        {
-            Debug.LogError("Rigidbody2D가 없습니다. 큰일이죠.");
-        }
+
+        // spriteMap = new Dictionary<IngredientName, Sprite>
+        // {
+        //     { IngredientName.TeaLeaf, teaSingle },
+        //     { IngredientName.Rose, roseSingle }
+        // };
     }
 
-    public void Init(TeaIngredient currentIngredientData, Sprite currentIngredientVisual)
+    public void Init(TeaIngredient currentIngredientData, Transform centerPoint)
     {
+        cauldronCenter = centerPoint;
         timeLastStirred = 0f;
         roastTimer = 0f;
-        isBurnt = false;
+        IsBurnt = false;
+        ingredientState = IngredientState.Roasting;
+        OxidizedDegree oxidizedDegree = currentIngredientData.oxidizedDegree;
 
-        SpriteRenderer renderer = transform.Find("RoastingVisual")?.GetComponent<SpriteRenderer>();
-        if (renderer != null)
+        if (spriteRenderer != null)
         {
-            renderer.sprite = currentIngredientVisual;
+            Sprite sprite = null;
+            switch (currentIngredientData.ingredientName)
+            {
+                case IngredientName.TeaLeaf:
+                    if (teaSingle != null && teaSingle.Length > 0)
+                        sprite = teaSingle[UnityEngine.Random.Range(0, teaSingle.Length)];
+                    break;
+                case IngredientName.Rose:
+                    if (roseSingle != null && roseSingle.Length > 0)
+                        sprite = roseSingle[UnityEngine.Random.Range(0, roseSingle.Length)];
+                    break;
+            }
+
+            if (sprite != null)
+            {
+                spriteRenderer.sprite = sprite;
+
+                switch (currentIngredientData.oxidizedDegree)
+                {
+                    case OxidizedDegree.Zero: spriteRenderer.color = new Color(0.8f, 1f, 0.8f); break;
+                    case OxidizedDegree.Half: spriteRenderer.color = new Color(1f, 0.8f, 0.3f); break;
+                    case OxidizedDegree.Full: spriteRenderer.color = new Color(0.8f, 0.4f, 0.2f); break;
+                    case OxidizedDegree.Over: spriteRenderer.color = Color.black; break;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("랜덤 스프라이트를 찾을 수 없습니다.");
+            }
+}
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (ingredientState == IngredientState.Roasting && cauldronCenter != null)
+        {
+            Vector2 directionToCenter = (cauldronCenter.position - transform.position).normalized;
+            rigidbody2D.AddForce(directionToCenter * centralGravityForce);
         }
     }
 
-    void Update()
+    private void Update()
     {
-        if (isBurnt) return;
+        if (ingredientState != IngredientState.Roasting) return;
 
         roastTimer += Time.deltaTime;
         timeLastStirred += Time.deltaTime;
 
-        // UnityEngine.Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        // mouseWorldPos.z = 0f;
-        // float distance = UnityEngine.Vector2.Distance(transform.position, mouseWorldPos);
-
-        UnityEngine.Vector2 mousePos2D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Collider2D ingredientCollider = GetComponent<Collider2D>();
-        
-        if (ingredientCollider.OverlapPoint(mousePos2D))
-        {
-            timeLastStirred = 0f;
-
-            UnityEngine.Vector2 direction = (transform.position - (UnityEngine.Vector3)mousePos2D).normalized;
-            GetComponent<Rigidbody2D>()?.AddForce(direction * 2f, ForceMode2D.Force);
-        }
+        CheckForStirring();
 
         if (timeLastStirred > burnTime)
         {
-            CauldronLid.Instance?.OnIngredientBurned();
+            OnBurnt?.Invoke();
         }
 
         if (roastTimer >= maxRoastTime)
         {
+            ingredientState = IngredientState.Roasted;
             Debug.Log("무사히 재료 덖기 완료!");
-            // OnRoastingComplete();
         }
+    }
+
+    private void CheckForStirring()
+    {
+        Vector2 mousePos2D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (GetComponent<Collider2D>().OverlapPoint(mousePos2D))
+        {
+            Stir(mousePos2D);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Cursor"))
+        {
+            Stir(other.transform.position);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (ingredientState != IngredientState.Roasting) return;
+
+        if (collision.gameObject.CompareTag("RoastingIngredient"))
+        {
+            timeLastStirred = 0f;
+            Debug.Log($"{name}과 {collision.gameObject.name}의 충돌 발생. 타이머를 리셋합니다.");
+        }
+    }
+
+    private void Stir(Vector2 stirringPosition)
+    {
+        timeLastStirred = 0f;
+        Vector2 direction = ((Vector2)transform.position - stirringPosition).normalized;
+        rigidbody2D?.AddForce(direction *20f, ForceMode2D.Force);
     }
 
     public void Burn()
     {
-        isBurnt = true;
+        if (IsBurnt) return; 
+
+        IsBurnt = true;
+        ingredientState = IngredientState.Burnt;
         if (spriteRenderer != null)
         {
             spriteRenderer.color = Color.black;
         }
-
         Debug.Log("재료를 태웁니다.");
     }
 
@@ -111,6 +179,14 @@ public class RoastingIngredient : MonoBehaviour
 
     public void Stop()
     {
+        ingredientState = IngredientState.Roasted;
         enabled = false;
+        if (rigidbody2D != null)
+        {
+            rigidbody2D.velocity = Vector2.zero;
+            rigidbody2D.angularVelocity = 0f;
+            rigidbody2D.bodyType = RigidbodyType2D.Static;
+        }
     }
+
 }

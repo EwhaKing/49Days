@@ -45,7 +45,7 @@ public class KeyPanel : MonoBehaviour
             currentIndex++;
 
             if (currentIndex >= keySequence.Count)
-                OnComplete?.Invoke(true);
+                StartCoroutine(DelayInvoke(true));
         }
         else
         {
@@ -56,8 +56,27 @@ public class KeyPanel : MonoBehaviour
             StartCoroutine(IncorrectEffect(rect, image));
             currentIndex++;
             if (mistakeCount >= 4)
-                OnComplete?.Invoke(false);
+            {
+                StartCoroutine(DelayInvoke(false));                
+            }
+            if (currentIndex >= keySequence.Count)
+            {
+                if (mistakeCount >= 4)
+                {
+                    StartCoroutine(DelayInvoke(false));
+                }
+                else
+                {
+                    StartCoroutine(DelayInvoke(true));
+                }
+            }
         }
+    }
+
+    private IEnumerator DelayInvoke(bool success)
+    {
+        yield return new WaitForSeconds(0.5f);
+        OnComplete?.Invoke(success);
     }
 
     private IEnumerator IncorrectEffect(RectTransform cellTransform, Image cellImage)

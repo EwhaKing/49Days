@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9c0b6b89226f1124ba24d46443e2f41c
+guid: d93556955cc33b8458f9285a44cea68b
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -147,7 +147,70 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: tealeaf_single_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 8
+        width: 93
+        height: 68
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1cdc165e3a395b478a77c6e968b02ab
+      internalID: 100718341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tealeaf_single_1
+      rect:
+        serializedVersion: 2
+        x: 116
+        y: 16
+        width: 102
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 69c3c905c0d406c48a05671c469477f2
+      internalID: 397549246
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tealeaf_single_2
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 0
+        width: 99
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 201cccd7c67c2934b8fc8dade1544415
+      internalID: 1414221423
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -158,7 +221,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      tealeaf_single_0: 100718341
+      tealeaf_single_1: 397549246
+      tealeaf_single_2: 1414221423
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

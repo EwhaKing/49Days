@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,12 +16,22 @@ public class RollingMachine : MonoBehaviour
     [SerializeField] private GameObject canvasPrefab;
     private Transform keyPanelSpawnPoint;
 
+    [Header("찻잎 유념 모션")]
+    [SerializeField] private GameObject rollingLeafPrefab;
+    [SerializeField] private Transform leafSpawnPoint;
+    [Tooltip("중앙에 표시될 기본 찻잎 이미지")]
+    [SerializeField] private Sprite rollingLeavesCenter;
+    [SerializeField] private Sprite rollingLeavesRight;
+    [SerializeField] private Sprite rollingLeavesUp;
+
+
     private KeyPanel currentKeyPanel;
     private GameObject currentIngredient;
     RollingState state = RollingState.Idle;
 
+    private GameObject rollingLeavesVisual;
 
-    private void setCanvas()
+    private void SetCanvas()
     {
         if (keyPanelSpawnPoint == null)
         {
@@ -92,9 +103,11 @@ public class RollingMachine : MonoBehaviour
                 }
                 else
                 {
+                    currentIngredient.SetActive(true);
+                    Destroy(rollingLeavesVisual);
                     Hand.Instance.Grab(currentIngredient);
                     currentIngredient = null;
-                    state = RollingState.Idle;
+                    ClearRollingMachine();
                 }
                 break;
         }
@@ -106,8 +119,9 @@ public class RollingMachine : MonoBehaviour
 
         state = RollingState.Rolling;
         Debug.Log("유념을 시작합니다.");
-        setCanvas();
+        SetCanvas();
         SetKeyPanel();
+        SetRollingLeaves();        
     }
 
     private bool ValidateRollingCondition()
@@ -138,6 +152,7 @@ public class RollingMachine : MonoBehaviour
         // 위 조건 이외론 손에 든 재료 Drop
         currentIngredient = Hand.Instance.Drop();
         currentIngredient.transform.position = transform.position;
+        currentIngredient.SetActive(false);
         Debug.Log($"{handIngredient.spriteStatus} 상태의 {handIngredient.ingredientName}을(를) 유념기에 넣었습니다.");
         return true;
     }
@@ -162,8 +177,23 @@ public class RollingMachine : MonoBehaviour
         }
         
         // 시퀀스 시작 후 이벤트 등록
-        currentKeyPanel.StartSequence(GenerateRandomKeySequence(12));
+        currentKeyPanel.StartSequence(GenerateRandomKeySequence(10));
         currentKeyPanel.OnComplete += OnRollingComplete;
+    }
+
+    private void SetRollingLeaves()
+    {
+        rollingLeavesVisual = Instantiate(rollingLeafPrefab, leafSpawnPoint.position, Quaternion.identity, transform);
+        SpriteRenderer visualRenderer = rollingLeavesVisual.GetComponentInChildren<SpriteRenderer>();
+        if (visualRenderer != null)
+        {
+            visualRenderer.sprite = rollingLeavesCenter;
+            SpriteRenderer ingredientRenderder = currentIngredient.GetComponent<SpriteRenderer>();
+            if (ingredientRenderder != null)
+            {
+                visualRenderer.color = ingredientRenderder.color;
+            }
+        }
     }
 
     private List<char> GenerateRandomKeySequence(int length)
@@ -189,7 +219,43 @@ public class RollingMachine : MonoBehaviour
         if (input != '\0')
         {
             currentKeyPanel.ReceiveInput(input);
+            ShowRollingMotion(input);
         }
+    }
+
+    private void ShowRollingMotion(char key)
+    {
+        if (rollingLeavesVisual == null) return;
+        SpriteRenderer spriteRenderer = rollingLeavesVisual.GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer == null) return;
+
+        spriteRenderer.flipX = false;
+        spriteRenderer.flipY = false;
+
+        Vector3 offset = Vector3.zero;
+
+        switch (key)
+        {
+            case 'W':
+                spriteRenderer.sprite = rollingLeavesUp;
+                offset = Vector3.up * 1f;
+                break;
+            case 'A':
+                spriteRenderer.sprite = rollingLeavesRight;
+                spriteRenderer.flipX = true;
+                offset = Vector3.left * 2f;
+                break;
+            case 'S':
+                spriteRenderer.sprite = rollingLeavesUp;
+                spriteRenderer.flipY = true;
+                offset = Vector3.down * 0.7f;
+                break;
+            case 'D':
+                spriteRenderer.sprite = rollingLeavesRight;
+                offset = Vector3.right * 2f;
+                break;
+        }
+        rollingLeavesVisual.transform.localPosition = offset;
     }
 
     private char GetKeyInput()
@@ -205,13 +271,14 @@ public class RollingMachine : MonoBehaviour
     {
         Debug.Log($"유념에 {(success ? "성공" : "실패")}했습니다.");
 
+        StopAllCoroutines();
+
         if (currentKeyPanel != null)
         {
             currentKeyPanel.OnComplete -= OnRollingComplete;
             Destroy(currentKeyPanel.gameObject);
             currentKeyPanel = null;
         }
-
         DestroyCanvas();
 
         if (currentIngredient != null)
@@ -220,27 +287,47 @@ public class RollingMachine : MonoBehaviour
             if (tea != null)
             {
                 tea.Roll(success);
-                state = RollingState.Rolled;
+                SpriteRenderer visualRenderer = rollingLeavesVisual.GetComponentInChildren<SpriteRenderer>();
+                SpriteRenderer ingredientRenderer = currentIngredient.GetComponent<SpriteRenderer>();
+                if (visualRenderer != null && ingredientRenderer != null)
+                {
+                    visualRenderer.color = ingredientRenderer.color;
+                }
             }
             else
             {
                 Debug.LogWarning("currentIngredient에 TeaIngredient 컴포넌트가 없습니다.");
             }
+            state = RollingState.Rolled;
         }
+    }
+
+    private void ClearVisuals()
+    {
+        StopAllCoroutines();
+        if (currentKeyPanel != null)
+        {
+            currentKeyPanel.OnComplete -= OnRollingComplete;
+            Destroy(currentKeyPanel.gameObject);
+            currentKeyPanel = null;
+        }
+
+        if (rollingLeavesVisual != null)
+        {
+            Destroy(rollingLeavesVisual);
+        }
+
+        DestroyCanvas();
     }
 
     public void ClearRollingMachine()
     {
         state = RollingState.Idle;
-        currentIngredient = null;
-
-        if (currentKeyPanel != null)
+        if (currentIngredient != null)
         {
-            Destroy(currentKeyPanel.gameObject);
-            currentKeyPanel = null;
+            currentIngredient = null;
         }
-
-        DestroyCanvas();
+        ClearVisuals();
         return;
     }
 }
