@@ -4,25 +4,6 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-[JsonConverter(typeof(StringEnumConverter))]  // 얘네를 저장할 일이 없지 싶긴한데...
-public enum EvaluationResult  // 평가는 주방에서 하지 않음, 찻집으로 돌아가서 함
-{
-    Excellent,
-    Normal,
-    Bad
-}
-
-[JsonConverter(typeof(StringEnumConverter))]
-public enum TeaName
-{
-    Unknown,
-    BlackTea,
-    GreenTea,
-    OolongTea,
-    WhiteTea,
-    HerbalTea
-}
-
 /// <summary>
 /// 차 제작 완료 후 씬이 넘어갈 때 전달용
 /// </summary>

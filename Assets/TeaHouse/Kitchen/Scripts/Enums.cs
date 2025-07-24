@@ -2,6 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TeaName
+{
+    Unknown,
+    HotWater,
+    BlackTea,
+    GreenTea,
+    OolongTea,
+    RoseTea,
+    SolomonsSealTea,
+}
+
 public enum IngredientName
 {
     None,        // None은 재료가 없는 상태를 나타냄 (추가 재료가 없는 경우를 위함)
@@ -9,7 +20,6 @@ public enum IngredientName
     Rose,
     SolomonsSeal,
     Honey,
-    Water,  // TODO: 삭제
 
     // 차 평가 중 TeaLeaf가 산화 정도에 따라 다음 중 하나로 바뀜, 주방 내에선 다른 영향 없음
     TeaLeaf_Black,
