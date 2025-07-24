@@ -34,7 +34,7 @@ public class TeaMaker : SceneSingleton<TeaMaker>
             Debug.LogError("tearecipe 그룹 로드 실패");
         }
     }
-    
+
     /// <summary>
     /// Tea를 기반으로 레시피를 판단하여 MakedTea 생성 (채점은 하지않음)
     /// </summary>
@@ -42,12 +42,6 @@ public class TeaMaker : SceneSingleton<TeaMaker>
     /// <returns></returns>
     public static MakedTea MakeTea(Tea tea)
     {
-        if (tea.isWaterFirst)
-        {
-            Debug.Log("물을 재료보다 먼저 넣었습니다: 알 수 없는 차 생성");
-            return new MakedTea { TeaName = TeaName.Unknown };
-        }
-
         foreach (TeaIngredient ingredient in tea.ingredients)
         {
             // 재료가 옳게 가공되었는지 평가
@@ -63,7 +57,7 @@ public class TeaMaker : SceneSingleton<TeaMaker>
         }
 
         // 레시피 찾기 (기준: 재료들이 정확히 일치하는지)
-        TeaRecipe recipe = teaRecipes.Find(r => 
+        TeaRecipe recipe = teaRecipes.Find(r =>
             r.ingredients.EqualIgnoreOrder(tea.ingredients.ConvertAll(i => i.ingredientName)));
 
         if (!recipe)
@@ -73,12 +67,12 @@ public class TeaMaker : SceneSingleton<TeaMaker>
         }
 
         MakedTea makedTea = new MakedTea
-        { 
+        {
             TeaName = recipe.teaName,
             brewTimeGap = tea.timeBrewed - recipe.brewTime,
             temperatureGap = tea.temperature - recipe.temperature
         };
-        
+
 
         if (tea.additionalIngredient)
         {
@@ -160,7 +154,7 @@ public class TeaMaker : SceneSingleton<TeaMaker>
 
     private static void ChangeTeaLeafName(TeaIngredient ingredient)
     {
-        if (ingredient.ingredientName != IngredientName.TeaLeaf) 
+        if (ingredient.ingredientName != IngredientName.TeaLeaf)
             Debug.LogError("찻잎이 아닌데 이름을 바꾸려 함");
 
         switch (ingredient.oxidizedDegree)

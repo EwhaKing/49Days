@@ -24,9 +24,6 @@ public class Kettle : MonoBehaviour
     [SerializeField] Transform kettleBottomPosition;
     [SerializeField] float smokeFadeSpeed = 0.2f; // 연기 투명도 변화 속도 (초당 변화량)
 
-
-
-
     //주전자 회전 관련 변수들 
     [SerializeField] float pourDuration = 2f;
     [SerializeField] float pourAngle = 15f; // 시계 방향 기울기

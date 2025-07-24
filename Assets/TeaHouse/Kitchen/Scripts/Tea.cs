@@ -10,7 +10,5 @@ public class Tea
 
     public int timeBrewed;                     // 우려낸 시간 (초)
 
-    public bool isWaterFirst;                  // 다병에 물을 먼저 넣었는지?
-
     public TeaIngredient additionalIngredient; // 추가 재료 (nullable)
 }

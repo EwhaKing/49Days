@@ -35,6 +35,9 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     void Start()
     {
+        // Tea 인스턴스 생성
+        tea = new Tea();
+
         if (resetButton != null)
             resetButton.SetActive(false);
 
@@ -62,7 +65,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     }
 
-
     void OnMouseUp()
     {
         if (currentState == State.Done)
@@ -77,6 +79,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     void TryInsertIngredient()
     {
+        //손이 비어있으면 return하세요
         if (Hand.Instance.handIngredient == null) return;
 
         // 미리 재료 정보만 얻는다 (Drop 안 함)
@@ -86,16 +89,26 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         // 중복 재료 방지
         if (ingredients.Exists(i => i.ingredientName == ing.ingredientName))
         {
-            Debug.LogWarning($"{ing.ingredientName}은 이미 추가된 재료입니다.");
+            Debug.Log($"{ing.ingredientName}은 이미 추가된 재료입니다.");
+            return;
+        }
+
+        //추가 재료는 한 개만 가능
+        if (tea.additionalIngredient != null)
+            return;
+
+        //물 > 주요 재료는 안 됨. 
+        if (currentState == State.Brewing && ing.ingredientType != IngredientType.Additional)
+        {
+            Debug.Log("우림 중에는 주요 재료를 넣을 수 없습니다.");
             return;
         }
 
         // 중복이 아니면 실제로 놓기
         GameObject ingredientObj = Hand.Instance.Drop();
-
         ingredientObj.transform.SetParent(ingredientParent);
-
         ing.GetComponent<SpriteRenderer>().sortingOrder = 1;
+
 
         // 애니메이션으로 자연스럽게 떨어지게
         Vector3 targetPos = ingredientParent.position;
@@ -103,26 +116,12 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         ingredientObj.transform.position = startAbove; // 시작 위치 조정
         ing.PlayDropAnimation(targetPos, 2.0f);
 
-        ingredients.Add(ing);
-
-        if (!waterPoured && ing.ingredientType != IngredientType.Additional)
-        {
-            ingredientAddedBeforeWater = true;
-        }
-
-        if (ing.ingredientType == IngredientType.Additional && tea != null && tea.additionalIngredient == null)
-        {
-            tea.additionalIngredient = ing;
-        }
-
+        //추가한 재료는 무엇인가? 핵심자료라면 ready 상태가 됩니다. 추가재료라면 걍 추가합니다. 
         if (ing.ingredientType != IngredientType.Additional)
         {
+            // 재료 추가
+            ingredients.Add(ing);
             Debug.Log($"{ing.ingredientName} 핵심 재료 추가됨");
-
-            if (tea != null)
-            {
-                tea.isWaterFirst = false;
-            }
 
             if (ingredients.Exists(i =>
                 i.ingredientType == IngredientType.TeaLeaf ||
@@ -132,31 +131,28 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
                 currentState = State.Ready;
             }
         }
-        else
+        else if (ing.ingredientType == IngredientType.Additional)
         {
+            tea.additionalIngredient = ing;
+
             Debug.Log($"[추가재료] {ing.ingredientName} 추가됨");
         }
 
-        Debug.Log($"🧩 다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
+        Debug.Log($"다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
 
     }
 
     public bool PourWater(float waterTemp)
     {
-        if (currentState != State.Ready && currentState != State.Empty) return false;
+        //물은 한 번만 부을 수 있음.
         if (waterPoured)
         {
             Debug.Log("물은 한 번만 부을 수 있습니다.");
             return false;
         }
 
-        // Tea 인스턴스 생성
-        //tea = new GameObject("Tea").AddComponent<Tea>(); //
-        tea = new Tea();
         tea.ingredients = ingredients;
         tea.temperature = (int)waterTemp;
-        tea.isWaterFirst = true;
-        //물을 넣으면 true로 하고, 주요 재료들을 넣으면 false로 해라
 
         waterPoured = true;
         currentState = State.Brewing;
@@ -166,6 +162,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         Debug.Log($"우림 시작: {waterTemp}도");
 
+        //다병 연기 컨트롤 애니메이션 (수정 필요)
         if (smokeAnimator != null)
         {
             teapotSmoke.SetActive(true);           // 연기 오브젝트를 켜고
