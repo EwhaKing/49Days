@@ -202,7 +202,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7344266533109817892, guid: 817a4271d718dae4d8a7e73d1e80ecd0, type: 3}
       propertyPath: ingredientName
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7344266533109817892, guid: 817a4271d718dae4d8a7e73d1e80ecd0, type: 3}
       propertyPath: ingredientType
@@ -362,7 +362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7344266533109817892, guid: 817a4271d718dae4d8a7e73d1e80ecd0, type: 3}
       propertyPath: ingredientName
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7344266533109817892, guid: 817a4271d718dae4d8a7e73d1e80ecd0, type: 3}
       propertyPath: ingredientType
