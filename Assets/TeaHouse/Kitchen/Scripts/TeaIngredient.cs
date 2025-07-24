@@ -128,7 +128,7 @@ public class TeaIngredient : MonoBehaviour
     /// </summary>
     /// <param name="ingredientName"></param>
     public void ChangeIngredientName(IngredientName ingredientName){
-        if (ingredientName != IngredientName.TeaLeaf) Debug.LogError("찻잎이 아닌데 이름 바꿈");
+        if (this.ingredientName != IngredientName.TeaLeaf) Debug.LogError("찻잎이 아닌데 이름 바꿈");
         this.ingredientName = ingredientName;
     }
 
