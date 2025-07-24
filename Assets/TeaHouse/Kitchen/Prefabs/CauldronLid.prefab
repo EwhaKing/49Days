@@ -219,7 +219,7 @@ MonoBehaviour:
   roastingIngredientPrefab: {fileID: 7322549569524306263, guid: dd03eb3d178677a43bdb7ca5798a0c56, type: 3}
   spawnAreaCenter: {fileID: 5514270785803058347}
   cursorFollowerPrefab: {fileID: 4427460293549059754, guid: cf6b154cded283c4497bdbcc0567ec85, type: 3}
-  spawnIngredientNum: 12
+  spawnIngredientNum: 15
   roastDuration: 8
   darkenInterval: 2
   spawnRadius: 1

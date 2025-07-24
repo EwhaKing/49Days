@@ -21,8 +21,8 @@ public class RoastingIngredient : MonoBehaviour
 
     [SerializeField] private float burnTime;
     [SerializeField] private float maxRoastTime;
-    [SerializeField] private Sprite teaSingle;
-    [SerializeField] private Sprite roseSingle;
+    [SerializeField] private Sprite[] teaSingle;
+    [SerializeField] private Sprite[] roseSingle;
 
     private float timeLastStirred;
     private float roastTimer;
@@ -37,11 +37,11 @@ public class RoastingIngredient : MonoBehaviour
         spriteRenderer = transform.Find("RoastingVisual")?.GetComponent<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
 
-        spriteMap = new Dictionary<IngredientName, Sprite>
-        {
-            { IngredientName.TeaLeaf, teaSingle },
-            { IngredientName.Rose, roseSingle }
-        };
+        // spriteMap = new Dictionary<IngredientName, Sprite>
+        // {
+        //     { IngredientName.TeaLeaf, teaSingle },
+        //     { IngredientName.Rose, roseSingle }
+        // };
     }
 
     public void Init(TeaIngredient currentIngredientData, Transform centerPoint)
@@ -53,21 +53,39 @@ public class RoastingIngredient : MonoBehaviour
         ingredientState = IngredientState.Roasting;
         OxidizedDegree oxidizedDegree = currentIngredientData.oxidizedDegree;
 
-        if (spriteRenderer != null && spriteMap.TryGetValue(currentIngredientData.ingredientName, out Sprite sprite))
+        if (spriteRenderer != null)
         {
-            spriteRenderer.sprite = sprite;
-            switch (oxidizedDegree)
+            Sprite sprite = null;
+            switch (currentIngredientData.ingredientName)
             {
-                case OxidizedDegree.Zero: spriteRenderer.color = new Color(0.8f, 1f, 0.8f); break;
-                case OxidizedDegree.Half: spriteRenderer.color = new Color(1f, 0.8f, 0.3f); break;
-                case OxidizedDegree.Full: spriteRenderer.color = new Color(0.8f, 0.4f, 0.2f); break;
-                case OxidizedDegree.Over: spriteRenderer.color = Color.black; break;
+                case IngredientName.TeaLeaf:
+                    if (teaSingle != null && teaSingle.Length > 0)
+                        sprite = teaSingle[UnityEngine.Random.Range(0, teaSingle.Length)];
+                    break;
+                case IngredientName.Rose:
+                    if (roseSingle != null && roseSingle.Length > 0)
+                        sprite = roseSingle[UnityEngine.Random.Range(0, roseSingle.Length)];
+                    break;
             }
-        }
-        else
-        {
-            Debug.LogWarning("해당 재료의 스프라이트가 없거나, SpriteRenderer가 없습니다.");
-        }
+
+            if (sprite != null)
+            {
+                spriteRenderer.sprite = sprite;
+
+                switch (currentIngredientData.oxidizedDegree)
+                {
+                    case OxidizedDegree.Zero: spriteRenderer.color = new Color(0.8f, 1f, 0.8f); break;
+                    case OxidizedDegree.Half: spriteRenderer.color = new Color(1f, 0.8f, 0.3f); break;
+                    case OxidizedDegree.Full: spriteRenderer.color = new Color(0.8f, 0.4f, 0.2f); break;
+                    case OxidizedDegree.Over: spriteRenderer.color = Color.black; break;
+                }
+            }
+            else
+            {
+                Debug.LogWarning("랜덤 스프라이트를 찾을 수 없습니다.");
+            }
+}
+
     }
 
     private void FixedUpdate()

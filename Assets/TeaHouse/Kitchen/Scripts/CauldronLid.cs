@@ -215,7 +215,11 @@ public class CauldronLid : MonoBehaviour
 
         if (success)
         {
-            currentIngredient.GetComponent<SpriteRenderer>().color = new Color(0.4f, 0.3f, 0.2f);
+            Color color = currentIngredient.GetComponent<SpriteRenderer>().color;
+            color.r *= 0.5f;
+            color.g *= 0.4f;
+            color.b *= 0.3f;
+            currentIngredient.GetComponent<SpriteRenderer>().color = color;
         }
         else
         {

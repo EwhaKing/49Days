@@ -81,7 +81,7 @@ SpriteRenderer:
   m_Size: {x: 1.06, y: 0.76}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &7322549569524306263
@@ -196,5 +196,11 @@ MonoBehaviour:
   centralGravityForce: 0.5
   burnTime: 3
   maxRoastTime: 8
-  teaSingle: {fileID: 21300000, guid: 31c21a027b638774fa95fa141c93b329, type: 3}
-  roseSingle: {fileID: 21300000, guid: d0ff328247171ee429ee1c68d4c2c5cf, type: 3}
+  teaSingle:
+  - {fileID: 100718341, guid: d93556955cc33b8458f9285a44cea68b, type: 3}
+  - {fileID: 397549246, guid: d93556955cc33b8458f9285a44cea68b, type: 3}
+  - {fileID: 1414221423, guid: d93556955cc33b8458f9285a44cea68b, type: 3}
+  roseSingle:
+  - {fileID: 1344292245, guid: f08962c2cbd66c0479af403b7fd51158, type: 3}
+  - {fileID: -40435270, guid: f08962c2cbd66c0479af403b7fd51158, type: 3}
+  - {fileID: -1461183102, guid: f08962c2cbd66c0479af403b7fd51158, type: 3}
