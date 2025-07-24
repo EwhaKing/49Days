@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
   m_Name: GreenTea
   m_EditorClassIdentifier: 
-  teaName: 2
-  ingredients: 08000000
+  teaName: 3
+  ingredients: 07000000
   temperature: 70
   brewTime: 5
