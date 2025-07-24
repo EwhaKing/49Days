@@ -13,12 +13,15 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     [SerializeField] GameObject ingredientTooltipPanel;
     [SerializeField] GameObject ingredientImagePrefab; // 재료 하나당 표시할 프리팹 (Image)
     [SerializeField] Transform ingredientListParent; // 재료 이미지들을 담을 부모 오브젝트
-                                                     //reset 버튼
-    [SerializeField] GameObject resetButton;
+    [SerializeField] GameObject resetButton;//reset 버튼
 
     [SerializeField] Transform ingredientParent;
     [SerializeField] Transform waterEffect;
+    [SerializeField] private Slider pourSlider;
     public Transform pourPosition;
+
+    [SerializeField] private SpriteRenderer smokeRenderer;
+
 
     GameObject teapotSmoke;
     Animator smokeAnimator;
@@ -32,11 +35,22 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     void Start()
     {
+        if (resetButton != null)
+            resetButton.SetActive(false);
+
+        if (ingredientTooltipPanel != null)
+            ingredientTooltipPanel.SetActive(false);
+
         teapotSmoke = transform.Find("teapotsmokeanimation")?.gameObject;
         if (teapotSmoke != null)
             smokeAnimator = teapotSmoke.GetComponent<Animator>();
         else
             Debug.LogWarning("[연기] teapotsmokeanimation를 찾을 수 없습니다.");
+
+        if (pourSlider != null)
+            pourSlider.value = 0f;
+
+        StartCoroutine(SmoothSlider());
     }
 
     void Update()
@@ -65,17 +79,19 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     {
         if (Hand.Instance.handIngredient == null) return;
 
-        // Drop() 먼저 실행해서 '손에 들린 실제 오브젝트'를 가져온다
-        GameObject ingredientObj = Hand.Instance.Drop();
-        TeaIngredient ing = ingredientObj.GetComponent<TeaIngredient>();
+        // 미리 재료 정보만 얻는다 (Drop 안 함)
+        TeaIngredient ing = Hand.Instance.handIngredient.GetComponent<TeaIngredient>();
         if (ing == null) return;
 
-        // 중복 재료 방지 //나중에 알림창으로 해야 됨. 
+        // 중복 재료 방지
         if (ingredients.Exists(i => i.ingredientName == ing.ingredientName))
         {
             Debug.LogWarning($"{ing.ingredientName}은 이미 추가된 재료입니다.");
             return;
         }
+
+        // 중복이 아니면 실제로 놓기
+        GameObject ingredientObj = Hand.Instance.Drop();
 
         ingredientObj.transform.SetParent(ingredientParent);
 
@@ -103,6 +119,11 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         {
             Debug.Log($"{ing.ingredientName} 핵심 재료 추가됨");
 
+            if (tea != null)
+            {
+                tea.isWaterFirst = false;
+            }
+
             if (ingredients.Exists(i =>
                 i.ingredientType == IngredientType.TeaLeaf ||
                 i.ingredientType == IngredientType.Flower ||
@@ -120,16 +141,22 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     }
 
-    public void PourWater(float waterTemp)
+    public bool PourWater(float waterTemp)
     {
-        if (currentState != State.Ready && currentState != State.Empty) return;
+        if (currentState != State.Ready && currentState != State.Empty) return false;
+        if (waterPoured)
+        {
+            Debug.Log("물은 한 번만 부을 수 있습니다.");
+            return false;
+        }
 
         // Tea 인스턴스 생성
         //tea = new GameObject("Tea").AddComponent<Tea>(); //
         tea = new Tea();
         tea.ingredients = ingredients;
         tea.temperature = (int)waterTemp;
-        tea.isWaterFirst = !ingredientAddedBeforeWater; // 재료보다 먼저 물을 부었는지
+        tea.isWaterFirst = true;
+        //물을 넣으면 true로 하고, 주요 재료들을 넣으면 false로 해라
 
         waterPoured = true;
         currentState = State.Brewing;
@@ -143,7 +170,11 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         {
             teapotSmoke.SetActive(true);           // 연기 오브젝트를 켜고
             smokeAnimator.SetTrigger("Play");      // 애니메이션 트리거 작동
+
+            SetSmokeAlphaByTemperature(waterTemp); // 🔥 온도 기반 알파 설정
         }
+
+        return true;
 
     }
 
@@ -174,6 +205,11 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         timer = 0f;
         waterPoured = false;
         ingredientAddedBeforeWater = false;
+
+        currentSliderValue = 0f;
+        targetSliderValue = 0f;
+        pourSlider.value = 0f;
+
 
         //   waterEffect?.gameObject.SetActive(false); // 물 효과 비활성화인데 이거 나중에 다시 살려야 함. 
 
@@ -272,6 +308,52 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             Destroy(child.gameObject);
         }
     }
+
+    //슬라이더로 물 붓는 진행 상황 업데이트
+    [SerializeField] private float sliderSpeed = 0.7f; // 1초에 n씩 증가 (느릴수록 천천히)
+
+    private float currentSliderValue = 0f;
+    private float targetSliderValue = 0f;
+    public void UpdatePourProgress(float target)
+    {
+        targetSliderValue = Mathf.Clamp01(target); // 계속 갱신됨
+    }
+
+    IEnumerator SmoothSlider()
+    {
+        while (true)
+        {
+            // 비율 progress 계산
+            float progress = currentSliderValue / Mathf.Max(targetSliderValue, 0.0001f);
+
+            // 감속 곡선 적용 (t → 0~1 → EaseOut)
+            float easedSpeed = sliderSpeed * (1f - progress); // 마지막에 0에 가까워짐
+            float delta = Time.deltaTime * Mathf.Max(easedSpeed, 0.03f); // 너무 느려지지 않게 최소 보장
+
+            currentSliderValue = Mathf.MoveTowards(currentSliderValue, targetSliderValue, delta);
+
+            if (pourSlider != null)
+                pourSlider.value = currentSliderValue;
+
+            yield return null;
+        }
+    }
+    public void SetSmokeAlphaByTemperature(float temp)
+    {
+        float alpha = 0f;
+        if (temp >= 85f)
+            alpha = 1f;
+        else if (temp >= 70f)
+            alpha = (temp - 70f) / 15f;
+
+        if (smokeRenderer != null)
+        {
+            Color c = smokeRenderer.color;
+            c.a = alpha;
+            smokeRenderer.color = c;
+        }
+    }
+
 
 
 }

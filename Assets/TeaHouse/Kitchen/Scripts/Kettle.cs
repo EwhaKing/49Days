@@ -233,14 +233,23 @@ public class Kettle : MonoBehaviour
                 TeaPot pot = hit.GetComponent<TeaPot>();
                 if (pot != null && cachedTemperature <= 100)
                 {
-                    StartCoroutine(PourWaterAnimation(pot));
-                    triedPour = true;
+                    bool success = pot.PourWater(cachedTemperature); // 물 이미 부었나?
+
+                    if (success)
+                    {
+                        //주전자 위치를 다병의 지정된 위치로 강제 이동
+                        Vector3 offset = transform.position - kettleSpoutPosition.position;
+                        transform.position = teapot.pourPosition.position + offset;
+
+                        StartCoroutine(PourWaterAnimation(pot)); // 물 붓기 애니메이션은 성공할 때만 실행
+                        triedPour = true;
+                    }
+                    else
+                    {
+                        Debug.Log("물 붓기 실패: 이미 다병에 물이 있음");
+                    }
                     break;
                 }
-            }
-            if (!triedPour)
-            {
-                Debug.Log("물 붓기 실패: 거리 조건은 맞지만 다병 없음");
             }
         }
 
@@ -298,7 +307,11 @@ public class Kettle : MonoBehaviour
 
         while (elapsed < pourDuration)
         {
-            transform.rotation = Quaternion.Lerp(originalRotation, targetRotation, elapsed / pourDuration);
+            float t = elapsed / pourDuration;
+            transform.rotation = Quaternion.Lerp(originalRotation, targetRotation, t);
+
+            pot.UpdatePourProgress(t); // 다병에게 진행도 전달
+
             elapsed += Time.deltaTime;
             yield return null;
         }
@@ -307,7 +320,7 @@ public class Kettle : MonoBehaviour
         pot.PourWater(cachedTemperature);
         Debug.Log("[행동] 물 붓기 완료");
 
-        yield return new WaitForSeconds(0.5f); // 0.5초 정지
+        yield return new WaitForSeconds(0.4f); // 0.5초 정지
 
         elapsed = 0f;
         while (elapsed < pourDuration)
@@ -325,9 +338,10 @@ public class Kettle : MonoBehaviour
         // 연기 알파를 다시 복원
         StartCoroutine(FadeSmokeTo(targetAlpha, smokeFadeSpeed * 3f));
 
-
-
         isPouring = false;
+        // 애니메이션 끝났으니 화로로 복귀(0.2초만 있다가)
+        yield return new WaitForSeconds(0.5f);
+        SetToFire();
     }
 
     //주전자에 물 부을 때 바뀌는 연기의 투명도 조절
@@ -348,5 +362,15 @@ public class Kettle : MonoBehaviour
             yield return null;
         }
     }
+
+    //pourradius는 어디까지인가?
+    void OnDrawGizmos()
+    {
+        if (kettleSpoutPosition == null) return;
+
+        Gizmos.color = Color.cyan; // 확인용 색상
+        Gizmos.DrawWireSphere(kettleSpoutPosition.position, pourRadius);
+    }
+
 
 }
