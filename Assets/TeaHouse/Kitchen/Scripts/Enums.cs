@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TeaName
+public enum TeaName  // 무조건 끝에 추가하기!!
 {
     Unknown,
     HotWater,
@@ -13,7 +13,7 @@ public enum TeaName
     SolomonsSealTea,
 }
 
-public enum IngredientName
+public enum IngredientName  // 무조건 끝에 추가하기!!
 {
     None,        // None은 재료가 없는 상태를 나타냄 (추가 재료가 없는 경우를 위함)
     TeaLeaf,
