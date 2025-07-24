@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public static class Extensions
 {
@@ -14,9 +15,20 @@ public static class Extensions
         return value.ToString().ToLowerInvariant();
     }
 
-    public static bool EqualIgnoreOrder<T>(this List<T> a, List<T> b)
+    /// <summary>
+    /// 매개번수로 주어진 리스트와 순서 상관없이 요소들이 일치하는지 비교합니다.
+    /// </summary>
+    public static bool EqualIgnoreOrder<T>(this List<T> list, List<T> otherList)
     {
-        return a.Count == b.Count && !a.Except(b).Any() && !b.Except(a).Any();
+        return list.Count == otherList.Count && !list.Except(otherList).Any() && !otherList.Except(list).Any();
+    }
+
+    /// <summary>
+    /// 주어진 정수값과 오차범위(기본값: 5) 내에서 일치하는지 판단합니다.
+    /// </summary>
+    public static bool IsNear(this int value, int target, int tolerance = 5)
+    {
+        return Mathf.Abs(value - target) <= tolerance;
     }
 
 }

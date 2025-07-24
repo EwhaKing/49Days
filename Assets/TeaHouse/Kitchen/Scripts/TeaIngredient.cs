@@ -25,6 +25,8 @@ public class TeaIngredient : MonoBehaviour
     // 상태에 따른 이미지 딕셔너리: Init에서 재료 이름을 통해 Resources.Load함
     public Dictionary<SpriteStatus, Sprite> spriteVariants { get; private set; } = new Dictionary<SpriteStatus, Sprite>();
 
+
+
     //애니메이션 추가(재료가 떨어지는 애니메이션)
     public void PlayDropAnimation(Vector3 targetPosition, float duration = 0.4f)
     {
@@ -118,6 +120,16 @@ public class TeaIngredient : MonoBehaviour
         processSequence.Add(ProcessStep.Chop);
         changeSprite(SpriteStatus.Chopped);
         Debug.Log($"{ingredientName}이(가) 손질되었습니다.");
+    }
+
+    /// <summary>
+    /// * 채점 시스템에서만 사용하는 함수입니다 * <br/>
+    ///  - 찻잎일 경우에만 산화 정도에 따라 재료 이름을 바꿈
+    /// </summary>
+    /// <param name="ingredientName"></param>
+    public void ChangeIngredientName(IngredientName ingredientName){
+        if (ingredientName != IngredientName.TeaLeaf) Debug.LogError("찻잎이 아닌데 이름 바꿈");
+        this.ingredientName = ingredientName;
     }
 
     void changeSprite(SpriteStatus newStatus)

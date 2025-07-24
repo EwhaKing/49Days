@@ -9,7 +9,7 @@ public enum IngredientName
     Rose,
     SolomonsSeal,
     Honey,
-    Water
+    Water,  // TODO: 삭제
 
     // 차 평가 중 TeaLeaf가 산화 정도에 따라 다음 중 하나로 바뀜, 주방 내에선 다른 영향 없음
     TeaLeaf_Black,

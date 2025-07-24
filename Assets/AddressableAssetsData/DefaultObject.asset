@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
-  m_Name: NewTeaRecipe
+  m_Script: {fileID: 11500000, guid: 3a189bb168d8d90478a09ea08c2f3d72, type: 3}
+  m_Name: DefaultObject
   m_EditorClassIdentifier: 
-  teaName: 0
-  ingredients: 00000000
-  teaType: 1
-  temperature: 70
-  brewTime: 5
-  additionalIngredient: 4
+  m_AddressableAssetSettingsGuid: e2ae25bc531573943bc7523d5bb75264

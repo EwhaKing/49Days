@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewTeaRecipe", menuName = "TeaRecipe")]
 public class TeaRecipe : ScriptableObject
 {
-    public TeaName teaName;  // 차 이름
+    public TeaName teaName;  // 차 이름 (이미지 및 컷씬, 설명 연결, npc의 주문 등에 사용)
 
     public List<IngredientName> ingredients;  // 차에 들어가는 재료 리스트
 
@@ -13,5 +13,5 @@ public class TeaRecipe : ScriptableObject
 
     public int brewTime;  // 우려내는 시간 (초)
 
-    public IngredientName additionalIngredient;  // 추가 재료 (없으면 None)
+    // public IngredientName additionalIngredient;  // 추가 재료 (없으면 None)
 }

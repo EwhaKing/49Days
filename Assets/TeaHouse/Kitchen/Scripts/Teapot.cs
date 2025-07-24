@@ -166,7 +166,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         // 평가 및 처리 책임은 외부 시스템에서 담당
 
         //주방 초기화!!
-        FinishTea();
+        //FinishTea();
 
         return tea;  // 완성된 차 객체 반환
     }
