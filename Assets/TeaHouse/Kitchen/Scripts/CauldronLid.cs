@@ -144,6 +144,12 @@ public class CauldronLid : MonoBehaviour
             return false;
         }
 
+        if ((handIngredient.ingredientType == IngredientType.Flower || handIngredient.ingredientType == IngredientType.Substitute) && handIngredient.isChopped == false)
+        {
+            Debug.Log("손질되지 않은 재료는 덖을 수 없습니다.");
+            return false;
+        }
+
         // 유념을 실패했거나, 산화에 실패한 재료 거부
         if (handIngredient.rolled == ResultStatus.Failed || handIngredient.oxidizedDegree == OxidizedDegree.Over)
         {
