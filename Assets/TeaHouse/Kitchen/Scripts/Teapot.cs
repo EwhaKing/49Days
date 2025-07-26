@@ -29,7 +29,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     List<TeaIngredient> ingredients = new List<TeaIngredient>();
     float timer = 0f;
     bool waterPoured = false;
-    bool ingredientAddedBeforeWater = false;
 
     private Tea tea;  // 외부에서 접근 가능하게
 
@@ -46,7 +45,10 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         teapotSmoke = transform.Find("teapotsmokeanimation")?.gameObject;
         if (teapotSmoke != null)
+        {
             smokeAnimator = teapotSmoke.GetComponent<Animator>();
+            teapotSmoke.SetActive(false); // 시작 시 꺼두기
+        }
         else
             Debug.LogWarning("[연기] teapotsmokeanimation를 찾을 수 없습니다.");
 
@@ -162,13 +164,19 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         Debug.Log($"우림 시작: {waterTemp}도");
 
-        //다병 연기 컨트롤 애니메이션 (수정 필요)
+        //다병 연기 애니메이션 
         if (smokeAnimator != null)
         {
-            teapotSmoke.SetActive(true);           // 연기 오브젝트를 켜고
-            smokeAnimator.SetTrigger("Play");      // 애니메이션 트리거 작동
+            teapotSmoke.SetActive(true);
 
-            SetSmokeAlphaByTemperature(waterTemp); // 🔥 온도 기반 알파 설정
+            smokeRenderer.color = new Color(smokeRenderer.color.r, smokeRenderer.color.g, smokeRenderer.color.b, 1f); // 무조건 시작 시 알파 1
+
+            if (waterTemp >= 70f)
+                StartCoroutine(FadeOutSmokeAfterDelay(30f, 10f)); // 30초 유지 후 10초 페이드
+            else if (waterTemp >= 40f)
+                StartCoroutine(FadeOutSmokeAfterDelay(5f, 10f)); // 5초 유지 후 10초 페이드
+            else
+                teapotSmoke.SetActive(false); // 너무 차가우면 아예 끔
         }
 
         return true;
@@ -201,16 +209,18 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         ingredients.Clear();
         timer = 0f;
         waterPoured = false;
-        ingredientAddedBeforeWater = false;
 
         currentSliderValue = 0f;
         targetSliderValue = 0f;
         pourSlider.value = 0f;
 
+        //애니메이션 꺼주기
+        if (teapotSmoke != null)
+            teapotSmoke.SetActive(false);
 
         //   waterEffect?.gameObject.SetActive(false); // 물 효과 비활성화인데 이거 나중에 다시 살려야 함. 
 
-        // ✅ 재료 오브젝트 제거 추가
+        // 재료 오브젝트 제거 추가
         foreach (Transform child in ingredientParent)
         {
             Destroy(child.gameObject);
@@ -219,10 +229,14 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         ClearIngredientListUI();
         ingredientTooltipPanel?.SetActive(false);
 
+        //현재 차는 폐기하고
         if (tea != null)
         {
             tea = null;
         }
+
+        //새 Tea 생성 (리셋 후 다시 재료를 넣을 수 있게) + void start에서 차를 생성하기 때문에 여기서 기존 차를 없앨 때마다 새 차 생성해야 함. (사실 GC가 있으니까 윗 두 줄은 필요없지만 의미상 남겨둠)
+        tea = new Tea();
 
         Debug.Log("🔥 ingredientParent 자식 개수: " + ingredientParent.childCount);
 
@@ -335,22 +349,49 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             yield return null;
         }
     }
-    public void SetSmokeAlphaByTemperature(float temp)
-    {
-        float alpha = 0f;
-        if (temp >= 85f)
-            alpha = 1f;
-        else if (temp >= 70f)
-            alpha = (temp - 70f) / 15f;
 
-        if (smokeRenderer != null)
+    IEnumerator FadeOutSmoke(float duration)
+    {
+        if (smokeRenderer == null) yield break;
+
+        Color c = smokeRenderer.color;
+        float startAlpha = c.a;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
         {
-            Color c = smokeRenderer.color;
-            c.a = alpha;
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            c.a = Mathf.Lerp(startAlpha, 0f, t);
             smokeRenderer.color = c;
+            yield return null;
         }
+
+        c.a = 0f;
+        smokeRenderer.color = c;
+
+        // 다 꺼졌으면 비활성화
+        if (teapotSmoke != null)
+            teapotSmoke.SetActive(false);
     }
 
+    IEnumerator FadeOutSmokeAfterDelay(float delay, float fadeDuration)
+    {
+        yield return new WaitForSeconds(delay);
 
+        float elapsed = 0f;
+        Color c = smokeRenderer.color;
+
+        while (elapsed < fadeDuration)
+        {
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / fadeDuration);
+            smokeRenderer.color = new Color(c.r, c.g, c.b, alpha);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        smokeRenderer.color = new Color(c.r, c.g, c.b, 0f);
+        teapotSmoke.SetActive(false);
+    }
 
 }

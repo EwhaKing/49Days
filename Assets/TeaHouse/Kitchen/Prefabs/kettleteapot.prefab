@@ -730,6 +730,10 @@ PrefabInstance:
       propertyPath: sliderSpeed
       value: 2.2
       objectReference: {fileID: 0}
+    - target: {fileID: 2877033913727898644, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
+      propertyPath: smokeRenderer
+      value: 
+      objectReference: {fileID: 7006539363925453253}
     - target: {fileID: 2878718077254802726, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
       propertyPath: offset.y
       value: -2
@@ -741,6 +745,10 @@ PrefabInstance:
     - target: {fileID: 3294424632880015705, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 3370864353954352064, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.54
       objectReference: {fileID: 0}
     - target: {fileID: 3415597204087692521, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
       propertyPath: m_SizeDelta.x
@@ -827,7 +835,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8488597514394667806, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 37513f8122d8dca4f88fa1fb9c143cf1, type: 3}
+    - target: {fileID: 8488597514394667806, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
       propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8488597514394667806, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
+      propertyPath: m_WasSpriteAssigned
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8564657144633158526, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
@@ -918,6 +934,11 @@ MonoBehaviour:
 --- !u!4 &6891642502830423671 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5428451964115721388, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
+  m_PrefabInstance: {fileID: 1509185378694947547}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &7006539363925453253 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8488597514394667806, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
   m_PrefabInstance: {fileID: 1509185378694947547}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1594649040776243583
