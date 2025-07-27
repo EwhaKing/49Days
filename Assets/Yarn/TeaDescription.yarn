@@ -3,6 +3,16 @@
 <<fade_in greentea>>
 녹차: 녹차입니다. 차에 대한 설명입니다.
 ===
+title: blacktea
+---
+<<fade_in blacktea>>
+홍차: 홍차입니다. 차에 대한 설명입니다.
+===
+title: oolongtea
+---
+<<fade_in oolongtea>>
+우롱차: 우롱차입니다. 차에 대한 설명입니다.
+===
 
 title: greentea_honey
 ---
