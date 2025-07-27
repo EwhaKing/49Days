@@ -28,13 +28,13 @@ public class Bottle : MonoBehaviour
     void Start()
     {
         Fill = transform.Find("Fill").gameObject;
-        sprite = Resources.Load<Sprite>($"Arts/{ingredientName.ToLowerString()}_default");
-        if (sprite == null)
-        {
-            Debug.LogError($"{ingredientName}의 Fill 스프라이트를 찾을 수 없습니다.");
-            return;
-        }
-        Fill.GetComponent<SpriteRenderer>().sprite = sprite;
+        // sprite = Resources.Load<Sprite>($"Arts/{ingredientName.ToLowerString()}_default");
+        // if (sprite == null)
+        // {
+        //     Debug.LogError($"{ingredientName}의 Fill 스프라이트를 찾을 수 없습니다.");
+        //     return;
+        // }
+        // Fill.GetComponent<SpriteRenderer>().sprite = sprite;
 
         nameTag = transform.Find("Canvas").Find("NameTag").gameObject;
         nameText = nameTag.transform.Find("Name").GetComponent<TMP_Text>();

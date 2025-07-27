@@ -40,7 +40,7 @@ public class Bell : MonoBehaviour
 
     void PauseGame()
     {
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         AudioListener.pause = true; // 전체 오디오 일시정지
 
         // 벨소리만 계속 들리게
@@ -52,8 +52,15 @@ public class Bell : MonoBehaviour
     {
         isSkipped = true;
         cutScene.SetActive(false);
-        Debug.Log(makedTea.TeaName.ToLowerString());
+
+        string teaString = makedTea.TeaName.ToLowerString();
+        if (makedTea.additionalIngredient != IngredientName.None)
+            teaString += "_" + makedTea.additionalIngredient;
+
+        Debug.Log(teaString);
+
         // 얀스피너로 makedTea이름 및 추가재료로 설명과 이미지 띄우기
+        YarnManager.Instance.RunDialogue(teaString);
     }
 
     IEnumerator LatePlayCutScene()

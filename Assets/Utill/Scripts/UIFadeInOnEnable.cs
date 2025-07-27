@@ -1,17 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
-public class UIFadeInOnStart : MonoBehaviour
+public class UIFadeInOnEnable : MonoBehaviour
 {
     private CanvasGroup canvasGroup;
-    [SerializeField] private float fadeDuration = 1.0f;
+    public float fadeDuration = 1.0f;
     private float alpha;
 
-    private void Start()
+    private void OnEnable()
     {
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
-
         alpha = canvasGroup.alpha;
         canvasGroup.alpha = 0f;
         StartCoroutine(FadeInCoroutine());
