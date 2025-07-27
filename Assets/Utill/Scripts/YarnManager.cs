@@ -12,10 +12,13 @@ public class YarnManager : SceneSingleton<YarnManager>
     void Start()
     {
         runner.AddCommandHandler<string>("fade_in", FadeIn);
+        runner.gameObject.SetActive(false);
     }
 
     public void RunDialogue(string nodeTitle)
     {
+        runner.gameObject.SetActive(true);
+
         runner.StartDialogue(nodeTitle);
     }
 
