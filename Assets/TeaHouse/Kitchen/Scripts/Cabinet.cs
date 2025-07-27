@@ -12,7 +12,7 @@ public class Cabinet : SceneSingleton<Cabinet>
     {
         foreach (IngredientName ingredientName in Utills.GetValues<IngredientName>())
         {
-            ingredientCounts[ingredientName] = 2;
+            ingredientCounts[ingredientName] = 5;
         }
 
         Debug.Log("Cabinet 초기화");

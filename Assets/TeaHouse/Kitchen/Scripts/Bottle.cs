@@ -20,12 +20,13 @@ public class Bottle : MonoBehaviour
     {
         Cabinet.AfterCabinetInit += () =>
         {
+            Init();
             FillDecision();
             countText.text = Cabinet.Instance.ingredientCounts[ingredientName] + "개";
             Debug.Log($"{ingredientName} 초기화: {Cabinet.Instance.ingredientCounts[ingredientName]}개");
         };
     }
-    void Start()
+    void Init()
     {
         Fill = transform.Find("Fill").gameObject;
         // sprite = Resources.Load<Sprite>($"Arts/{ingredientName.ToLowerString()}_default");
