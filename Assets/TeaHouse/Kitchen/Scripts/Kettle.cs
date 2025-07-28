@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Kettle : MonoBehaviour
 {
-    private float maxAngle = 360f; // -355f=5f
-    private float minAngle = 72f; // -72f=288f
+    private float maxAngle = 150f; // -355f=5f
+    private float minAngle = -150f; // -72f=288f
 
     enum KettleState { OnFire, OnHook, Dragging }
     KettleState currentState = KettleState.OnFire;
@@ -29,7 +29,14 @@ public class Kettle : MonoBehaviour
     [SerializeField] float pourAngle = 15f; // 시계 방향 기울기
     bool isPouring = false;
     Quaternion originalRotation;
-    // [SerializeField] Transform kettlePivot; // 회전용 빈 부모 오브젝트
+
+    //물 파티클 관련 변수들
+    [SerializeField] private ParticleSystem waterParticle; // Inspector에서 할당
+    [SerializeField] private float particleSpawnInterval = 0.8f;
+    //kettlespoutposition도 사용
+
+    private Coroutine particleCoroutine;
+
 
     public TeaPot teapot; // Inspector에서 할당
     GameObject heldSmokeObject;
@@ -67,14 +74,16 @@ public class Kettle : MonoBehaviour
 
         if (teapot == null)
             teapot = GameObject.FindObjectOfType<TeaPot>();
-
-
     }
 
     void Update()
     {
-        // Debug.Log($"[위치 확인] 주전자: {transform.position}, 바닥: {kettleBottomPosition.position}, 화로: {stovePosition.position}");
-
+        //waterparticle은 주둥이 위치를 따라간다
+        if (kettleSpoutPosition != null && waterParticle != null)
+        {
+            waterParticle.transform.position = kettleSpoutPosition.position + new Vector3(0f, -0.2f, 0f); // 주둥이 위치에 약간 아래 위치
+            waterParticle.transform.rotation = kettleSpoutPosition.rotation;
+        }
 
         //물 붓는 동안에는 움직이지 마세요
         if (isPouring) return;
@@ -297,11 +306,11 @@ public class Kettle : MonoBehaviour
         // 연기 알파를 0으로 줄이기 시작
         StartCoroutine(FadeSmokeTo(0f, smokeFadeSpeed * 3f));
 
-
         Quaternion originalRotation = transform.rotation;
         Quaternion targetRotation = Quaternion.Euler(0, 0, pourAngle);
         float elapsed = 0f;
 
+        //물 붓기, 주전자 기울이기
         while (elapsed < pourDuration)
         {
             float t = elapsed / pourDuration;
@@ -310,6 +319,13 @@ public class Kettle : MonoBehaviour
             pot.UpdatePourProgress(t); // 다병에게 진행도 전달
 
             elapsed += Time.deltaTime;
+
+            // 기울인 뒤 0.5초 후에 파티클 시작
+            if (particleCoroutine == null && elapsed >= 0.7f)
+            {
+                particleCoroutine = StartCoroutine(SpawnParticles());
+            }
+
             yield return null;
         }
         transform.rotation = targetRotation;
@@ -317,13 +333,43 @@ public class Kettle : MonoBehaviour
         pot.PourWater(cachedTemperature);
         Debug.Log("[행동] 물 붓기 완료");
 
-        yield return new WaitForSeconds(0.4f); // 0.5초 정지
+        yield return new WaitForSeconds(0.4f); // n초 정지
+
+        // 파티클 생성 종료
+        if (particleCoroutine != null)
+        {
+            StopCoroutine(particleCoroutine);
+            particleCoroutine = null;
+        }
+        if (waterParticle != null && waterParticle.isPlaying)
+        {
+            waterParticle.Stop();
+        }
 
         elapsed = 0f;
+
+        // 돌아갈 때: 처음 0.5초 동안만 파티클 재생
+        particleCoroutine = StartCoroutine(SpawnParticles());
+
         while (elapsed < pourDuration)
         {
             transform.rotation = Quaternion.Lerp(targetRotation, originalRotation, elapsed / pourDuration);
             elapsed += Time.deltaTime;
+
+            //0.5초 지나면 파티클 멈춤
+            if (elapsed >= 0.5f && particleCoroutine != null)
+            {
+                if (particleCoroutine != null)
+                {
+                    StopCoroutine(particleCoroutine);
+                    particleCoroutine = null;
+                }
+                if (waterParticle != null && waterParticle.isPlaying)
+                {
+                    waterParticle.Stop();
+                }
+            }
+
             yield return null;
         }
         transform.rotation = originalRotation;
@@ -358,6 +404,25 @@ public class Kettle : MonoBehaviour
             currentColor = spriteRenderer.color;
             yield return null;
         }
+    }
+
+    //파티클 생성하기
+    IEnumerator SpawnParticles()
+    {
+        while (true)
+        {
+            Instantiate(waterParticle, kettleSpoutPosition.position, Quaternion.identity);
+            yield return new WaitForSeconds(particleSpawnInterval);
+        }
+    }
+
+    /// <summary>
+    /// 연기 애니메이션 정지 (Animator bool 파라미터 'isSmoking'을 false로 설정)
+    /// </summary>
+    public void StopSmokeAnimation()
+    {
+        if (smokeAnimator != null)
+            smokeAnimator.SetBool("isSmoking", false);
     }
 
     //pourradius는 어디까지인가?

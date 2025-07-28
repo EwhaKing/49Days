@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 {
-    enum State { Empty, Ready, Brewing, Done }
+    public enum State { Empty, Ready, Brewing, Done }
     State currentState = State.Empty;
 
     //다병에 마우스 오버 시 팝업
@@ -48,6 +48,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         {
             smokeAnimator = teapotSmoke.GetComponent<Animator>();
             teapotSmoke.SetActive(false); // 시작 시 꺼두기
+            smokeAnimator.SetBool("isSmoking", false); // 안전하게 초기화
         }
         else
             Debug.LogWarning("[연기] teapotsmokeanimation를 찾을 수 없습니다.");
@@ -168,6 +169,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         if (smokeAnimator != null)
         {
             teapotSmoke.SetActive(true);
+            smokeAnimator.Play("startSmoke", 0, 0f); // 애니메이션 처음부터 재생
+            smokeAnimator.SetBool("isSmoking", true);
 
             smokeRenderer.color = new Color(smokeRenderer.color.r, smokeRenderer.color.g, smokeRenderer.color.b, 1f); // 무조건 시작 시 알파 1
 
@@ -253,6 +256,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     void OnMouseEnter()
     {
         if (currentState == State.Empty) return;  //상태가 비었으면 재료 UI 안 띄움
+        if (ingredients.Count == 0) return; // 재료가 하나도 없으면, 즉 물만 들어간 경우도 안 띄움
 
         if (ingredientTooltipPanel != null)
         {
@@ -392,6 +396,24 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         smokeRenderer.color = new Color(c.r, c.g, c.b, 0f);
         teapotSmoke.SetActive(false);
+    }
+
+    /// <summary>
+    /// 연기 애니메이션 정지 (Animator bool 파라미터 'isSmoking'을 false로 설정)
+    /// </summary>
+    public void StopSmokeAnimation()
+    {
+        if (smokeAnimator != null)
+            smokeAnimator.SetBool("isSmoking", false);
+    }
+
+    /// <summary>
+    /// (tea를 인자로 받아) state를 return 하는 함수
+    /// </summary>
+
+    public State GetCurrentState()
+    {
+        return currentState;
     }
 
 }

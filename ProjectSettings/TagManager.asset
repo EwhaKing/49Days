@@ -6,6 +6,7 @@ TagManager:
   tags:
   - RoastingIngredient
   - Cursor
+  - DeleteZone
   layers:
   - Default
   - TransparentFX
