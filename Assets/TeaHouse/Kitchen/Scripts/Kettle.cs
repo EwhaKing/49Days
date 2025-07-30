@@ -23,6 +23,7 @@ public class Kettle : MonoBehaviour
     [SerializeField] Transform kettleSpoutPosition; //주전자 주둥이 위치 (다병에 붓기 위하여)
     [SerializeField] Transform kettleBottomPosition;
     [SerializeField] float smokeFadeSpeed = 0.2f; // 연기 투명도 변화 속도 (초당 변화량)
+    [SerializeField] GameObject highlightSprite; // 하이라이트용 스프라이트 오브젝트
 
     //주전자 회전 관련 변수들 
     [SerializeField] float pourDuration = 2f;
@@ -45,6 +46,9 @@ public class Kettle : MonoBehaviour
     void Start()
     {
         SetToFire(); // 시작 시 화로 위치로 이동
+
+        // 하이라이트 비활성화
+        highlightSprite.SetActive(false);
 
         // SmokeObject와 Animator 찾기
         heldSmokeObject = transform.Find("SmokeObject")?.gameObject;
@@ -252,6 +256,15 @@ public class Kettle : MonoBehaviour
         }
 
     }
+    void OnMouseEnter()
+    {
+        highlightSprite.SetActive(true);
+    }
+
+    void OnMouseExit()
+    {
+        highlightSprite.SetActive(false);
+    }
 
     Vector3 GetMouseWorldPos()
     {
@@ -282,6 +295,8 @@ public class Kettle : MonoBehaviour
 
         // 정렬 순서 낮게 조정
         GetComponent<SpriteRenderer>().sortingOrder = 0;
+        highlightSprite.GetComponent<SpriteRenderer>().sortingOrder = 0;
+
 
         // 연기 알파를 0으로 줄이기 시작
         StartCoroutine(FadeSmokeTo(0f, smokeFadeSpeed * 3f));

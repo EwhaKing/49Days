@@ -20,6 +20,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     [SerializeField] private Slider pourSlider;
     public Transform pourPosition;
 
+    [SerializeField] private GameObject highlightSprite;
+
     [SerializeField] private SpriteRenderer smokeRenderer;
 
 
@@ -36,6 +38,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     {
         // Tea 인스턴스 생성
         tea = new Tea();
+
+        highlightSprite.SetActive(false);
 
         if (resetButton != null)
             resetButton.SetActive(false);
@@ -254,6 +258,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     void OnMouseEnter()
     {
+        highlightSprite.SetActive(true);
+
         if (currentState == State.Empty) return;  //상태가 비었으면 재료 UI 안 띄움
         if (ingredients.Count == 0) return; // 재료가 하나도 없으면, 즉 물만 들어간 경우도 안 띄움
 
@@ -267,6 +273,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     void OnMouseExit()
     {
+        highlightSprite.SetActive(false);
+
         if (ingredientTooltipPanel != null)
         {
             ingredientTooltipPanel.SetActive(false);
