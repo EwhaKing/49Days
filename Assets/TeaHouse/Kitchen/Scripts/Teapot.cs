@@ -183,7 +183,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         }
 
         return true;
-
     }
 
     public Tea getTea()
