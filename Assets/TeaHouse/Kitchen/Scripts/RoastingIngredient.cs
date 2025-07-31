@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class RoastingIngredient : MonoBehaviour
@@ -43,6 +44,11 @@ public class RoastingIngredient : MonoBehaviour
         // };
     }
 
+    void OnMouseEnter()
+    {
+        // if (ingredientState != IngredientState.Default || ingredientState == IngredientState.Roasting)
+    }
+
     public void Init(TeaIngredient currentIngredientData, Transform centerPoint)
     {
         cauldronCenter = centerPoint;
@@ -83,7 +89,7 @@ public class RoastingIngredient : MonoBehaviour
             {
                 Debug.LogWarning("랜덤 스프라이트를 찾을 수 없습니다.");
             }
-}
+        }
 
     }
 

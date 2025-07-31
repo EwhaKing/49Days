@@ -11,6 +11,11 @@ public class RollingMachine : MonoBehaviour
         Rolled
     }
 
+    [Header("스프라이트 관련")]
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private Sprite highlight;
+
     [Header("키 패널 관련")]
     [SerializeField] private GameObject keyPanelPrefab;
     [SerializeField] private GameObject canvasPrefab;
@@ -76,6 +81,20 @@ public class RollingMachine : MonoBehaviour
         ClearRollingMachine();
     }
 
+    void OnMouseEnter()
+    {
+        TeaIngredient ingredient = Hand.Instance.handIngredient;
+        
+        if ((ingredient == null && state == RollingState.Rolled) || (ingredient != null && ValidateRollingCondition() && state == RollingState.Idle))
+        {
+            spriteRenderer.sprite = highlight;
+        }
+    }
+
+    void OnMouseExit()
+    {
+        spriteRenderer.sprite = defaultSprite;
+    }
 
     private void OnMouseUp()
     {
@@ -117,6 +136,10 @@ public class RollingMachine : MonoBehaviour
     {
         if (!ValidateRollingCondition()) return;
 
+        currentIngredient = Hand.Instance.Drop();
+        currentIngredient.transform.position = transform.position;
+        currentIngredient.SetActive(false);
+
         state = RollingState.Rolling;
         Debug.Log("유념을 시작합니다.");
         SetCanvas();
@@ -149,11 +172,7 @@ public class RollingMachine : MonoBehaviour
             return false;
         }
 
-        // 위 조건 이외론 손에 든 재료 Drop
-        currentIngredient = Hand.Instance.Drop();
-        currentIngredient.transform.position = transform.position;
-        currentIngredient.SetActive(false);
-        Debug.Log($"{handIngredient.spriteStatus} 상태의 {handIngredient.ingredientName}을(를) 유념기에 넣었습니다.");
+        Debug.Log($"{handIngredient.spriteStatus} 상태의 {handIngredient.ingredientName}을(를) 유념기에 넣기 시도");
         return true;
     }
 
