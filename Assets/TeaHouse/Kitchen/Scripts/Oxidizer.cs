@@ -56,6 +56,12 @@ public class Oxidizer : MonoBehaviour
             backgroundRenderer.sprite = openHighlightSprite;
         }
 
+        else if (state == OxidizerState.Oxidizing)
+        {
+            // 산화 중 상태에서 마우스 오버 → 하이라이트
+            backgroundRenderer.sprite = closedHighlightSprite;
+        }
+
         else if (state == OxidizerState.OverReady)
         {
             // 탐 대기 상태에서 마우스 오버 → 하이라이트
@@ -69,6 +75,13 @@ public class Oxidizer : MonoBehaviour
         {
             // 산화기 다시 닫기
             state = OxidizerState.ClosedIdle;
+            backgroundRenderer.sprite = closedSprite;
+        }
+
+        else if (state == OxidizerState.Oxidizing ||
+                 state == OxidizerState.OverReady)
+        {
+            // 산화 중 또는 탐 대기 상태에서 마우스 나가면 하이라이트 제거
             backgroundRenderer.sprite = closedSprite;
         }
     }
@@ -109,7 +122,6 @@ public class Oxidizer : MonoBehaviour
         currentIngredient.gameObject.SetActive(false);
         Hand.Instance.Drop();
 
-        backgroundRenderer.sprite = closedSprite;
         gaugeArrow.SetActive(true);
         gaugePlate.SetActive(true);
 
