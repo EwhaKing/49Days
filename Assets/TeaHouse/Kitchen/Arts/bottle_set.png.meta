@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 431efdf78ab70ad48a33323a1a0d55a7
+guid: 496c88be514989e4dad3a53a83b61990
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: bottle_solomonssealin_0
+      name: bottle_set_0
       rect:
         serializedVersion: 2
-        x: 601
-        y: 1126
-        width: 115
-        height: 166
+        x: 0
+        y: 245
+        width: 114
+        height: 165
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,8 +124,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 132ba3aca91f3324a916e988a92c2779
-      internalID: 2116902839
+      spriteID: e9d2af67bf9a9b74b84f12dcd0b20efd
+      internalID: -1534276697
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bottle_set_1
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 243
+        width: 116
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 994cbd6f3add29b4eaceff9a483775a2
+      internalID: -999383164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bottle_set_2
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 241
+        width: 113
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d4bf5484bc0ce94693af3aa06969fa4
+      internalID: -801702480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bottle_set_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 4
+        width: 114
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6c3afea9c6eb5a24f809a5463fcd769e
+      internalID: -498481022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bottle_set_4
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 2
+        width: 116
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d2eb01431f19a434194a7c1a463eb0d1
+      internalID: 376524369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bottle_set_5
+      rect:
+        serializedVersion: 2
+        x: 366
+        y: 0
+        width: 113
+        height: 168
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fe983155ed0cab64b84f9af545f9260b
+      internalID: -1237174146
       vertices: []
       indices: 
       edges: []
@@ -141,7 +246,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      bottle_solomonssealin_0: 2116902839
+      bottle_set_0: -1534276697
+      bottle_set_1: -999383164
+      bottle_set_2: -801702480
+      bottle_set_3: -498481022
+      bottle_set_4: 376524369
+      bottle_set_5: -1237174146
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -9,19 +9,29 @@ public class Bell : MonoBehaviour
     [SerializeField] GameObject manufacturingCompletedUI;
     [SerializeField] GameObject cutScene;
     [SerializeField] Button skipButton;
+    [SerializeField] Sprite highlightSprite;
     Tea tea;
     MakedTea makedTea;
     AudioSource audioSource;
+    SpriteRenderer image;
+    Sprite originSprite;
     bool isSkipped;
 
     private void Start() 
     {
         audioSource = GetComponent<AudioSource>();
         skipButton.onClick.AddListener(ShowMakedTea);
+        image = GetComponent<SpriteRenderer>();
+        originSprite = image.sprite;
     }
     private void OnMouseEnter()
     {
-        // 마우스오버 효과
+        image.sprite = highlightSprite;
+    }
+
+    private void OnMouseExit() 
+    {
+        image.sprite = originSprite;
     }
 
     private void OnMouseUp()

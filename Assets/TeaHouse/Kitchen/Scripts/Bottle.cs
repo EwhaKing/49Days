@@ -10,11 +10,11 @@ public class Bottle : MonoBehaviour
     [SerializeField] IngredientName ingredientName;
     [SerializeField] IngredientType ingredientType;
     [SerializeField] GameObject ingredientPrefab;
+    [SerializeField] GameObject highlight;
     GameObject nameTag;
     TMP_Text nameText;
     TMP_Text countText;
     GameObject Fill;
-    Sprite sprite;
 
     void Awake()
     {
@@ -28,15 +28,8 @@ public class Bottle : MonoBehaviour
     }
     void Init()
     {
+        highlight.SetActive(false);
         Fill = transform.Find("Fill").gameObject;
-        // sprite = Resources.Load<Sprite>($"Arts/{ingredientName.ToLowerString()}_default");
-        // if (sprite == null)
-        // {
-        //     Debug.LogError($"{ingredientName}의 Fill 스프라이트를 찾을 수 없습니다.");
-        //     return;
-        // }
-        // Fill.GetComponent<SpriteRenderer>().sprite = sprite;
-
         nameTag = transform.Find("Canvas").Find("NameTag").gameObject;
         nameText = nameTag.transform.Find("Name").GetComponent<TMP_Text>();
         countText = nameTag.transform.Find("Count").GetComponent<TMP_Text>();
@@ -46,20 +39,16 @@ public class Bottle : MonoBehaviour
 
     void OnMouseUp()
     {
-        if (Hand.Instance.handIngredient != null)
+        if (Hand.Instance.handIngredient != null)  // 재료 다시 집어넣기
         {
             TeaIngredient handIngredient = Hand.Instance.handIngredient;
 
-            if (handIngredient.ingredientName != ingredientName) return;
-            if (handIngredient.isChopped) return;
-            if (handIngredient.oxidizedDegree != OxidizedDegree.None) return;
-            if (handIngredient.roasted != ResultStatus.None) return;
-            if (handIngredient.rolled != ResultStatus.None) return;
+            if (!CanGetBackIn(handIngredient)) return;
 
             Cabinet.Instance.ingredientCounts[ingredientName] += 1;
             Destroy(Hand.Instance.Drop());
         }
-        else
+        else  // 재료 빼기
         {
             if (Cabinet.Instance.ingredientCounts[ingredientName] == 0) return;
 
@@ -79,11 +68,15 @@ public class Bottle : MonoBehaviour
     void OnMouseEnter()
     {
         nameTag.SetActive(true);
+        if (Hand.Instance.handIngredient != null && CanGetBackIn(Hand.Instance.handIngredient)
+        || Hand.Instance.handIngredient == null && Cabinet.Instance.ingredientCounts[ingredientName] > 0)
+            highlight.SetActive(true);
     }
 
     void OnMouseExit()
     {
         nameTag.SetActive(false);
+        highlight.SetActive(false);
     }
 
     void FillDecision()
@@ -96,5 +89,16 @@ public class Bottle : MonoBehaviour
         {
             Fill.SetActive(true);
         }
+    }
+
+    bool CanGetBackIn(TeaIngredient handIngredient)
+    {
+        if (handIngredient.ingredientName != ingredientName) return false;
+        if (handIngredient.isChopped) return false;
+        if (handIngredient.oxidizedDegree != OxidizedDegree.None) return false;
+        if (handIngredient.roasted != ResultStatus.None) return false;
+        if (handIngredient.rolled != ResultStatus.None) return false;
+        
+        return true;
     }
 }

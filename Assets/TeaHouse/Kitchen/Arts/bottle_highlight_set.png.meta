@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 29cb207364b93634187750179df7ab2e
+guid: a6dc8dc8f68b5234a89b682a3438d530
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,18 +108,84 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: bottle_highlight_set_0
+      rect:
+        serializedVersion: 2
+        x: 230
+        y: 1124
+        width: 126
+        height: 177
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 925ccc7fb794079429ae698c7172fd9e
+      internalID: -1967894621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bottle_highlight_set_1
+      rect:
+        serializedVersion: 2
+        x: 402
+        y: 1122
+        width: 125
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c7af2285250eb64ca215c59d192a159
+      internalID: 624920735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bottle_highlight_set_2
+      rect:
+        serializedVersion: 2
+        x: 596
+        y: 1121
+        width: 125
+        height: 176
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7bbebc07e4175314d870abae7e8b843f
+      internalID: -971700549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: deae96cf17eabd1459302df7389923b5
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bottle_highlight_set_0: -1967894621
+      bottle_highlight_set_1: 624920735
+      bottle_highlight_set_2: -971700549
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
