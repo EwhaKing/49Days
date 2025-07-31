@@ -13,9 +13,11 @@ public class Oxidizer : MonoBehaviour
     }
 
     [Header("산화기 외형")]
-    [SerializeField] SpriteRenderer backgroundRenderer; // 산화기 열림/닫힘 이미지 관리
+    [SerializeField] SpriteRenderer backgroundRenderer; // 산화기 열림/닫힘/하이라이트 이미지 관리
     [SerializeField] Sprite openSprite;                 // 산화기 열렸을 때 이미지
     [SerializeField] Sprite closedSprite;               // 산화기 닫혔을 때 이미지
+    [SerializeField] Sprite openHighlightSprite;        // 산화기 열림 상태에서 마우스 오버 시 이미지
+    [SerializeField] Sprite closedHighlightSprite;      // 산화기 닫힘 상태에서 마우스 오버 시 이미지
 
     [Header("게이지 관련")]
     [SerializeField] GameObject gaugePlate;         // 게이지 판
@@ -45,11 +47,19 @@ public class Oxidizer : MonoBehaviour
             ingredient != null &&
             ingredient.ingredientType == IngredientType.TeaLeaf &&
             (ingredient.oxidizedDegree == OxidizedDegree.None ||
-             ingredient.oxidizedDegree == OxidizedDegree.Zero))
+             ingredient.oxidizedDegree == OxidizedDegree.Zero) &&
+            !(ingredient.processSequence.Contains(ProcessStep.Roast) ||
+              ingredient.processSequence.Contains(ProcessStep.Roll)))
         {
             // 산화기 열기
             state = OxidizerState.OpenReady;
-            backgroundRenderer.sprite = openSprite;
+            backgroundRenderer.sprite = openHighlightSprite;
+        }
+
+        else if (state == OxidizerState.OverReady)
+        {
+            // 탐 대기 상태에서 마우스 오버 → 하이라이트
+            backgroundRenderer.sprite = closedHighlightSprite;
         }
     }
 
@@ -95,15 +105,6 @@ public class Oxidizer : MonoBehaviour
     {
         TeaIngredient ingredient = Hand.Instance.handIngredient;
 
-        // 이미 조리 단계를 거친 재료 거부 (덖기/유념)
-        if (ingredient.processSequence.Contains(ProcessStep.Roast) ||
-            ingredient.processSequence.Contains(ProcessStep.Roll))
-        {
-            Debug.Log($"{ingredient.name}은(는) 조리 단계(유념/덖기)를 거쳐 산화할 수 없습니다.");
-            return;
-        }
-
-        // 조건 통과 → 산화 시작
         currentIngredient = ingredient;
         currentIngredient.gameObject.SetActive(false);
         Hand.Instance.Drop();
