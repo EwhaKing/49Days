@@ -196,6 +196,9 @@ public class Kettle : MonoBehaviour
 
         // 드래그 중일 때 주전자의 위치를 마우스 위치로 업데이트
         transform.position = GetMouseWorldPos() + dragOffset;
+
+        GetComponent<SpriteRenderer>().sortingOrder = 9;
+        highlightSprite.GetComponent<SpriteRenderer>().sortingOrder = 9;
     }
 
     void OnMouseUp() //땔 때
@@ -258,6 +261,8 @@ public class Kettle : MonoBehaviour
     }
     void OnMouseEnter()
     {
+        if (Hand.Instance.handIngredient != null)
+            return;
         highlightSprite.SetActive(true);
     }
 
@@ -282,9 +287,8 @@ public class Kettle : MonoBehaviour
         // kettleBottomPosition이 stovePosition 위치에 정확히 맞도록 KettleObject의 위치 조정
         transform.position += stovePosition.position - kettleBottomPosition.position;
         currentState = KettleState.OnFire;
+        GetComponent<SpriteRenderer>().sortingOrder = 3;
     }
-
-
 
     // 주전자에 물 붓기 애니메이션 함수
     IEnumerator PourWaterAnimation(TeaPot pot)
@@ -294,8 +298,8 @@ public class Kettle : MonoBehaviour
         currentState = KettleState.Dragging;
 
         // 정렬 순서 낮게 조정
-        GetComponent<SpriteRenderer>().sortingOrder = 0;
-        highlightSprite.GetComponent<SpriteRenderer>().sortingOrder = 0;
+        GetComponent<SpriteRenderer>().sortingOrder = 6;
+        highlightSprite.GetComponent<SpriteRenderer>().sortingOrder = 6;
 
 
         // 연기 알파를 0으로 줄이기 시작
@@ -318,7 +322,7 @@ public class Kettle : MonoBehaviour
             // 기울인 뒤 0.5초 후에 파티클 시작
             if (elapsed >= 0.4f && !waterParticle.isPlaying)
             {
-                waterParticle.GetComponent<Renderer>().sortingOrder = 1;
+                waterParticle.GetComponent<Renderer>().sortingOrder = 7;
                 ConfigureWaterParticleVelocity();
                 waterParticle.Play();
             }

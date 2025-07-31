@@ -114,7 +114,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         // 중복이 아니면 실제로 놓기
         GameObject ingredientObj = Hand.Instance.Drop();
         ingredientObj.transform.SetParent(ingredientParent);
-        ing.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        ing.GetComponent<SpriteRenderer>().sortingOrder = 7;
 
 
         // 애니메이션으로 자연스럽게 떨어지게
@@ -142,10 +142,16 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         {
             tea.additionalIngredient = ing;
 
-            Debug.Log($"[추가재료] {ing.ingredientName} 추가됨");
+            // Debug.Log($"[추가재료] {ing.ingredientName} 추가됨");
         }
 
-        Debug.Log($"다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
+        if (highlightSprite.activeSelf && ingredientTooltipPanel != null)
+        {
+            ingredientTooltipPanel.SetActive(true);
+            ShowIngredientListUI();
+        }
+
+        //Debug.Log($"다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
 
     }
 
@@ -258,8 +264,28 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     void OnMouseEnter()
     {
-        highlightSprite.SetActive(true);
+        var held = Hand.Instance.handIngredient;
 
+        // ✅ 하이라이트 처리 ---------------------
+        if (held == null)
+        {
+            highlightSprite.SetActive(false);
+        }
+        else
+        {
+            TeaIngredient ing = held.GetComponent<TeaIngredient>();
+            if (ing == null || ingredients.Exists(i => i.ingredientName == ing.ingredientName))
+            {
+                highlightSprite.SetActive(false);
+            }
+            else
+            {
+                highlightSprite.SetActive(true);
+            }
+        }
+
+
+        // 툴팁은 조건 상관없이 계속 보여줌
         if (currentState == State.Empty) return;  //상태가 비었으면 재료 UI 안 띄움
         if (ingredients.Count == 0) return; // 재료가 하나도 없으면, 즉 물만 들어간 경우도 안 띄움
 
@@ -268,7 +294,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
             ingredientTooltipPanel.SetActive(true);
             ShowIngredientListUI();
         }
-
     }
 
     void OnMouseExit()
