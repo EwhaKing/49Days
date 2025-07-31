@@ -14,6 +14,11 @@ public class CauldronLid : MonoBehaviour
         Roasted
     }
 
+    [Header("스프라이트 관련")]
+    [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private Sprite highlight;
+    [SerializeField] SpriteRenderer spriteRenderer;
+
     [Header("프리팹 설정")]
     [SerializeField] private GameObject roastingIngredientPrefab;       // 복제를 위한 RoastingIngredient 프리팹
     [SerializeField] private Transform spawnAreaCenter;         // 복제 RoastingIngredient가 생성될 중심 위치
@@ -50,7 +55,17 @@ public class CauldronLid : MonoBehaviour
 
     void OnMouseEnter()
     {
-        // TODO: 마우스 오버 시 스프라이트 커짐 + 하이라이트    
+        TeaIngredient ingredient = Hand.Instance.handIngredient;
+        
+        if ((ingredient == null && cauldronState == CauldronState.Roasted) || (ingredient != null && ValidateRoastingCondition() && cauldronState == CauldronState.Idle))
+        {
+            spriteRenderer.sprite = highlight;
+        }
+    }
+
+    void OnMouseExit()
+    {
+        spriteRenderer.sprite = defaultSprite;
     }
 
     private void OnMouseUp()
@@ -157,10 +172,7 @@ public class CauldronLid : MonoBehaviour
             return false;
         }
 
-        // 위 조건 이외론 손에 든 재료 Drop
-        currentIngredient = Hand.Instance.Drop();
         Debug.Log($"{handIngredient.spriteStatus} 상태 {handIngredient.ingredientName}을(를) 가마솥에 넣었습니다.");
-        currentIngredient.SetActive(false);
         return true;
     }
     
@@ -168,6 +180,8 @@ public class CauldronLid : MonoBehaviour
     {
         if (!ValidateRoastingCondition()) return;
 
+        currentIngredient = Hand.Instance.Drop();
+        currentIngredient.SetActive(false);
         cauldronState = CauldronState.Roasting;
         roastTimer = 0f;
 
