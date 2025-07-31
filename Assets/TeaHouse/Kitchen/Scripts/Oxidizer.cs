@@ -58,14 +58,20 @@ public class Oxidizer : MonoBehaviour
 
         else if (state == OxidizerState.Oxidizing)
         {
-            // 산화 중 상태에서 마우스 오버 → 하이라이트
-            backgroundRenderer.sprite = closedHighlightSprite;
+            if (Hand.Instance.handIngredient == null)
+            {
+                // 산화 중 상태에서 마우스 오버 → 하이라이트
+                backgroundRenderer.sprite = closedHighlightSprite;
+            }
         }
 
         else if (state == OxidizerState.OverReady)
         {
-            // 탐 대기 상태에서 마우스 오버 → 하이라이트
-            backgroundRenderer.sprite = closedHighlightSprite;
+            if (Hand.Instance.handIngredient == null)
+            {
+                // 탐 대기 상태에서 마우스 오버 → 하이라이트
+                backgroundRenderer.sprite = closedHighlightSprite;
+            }
         }
     }
 
