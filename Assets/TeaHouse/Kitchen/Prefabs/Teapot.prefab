@@ -199,7 +199,7 @@ SpriteRenderer:
   m_Size: {x: 25.6, y: 14.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &7902962046524065698
@@ -291,9 +291,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -393, y: -240}
+  m_AnchoredPosition: {x: -393, y: -225}
   m_SizeDelta: {x: 160, y: 30}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &7093319722421621272
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1038,8 +1038,11 @@ MonoBehaviour:
   resetButton: {fileID: 1371017624103929677}
   ingredientParent: {fileID: 1905210729577809207}
   waterEffect: {fileID: 0}
+  pourSlider: {fileID: 0}
   pourPosition: {fileID: 3294424632880015705}
-  tea: {fileID: 0}
+  highlightSprite: {fileID: 0}
+  smokeRenderer: {fileID: 0}
+  sliderSpeed: 0.7
 --- !u!58 &1500158086312286494
 CircleCollider2D:
   m_ObjectHideFlags: 0

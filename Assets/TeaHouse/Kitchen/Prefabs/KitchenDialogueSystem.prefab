@@ -266,7 +266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958262985454349548, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: typewriterEffectSpeed
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2958262986393358536, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_RaycastPadding.w

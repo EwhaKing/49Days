@@ -14,6 +14,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     Tea tea;
     MakedTea makedTea;
     AudioSource audioSource;
+    VideoPlayer videoPlayer;
     SpriteRenderer image;
     Sprite originSprite;
     bool isSkipped;
@@ -24,6 +25,8 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         audioSource = GetComponent<AudioSource>();
         skipButton.onClick.AddListener(ShowMakedTea);
         image = GetComponent<SpriteRenderer>();
+        videoPlayer = cutScene.GetComponent<VideoPlayer>();
+        videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, "pourtea.mp4");
         originSprite = image.sprite;
 
         TeaPot.Instance.onStateBrewing += () => {if (isMouseOver) image.sprite = highlightSprite;};
@@ -93,9 +96,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         yield return new WaitForSecondsRealtime(2f);
 
         cutScene.SetActive(true);
-        VideoPlayer vp = cutScene.GetComponent<VideoPlayer>();
-        vp.url = System.IO.Path.Combine(Application.streamingAssetsPath, "pourtea.mp4");
-        vp.loopPointReached += (VideoPlayer vp) => {
+        videoPlayer.loopPointReached += (VideoPlayer vp) => {
             if(!isSkipped) ShowMakedTea();
         };
     }
