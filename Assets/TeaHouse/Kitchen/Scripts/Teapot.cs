@@ -262,6 +262,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
     public void OnClickResetButton()
     {
         Debug.Log("초기화 버튼 눌림");
+
         FinishTea();
     }
 
@@ -287,7 +288,6 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
                 highlightSprite.SetActive(true);
             }
         }
-
 
         // 툴팁은 조건 상관없이 계속 보여줌
         if (currentState == State.Empty) return;  //상태가 비었으면 재료 UI 안 띄움
@@ -438,7 +438,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
     public void SetBrewingState()
     {
         currentState = State.Brewing;
-        onStateBrewing.Invoke();
+        onStateBrewing?.Invoke();
     }
 
     /// <summary>

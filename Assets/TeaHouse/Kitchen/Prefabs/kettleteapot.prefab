@@ -638,97 +638,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &7939465557145355929
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7457520964212073546}
-  - component: {fileID: 3708957218829052360}
-  - component: {fileID: 2267887269388812581}
-  m_Layer: 0
-  m_Name: resetoffset
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7457520964212073546
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7939465557145355929}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6891642502830423671}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &3708957218829052360
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7939465557145355929}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -9.715859, y: -4.271625}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 3.3964634, y: 1.1070259}
-  m_EdgeRadius: 0
---- !u!114 &2267887269388812581
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7939465557145355929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 83e584ad08173dc49a3ee79366487d91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resetButton: {fileID: 574034512339576214}
 --- !u!1 &8533389075820986598
 GameObject:
   m_ObjectHideFlags: 0
@@ -1225,13 +1134,11 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 8
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1500158086312286494, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
     m_RemovedGameObjects:
     - {fileID: 6476157076488085280, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 5428451964115721388, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7457520964212073546}
     - targetCorrespondingSourceObject: {fileID: 5428451964115721388, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2768261982270553802}
@@ -1242,6 +1149,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6139946335358601039, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4866877526711858670}
+    - targetCorrespondingSourceObject: {fileID: 6139946335358601039, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 524946337778912826}
   m_SourcePrefab: {fileID: 100100000, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
 --- !u!1 &574034512339576214 stripped
 GameObject:
@@ -1282,6 +1192,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resetButton: {fileID: 574034512339576214}
+  kettle: {fileID: 5709991788854871279}
+--- !u!70 &524946337778912826
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4739137774359258516}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -9.701967, y: -2.4277048}
+  m_Size: {x: 4.4404182, y: 5.220749}
+  m_Direction: 0
 --- !u!4 &6891642502830423671 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5428451964115721388, guid: 0514d9a3b9a22414582d9cbebf19d4f9, type: 3}
@@ -1531,6 +1477,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 5161988571168703648}
   m_SourcePrefab: {fileID: 100100000, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
+--- !u!114 &5709991788854871279 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
+  m_PrefabInstance: {fileID: 4433170938592847936}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5815900559780203158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6516243cccaae240b5d821026523d32, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5815900559780203158 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7868901004834022102, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}

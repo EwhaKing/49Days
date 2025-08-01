@@ -40,7 +40,10 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
     //물 파티클 관련 변수들
     [SerializeField] private ParticleSystem waterParticle; // Inspector에서 할당
-    //kettlespoutposition도 사용
+                                                           //kettlespoutposition도 사용
+
+    public bool IsPouring => isPouring;
+
 
     public TeaPot teapot; // Inspector에서 할당
     GameObject heldSmokeObject;
