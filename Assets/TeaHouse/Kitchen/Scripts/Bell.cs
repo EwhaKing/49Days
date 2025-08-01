@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Video;
 
-public class Bell : MonoBehaviour
+public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] GameObject manufacturingCompletedUI;
     [SerializeField] GameObject cutScene;
@@ -24,18 +25,20 @@ public class Bell : MonoBehaviour
         image = GetComponent<SpriteRenderer>();
         originSprite = image.sprite;
     }
-    private void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData e)
     {
+        if (TeaPot.Instance.GetCurrentState() != TeaPot.State.Brewing) return;
         image.sprite = highlightSprite;
     }
 
-    private void OnMouseExit() 
+    public void OnPointerExit(PointerEventData e)
     {
         image.sprite = originSprite;
     }
 
-    private void OnMouseUp()
+    public void OnPointerClick(PointerEventData e)
     {
+        if (TeaPot.Instance.GetCurrentState() != TeaPot.State.Brewing) return;
         tea = TeaPot.Instance.getTea();
 
         if (tea != null)
@@ -44,7 +47,10 @@ public class Bell : MonoBehaviour
             PauseGame();
             makedTea = TeaMaker.MakeTea(tea);
             StartCoroutine(LatePlayCutScene());
-            
+        } 
+        else
+        {
+            Debug.LogError("State가 Brewing인데 차를 가져오지 못함");
         }
     }
 

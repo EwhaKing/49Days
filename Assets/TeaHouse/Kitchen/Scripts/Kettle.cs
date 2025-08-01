@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
 public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
@@ -125,23 +126,6 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
             //Debug.Log($"[연기] 온도: {Temperature}, isSmoking: {shouldShow}");
         }
 
-        //삭제할 로그(케틀에 ray가 도달하나?)
-        if (Input.GetMouseButtonDown(0)) // 클릭할 때만 확인
-        {
-            PointerEventData pointerData = new PointerEventData(EventSystem.current)
-            {
-                position = Input.mousePosition
-            };
-
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-
-            Debug.Log("📌 Raycast Hits:");
-            foreach (var result in results)
-            {
-                Debug.Log($"- {result.gameObject.name}");
-            }
-        }
     }
 
     //연기는 천천히 회전시키기(그게 자연스러움)
@@ -305,9 +289,12 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
     Vector3 GetMouseWorldPos()
     {
-        Vector3 mouse = Input.mousePosition;
-        mouse.z = 10f;
-        return Camera.main.ScreenToWorldPoint(mouse);
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector3 screenPosition = new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane);
+
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+        worldPosition.z = 0f; // 2D 고정
+        return worldPosition;
     }
 
     public void SetToFire()
