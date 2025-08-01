@@ -53,6 +53,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
             PauseGame();
             makedTea = TeaMaker.MakeTea(tea);
             StartCoroutine(LatePlayCutScene());
+            image.sprite = originSprite;
         } 
         else
         {
@@ -90,8 +91,11 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     IEnumerator LatePlayCutScene()
     {
         yield return new WaitForSecondsRealtime(2f);
+
         cutScene.SetActive(true);
-        cutScene.GetComponent<VideoPlayer>().loopPointReached += (VideoPlayer vp) => {
+        VideoPlayer vp = cutScene.GetComponent<VideoPlayer>();
+        vp.url = System.IO.Path.Combine(Application.streamingAssetsPath, "pourtea.mp4");
+        vp.loopPointReached += (VideoPlayer vp) => {
             if(!isSkipped) ShowMakedTea();
         };
     }
