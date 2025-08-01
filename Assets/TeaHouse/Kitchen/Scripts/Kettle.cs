@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class Kettle : MonoBehaviour
+public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     private float maxAngle = 150f; // -355f=5f
     private float minAngle = -150f; // -72f=288f
@@ -123,6 +124,24 @@ public class Kettle : MonoBehaviour
 
             //Debug.Log($"[연기] 온도: {Temperature}, isSmoking: {shouldShow}");
         }
+
+        //삭제할 로그(케틀에 ray가 도달하나?)
+        if (Input.GetMouseButtonDown(0)) // 클릭할 때만 확인
+        {
+            PointerEventData pointerData = new PointerEventData(EventSystem.current)
+            {
+                position = Input.mousePosition
+            };
+
+            List<RaycastResult> results = new List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
+
+            Debug.Log("📌 Raycast Hits:");
+            foreach (var result in results)
+            {
+                Debug.Log($"- {result.gameObject.name}");
+            }
+        }
     }
 
     //연기는 천천히 회전시키기(그게 자연스러움)
@@ -177,7 +196,7 @@ public class Kettle : MonoBehaviour
     }
 
 
-    void OnMouseDown() //누를 때
+    public void OnPointerDown(PointerEventData eventData) //누를 때
     {
         //물 붓는 동안에는 움직이지 마세요
         if (isPouring) return;
@@ -192,7 +211,7 @@ public class Kettle : MonoBehaviour
 
         cachedTemperature = Temperature;
     }
-    void OnMouseDrag()
+    public void OnDrag(PointerEventData eventData)
     {
         //물 붓는 동안에는 움직이지 마세요 + 드래그 안 하는 중이면 함수 실행시키지 마세요.(당연함)
         if (isPouring || !isDragging) return;
@@ -204,7 +223,7 @@ public class Kettle : MonoBehaviour
         highlightSprite.GetComponent<SpriteRenderer>().sortingOrder = 9;
     }
 
-    void OnMouseUp() //땔 때
+    public void OnPointerUp(PointerEventData eventData) //땔 때
     {
         //물 붓는 동안에는 움직이지 마세요
         if (isPouring) return;
@@ -271,14 +290,15 @@ public class Kettle : MonoBehaviour
         }
 
     }
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("마우스오버함.");
         if (Hand.Instance.handIngredient != null)
             return;
         highlightSprite.SetActive(true);
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         highlightSprite.SetActive(false);
     }

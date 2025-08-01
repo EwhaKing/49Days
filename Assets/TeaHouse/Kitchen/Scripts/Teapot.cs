@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
-public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
+public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler  //싱글톤(알아보기)
 {
     public enum State { Empty, Ready, Brewing, Done }
     State currentState = State.Empty;
@@ -72,7 +73,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     }
 
-    void OnMouseUp()
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (currentState == State.Done)
         {
@@ -262,7 +263,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     }
 
 
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
         var held = Hand.Instance.handIngredient;
 
@@ -296,7 +297,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         }
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         highlightSprite.SetActive(false);
 
