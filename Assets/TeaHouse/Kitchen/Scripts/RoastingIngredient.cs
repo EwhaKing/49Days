@@ -144,16 +144,16 @@ public class RoastingIngredient : MonoBehaviour
         }
     }
 
-    private void CheckForStirring()
-    {
-        if (Mouse.current == null) return;
+    // private void CheckForStirring()
+    // {
+    //     if (Mouse.current == null) return;
 
-        Vector2 mousePos2D = Camera.main.ScreenToWorldPoint(pointerPosition);
-        if (GetComponent<Collider2D>().OverlapPoint(mousePos2D))
-        {
-            Stir(mousePos2D);
-        }
-    }
+    //     Vector2 mousePos2D = Camera.main.ScreenToWorldPoint(pointerPosition);
+    //     if (GetComponent<Collider2D>().OverlapPoint(mousePos2D))
+    //     {
+    //         Stir(mousePos2D);
+    //     }
+    // }
 
     private void OnTriggerStay2D(Collider2D other)
     {
