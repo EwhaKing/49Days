@@ -386,6 +386,9 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         isPouring = false;
         // 애니메이션 끝났으니 화로로 복귀(0.2초만 있다가)
         yield return new WaitForSeconds(0.5f);
+
+        teapot.SetBrewingState(); // 다병 상태를 Brewing으로 변경
+
         SetToFire();
     }
 

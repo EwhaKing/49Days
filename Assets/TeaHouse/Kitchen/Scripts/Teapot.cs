@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 
 public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler  //싱글톤(알아보기)
 {
     public enum State { Empty, Ready, Brewing, Done }
+
+    public Action onStateBrewing;
     State currentState = State.Empty;
 
     //다병에 마우스 오버 시 팝업
@@ -34,6 +37,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
     bool waterPoured = false;
 
     private Tea tea;  // 외부에서 접근 가능하게
+
 
     void Start()
     {
@@ -70,7 +74,6 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
         {
             timer += Time.deltaTime;
         }
-
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -169,7 +172,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
         tea.temperature = (int)waterTemp;
 
         waterPoured = true;
-        currentState = State.Brewing;
+        //currentState = State.Brewing;
         timer = 0f;
 
         // waterEffect?.gameObject.SetActive(true); // 물 효과
@@ -429,6 +432,13 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
         smokeRenderer.color = new Color(c.r, c.g, c.b, 0f);
         teapotSmoke.SetActive(false);
+    }
+
+    //brewing 상태로 설정하는 함수
+    public void SetBrewingState()
+    {
+        currentState = State.Brewing;
+        onStateBrewing.Invoke();
     }
 
     /// <summary>
