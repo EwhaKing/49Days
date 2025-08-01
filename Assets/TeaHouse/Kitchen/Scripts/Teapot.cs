@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
-public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
+public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler  //싱글톤(알아보기)
 {
-    enum State { Empty, Ready, Brewing, Done }
+    public enum State { Empty, Ready, Brewing, Done }
     State currentState = State.Empty;
 
     //다병에 마우스 오버 시 팝업
@@ -19,6 +20,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     [SerializeField] Transform waterEffect;
     [SerializeField] private Slider pourSlider;
     public Transform pourPosition;
+
+    [SerializeField] private GameObject highlightSprite;
 
     [SerializeField] private SpriteRenderer smokeRenderer;
 
@@ -37,6 +40,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         // Tea 인스턴스 생성
         tea = new Tea();
 
+        highlightSprite.SetActive(false);
+
         if (resetButton != null)
             resetButton.SetActive(false);
 
@@ -48,6 +53,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         {
             smokeAnimator = teapotSmoke.GetComponent<Animator>();
             teapotSmoke.SetActive(false); // 시작 시 꺼두기
+            smokeAnimator.SetBool("isSmoking", false); // 안전하게 초기화
         }
         else
             Debug.LogWarning("[연기] teapotsmokeanimation를 찾을 수 없습니다.");
@@ -67,7 +73,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
     }
 
-    void OnMouseUp()
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (currentState == State.Done)
         {
@@ -109,7 +115,7 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         // 중복이 아니면 실제로 놓기
         GameObject ingredientObj = Hand.Instance.Drop();
         ingredientObj.transform.SetParent(ingredientParent);
-        ing.GetComponent<SpriteRenderer>().sortingOrder = 1;
+        ing.GetComponent<SpriteRenderer>().sortingOrder = 7;
 
 
         // 애니메이션으로 자연스럽게 떨어지게
@@ -137,10 +143,16 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         {
             tea.additionalIngredient = ing;
 
-            Debug.Log($"[추가재료] {ing.ingredientName} 추가됨");
+            // Debug.Log($"[추가재료] {ing.ingredientName} 추가됨");
         }
 
-        Debug.Log($"다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
+        if (highlightSprite.activeSelf && ingredientTooltipPanel != null)
+        {
+            ingredientTooltipPanel.SetActive(true);
+            ShowIngredientListUI();
+        }
+
+        //Debug.Log($"다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
 
     }
 
@@ -168,6 +180,8 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         if (smokeAnimator != null)
         {
             teapotSmoke.SetActive(true);
+            smokeAnimator.Play("startSmoke", 0, 0f); // 애니메이션 처음부터 재생
+            smokeAnimator.SetBool("isSmoking", true);
 
             smokeRenderer.color = new Color(smokeRenderer.color.r, smokeRenderer.color.g, smokeRenderer.color.b, 1f); // 무조건 시작 시 알파 1
 
@@ -180,7 +194,6 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
         }
 
         return true;
-
     }
 
     public Tea getTea()
@@ -250,20 +263,44 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
     }
 
 
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
+        var held = Hand.Instance.handIngredient;
+
+        // ✅ 하이라이트 처리 ---------------------
+        if (held == null)
+        {
+            highlightSprite.SetActive(false);
+        }
+        else
+        {
+            TeaIngredient ing = held.GetComponent<TeaIngredient>();
+            if (ing == null || ingredients.Exists(i => i.ingredientName == ing.ingredientName))
+            {
+                highlightSprite.SetActive(false);
+            }
+            else
+            {
+                highlightSprite.SetActive(true);
+            }
+        }
+
+
+        // 툴팁은 조건 상관없이 계속 보여줌
         if (currentState == State.Empty) return;  //상태가 비었으면 재료 UI 안 띄움
+        if (ingredients.Count == 0) return; // 재료가 하나도 없으면, 즉 물만 들어간 경우도 안 띄움
 
         if (ingredientTooltipPanel != null)
         {
             ingredientTooltipPanel.SetActive(true);
             ShowIngredientListUI();
         }
-
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
+        highlightSprite.SetActive(false);
+
         if (ingredientTooltipPanel != null)
         {
             ingredientTooltipPanel.SetActive(false);
@@ -392,6 +429,24 @@ public class TeaPot : SceneSingleton<TeaPot>  //싱글톤(알아보기)
 
         smokeRenderer.color = new Color(c.r, c.g, c.b, 0f);
         teapotSmoke.SetActive(false);
+    }
+
+    /// <summary>
+    /// 연기 애니메이션 정지 (Animator bool 파라미터 'isSmoking'을 false로 설정)
+    /// </summary>
+    public void StopSmokeAnimation()
+    {
+        if (smokeAnimator != null)
+            smokeAnimator.SetBool("isSmoking", false);
+    }
+
+    /// <summary>
+    /// (tea를 인자로 받아) state를 return 하는 함수
+    /// </summary>
+
+    public State GetCurrentState()
+    {
+        return currentState;
     }
 
 }
