@@ -273,13 +273,12 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
                 // 삭제할 로그
                 Debug.Log("✅ 화로로 복귀 시도");
             }
-
         }
-
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        Debug.Log("마우스오버함.");
+        if (isPouring) return;  // 물 붓는 중이면 하이라이트 안 보이게
+
         if (Hand.Instance.handIngredient != null)
             return;
         highlightSprite.SetActive(true);
@@ -319,10 +318,10 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         isDragging = false;
         currentState = KettleState.Dragging;
 
+        highlightSprite.SetActive(false);  // 하이라이트 강제 끄기
+
         // 정렬 순서 낮게 조정
         GetComponent<SpriteRenderer>().sortingOrder = 6;
-        highlightSprite.GetComponent<SpriteRenderer>().sortingOrder = 6;
-
 
         // 연기 알파를 0으로 줄이기 시작
         StartCoroutine(FadeSmokeTo(0f, smokeFadeSpeed * 3f));
