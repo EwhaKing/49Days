@@ -54,10 +54,7 @@ public class RoastingIngredient : MonoBehaviour
             controls = new systemActions();
 
         controls.Enable();
-
-        // 마우스 위치 읽는 액션 (SystemActions에 따로 Point 같은 액션을 추가해야 함)
-        // 없으면 Mouse.current.position으로 직접 가져올 수도 있음
-        controls.SystemActions.WASD.performed += OnAnyInput; // 혹시 WASD 외 다른 액션도 있다면 여기에 추가
+        controls.SystemActions.WASD.performed += OnAnyInput;
     }
 
     private void OnDisable()
@@ -68,7 +65,6 @@ public class RoastingIngredient : MonoBehaviour
 
     private void OnAnyInput(InputAction.CallbackContext context)
     {
-        // 마우스 위치는 별도 처리: New Input System의 Mouse.current 사용
         if (Mouse.current != null)
             pointerPosition = Mouse.current.position.ReadValue();
     }
