@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Yarn.Unity;
+using UnityEngine.SceneManagement;
 
 public class YarnManager : SceneSingleton<YarnManager>
 {
@@ -18,6 +19,8 @@ public class YarnManager : SceneSingleton<YarnManager>
 
     public void RunDialogue(string nodeTitle)
     {
+        GameManager.Instance.isUIOn = true;
+
         runner.gameObject.SetActive(true);
 
         runner.StartDialogue(nodeTitle);
@@ -34,6 +37,8 @@ public class YarnManager : SceneSingleton<YarnManager>
 
     void EndDialogue()
     {
+        GameManager.Instance.isUIOn = false;
+
         fadeImage.gameObject.SetActive(false);
         runner.gameObject.SetActive(true);
     }

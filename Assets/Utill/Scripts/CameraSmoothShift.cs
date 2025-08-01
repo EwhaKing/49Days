@@ -22,6 +22,7 @@ public class CameraSmoothShift : MonoBehaviour
 
     void OnMoveCamera()
     {
+        if (GameManager.Instance.isUIOn) return;
         // 이미 진행 중이면 중단
         if (currentTransition != null)
             StopCoroutine(currentTransition);

@@ -68,6 +68,8 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         // 벨소리만 계속 들리게
         audioSource.ignoreListenerPause = true;
         audioSource.Play();
+
+        TeaPot.Instance.StopSmokeAnimation();        
     }
 
     void ShowMakedTea()

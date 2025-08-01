@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class TrashCan : MonoBehaviour
+public class TrashCan : MonoBehaviour, IPointerClickHandler
 {
-    private void OnMouseUp() 
+    public void OnPointerClick(PointerEventData e) 
     {
         if (Hand.Instance.handIngredient != null)
         {
