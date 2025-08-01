@@ -28,3 +28,9 @@ position: 25,-418
 <<fade_in unknowntea>>
 알 수 없는 차: 알 수 없는 차입니다.
 ===
+title: hotwater
+position: 32,-115
+---
+<<fade_in hotwater>>
+뜨거운 물: 정말 뜨거운 물입니다.
+===
