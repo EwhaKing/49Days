@@ -130,7 +130,7 @@ public class RoastingIngredient : MonoBehaviour
         roastTimer += Time.deltaTime;
         timeLastStirred += Time.deltaTime;
 
-        CheckForStirring();
+        // CheckForStirring();
 
         if (timeLastStirred > burnTime)
         {
