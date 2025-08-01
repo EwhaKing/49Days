@@ -17,6 +17,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     SpriteRenderer image;
     Sprite originSprite;
     bool isSkipped;
+    bool isMouseOver;
 
     private void Start() 
     {
@@ -24,15 +25,20 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         skipButton.onClick.AddListener(ShowMakedTea);
         image = GetComponent<SpriteRenderer>();
         originSprite = image.sprite;
+
+        TeaPot.Instance.onStateBrewing += () => {if (isMouseOver) image.sprite = highlightSprite;};
     }
+
     public void OnPointerEnter(PointerEventData e)
     {
+        isMouseOver = true;
         if (TeaPot.Instance.GetCurrentState() != TeaPot.State.Brewing) return;
         image.sprite = highlightSprite;
     }
 
     public void OnPointerExit(PointerEventData e)
     {
+        isMouseOver = false;
         image.sprite = originSprite;
     }
 

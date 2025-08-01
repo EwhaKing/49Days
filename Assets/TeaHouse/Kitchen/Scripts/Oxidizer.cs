@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
-public class Oxidizer : MonoBehaviour
+public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     enum OxidizerState
     {
@@ -39,7 +41,7 @@ public class Oxidizer : MonoBehaviour
         ResetOxidizer(); // 기본 초기화
     }
 
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData e)
     {
         TeaIngredient ingredient = Hand.Instance.handIngredient;
 
@@ -75,7 +77,7 @@ public class Oxidizer : MonoBehaviour
         }
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData e)
     {
         if (state == OxidizerState.OpenReady)
         {
@@ -92,7 +94,7 @@ public class Oxidizer : MonoBehaviour
         }
     }
 
-    void OnMouseUp()
+    public void OnPointerClick(PointerEventData e)
     {
         switch (state)
         {
@@ -146,7 +148,7 @@ public class Oxidizer : MonoBehaviour
     // 마우스가 산화기 위에 있는지 확인하는 함수 추가
     bool IsMouseOver()
     {
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         mouseWorldPos.z = 0f;
         Collider2D col = GetComponent<Collider2D>();
         if (col == null) return false;
