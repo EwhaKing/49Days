@@ -56,7 +56,7 @@ public class Oxidizer : MonoBehaviour
             backgroundRenderer.sprite = openHighlightSprite;
         }
 
-        else if (state == OxidizerState.Oxidizing)
+        if (state == OxidizerState.Oxidizing)
         {
             if (Hand.Instance.handIngredient == null)
             {
@@ -65,7 +65,7 @@ public class Oxidizer : MonoBehaviour
             }
         }
 
-        else if (state == OxidizerState.OverReady)
+        if (state == OxidizerState.OverReady)
         {
             if (Hand.Instance.handIngredient == null)
             {
@@ -134,7 +134,23 @@ public class Oxidizer : MonoBehaviour
         state = OxidizerState.Oxidizing;
         gaugePlates[0].SetActive(true);
 
+        // 마우스가 산화기 위에 있으면 하이라이트 이미지 적용 (MouseEnter 메서드 보완 목적)
+        if (IsMouseOver())
+            backgroundRenderer.sprite = closedHighlightSprite;
+        else
+            backgroundRenderer.sprite = closedSprite;
+
         Debug.Log($"{ingredient.name}의 산화를 시작합니다.");
+    }
+
+    // 마우스가 산화기 위에 있는지 확인하는 함수 추가
+    bool IsMouseOver()
+    {
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0f;
+        Collider2D col = GetComponent<Collider2D>();
+        if (col == null) return false;
+        return col.OverlapPoint(mouseWorldPos);
     }
 
     void Update()
@@ -183,6 +199,13 @@ public class Oxidizer : MonoBehaviour
             backgroundRenderer.sprite = closedSprite;
             foreach (var plate in gaugePlates)
                 plate.SetActive(true);
+
+            // 마우스가 산화기 위에 있으면 하이라이트 이미지 적용 (MouseEnter 메서드 보완 목적)
+            if (IsMouseOver())
+                backgroundRenderer.sprite = closedHighlightSprite;
+            else
+                backgroundRenderer.sprite = closedSprite;
+
             yield break;
         }
         else
