@@ -38,7 +38,42 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
     RollingState state = RollingState.Idle;
 
     private GameObject rollingLeavesVisual;
+    private systemActions wasdControl;
 
+    private void OnEnable()
+    {
+        if (wasdControl == null)
+            wasdControl = new systemActions();
+
+        wasdControl.Enable();
+        wasdControl.SystemActions.WASD.performed += OnWASDInput;
+    }
+
+    private void OnDisable()
+    {
+        wasdControl.SystemActions.WASD.performed -= OnWASDInput;
+        wasdControl.Disable();
+    }
+
+    private void OnWASDInput(InputAction.CallbackContext context)
+    {
+        if (currentKeyPanel == null || !currentKeyPanel.gameObject.activeInHierarchy)
+            return;
+
+        string keyPath = context.control.path;
+        char input = '\0';
+        if (keyPath.Contains("/w")) input = 'W';
+        else if (keyPath.Contains("/a")) input = 'A';
+        else if (keyPath.Contains("/s")) input = 'S';
+        else if (keyPath.Contains("/d")) input = 'D';
+
+        if (input != '\0')
+        {
+            currentKeyPanel.ReceiveInput(input);
+            ShowRollingMotion(input);
+        }
+    }
+    
     private void SetCanvas()
     {
         if (keyPanelSpawnPoint == null)
@@ -229,21 +264,21 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
         return sequence;
     }
 
-    private void Update()
-    {
-        // 패널 활성화가 안 된 상황에는 아무것도 하지 않고 리턴
-        if (currentKeyPanel == null || !currentKeyPanel.gameObject.activeInHierarchy)
-        {
-            return;
-        }
+    // private void Update()
+    // {
+    //     // 패널 활성화가 안 된 상황에는 아무것도 하지 않고 리턴
+    //     if (currentKeyPanel == null || !currentKeyPanel.gameObject.activeInHierarchy)
+    //     {
+    //         return;
+    //     }
     
-        char input = GetKeyInput();
-        if (input != '\0')
-        {
-            currentKeyPanel.ReceiveInput(input);
-            ShowRollingMotion(input);
-        }
-    }
+    //     char input = GetKeyInput();
+    //     if (input != '\0')
+    //     {
+    //         currentKeyPanel.ReceiveInput(input);
+    //         ShowRollingMotion(input);
+    //     }
+    // }
 
     private void ShowRollingMotion(char key)
     {
@@ -280,16 +315,16 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
         rollingLeavesVisual.transform.localPosition = offset;
     }
 
-    private char GetKeyInput()
-    {
-        if (Keyboard.current == null) return '\0';
+    // private char GetKeyInput()
+    // {
+    //     if (Keyboard.current == null) return '\0';
 
-        if (Keyboard.current.wKey.wasPressedThisFrame) return 'W';
-        else if (Keyboard.current.aKey.wasPressedThisFrame) return 'A';
-        else if (Keyboard.current.sKey.wasPressedThisFrame) return 'S';
-        else if (Keyboard.current.dKey.wasPressedThisFrame) return 'D';
-        return '\0';
-    }
+    //     if (Keyboard.current.wKey.wasPressedThisFrame) return 'W';
+    //     else if (Keyboard.current.aKey.wasPressedThisFrame) return 'A';
+    //     else if (Keyboard.current.sKey.wasPressedThisFrame) return 'S';
+    //     else if (Keyboard.current.dKey.wasPressedThisFrame) return 'D';
+    //     return '\0';
+    // }
 
 
     private void OnRollingComplete(bool success)

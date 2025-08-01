@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class RoastingIngredient : MonoBehaviour
 {
@@ -32,6 +32,10 @@ public class RoastingIngredient : MonoBehaviour
     private Dictionary<IngredientName, Sprite> spriteMap;
     private Transform cauldronCenter;
 
+    private systemActions controls;
+    private Vector2 pointerPosition;
+    
+
     private void Awake()
     {
         spriteRenderer = transform.Find("RoastingVisual")?.GetComponent<SpriteRenderer>();
@@ -44,10 +48,31 @@ public class RoastingIngredient : MonoBehaviour
         // };
     }
 
-    void OnMouseEnter()
+    private void OnEnable()
     {
-        // if (ingredientState != IngredientState.Default || ingredientState == IngredientState.Roasting)
+        if (controls == null)
+            controls = new systemActions();
+
+        controls.Enable();
+
+        // 마우스 위치 읽는 액션 (SystemActions에 따로 Point 같은 액션을 추가해야 함)
+        // 없으면 Mouse.current.position으로 직접 가져올 수도 있음
+        controls.SystemActions.WASD.performed += OnAnyInput; // 혹시 WASD 외 다른 액션도 있다면 여기에 추가
     }
+
+    private void OnDisable()
+    {
+        controls.SystemActions.WASD.performed -= OnAnyInput;
+        controls.Disable();
+    }
+
+    private void OnAnyInput(InputAction.CallbackContext context)
+    {
+        // 마우스 위치는 별도 처리: New Input System의 Mouse.current 사용
+        if (Mouse.current != null)
+            pointerPosition = Mouse.current.position.ReadValue();
+    }
+
 
     public void Init(TeaIngredient currentIngredientData, Transform centerPoint)
     {
@@ -125,7 +150,9 @@ public class RoastingIngredient : MonoBehaviour
 
     private void CheckForStirring()
     {
-        Vector2 mousePos2D = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (Mouse.current == null) return;
+
+        Vector2 mousePos2D = Camera.main.ScreenToWorldPoint(pointerPosition);
         if (GetComponent<Collider2D>().OverlapPoint(mousePos2D))
         {
             Stir(mousePos2D);
