@@ -1465,7 +1465,7 @@ PrefabInstance:
       objectReference: {fileID: -673477442, guid: 0aa3f93120a262f4992059113d09f8d5, type: 3}
     - target: {fileID: 6882156251064916598, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: m_SortingOrder
-      value: 20
+      value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 7868901004834022102, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: m_Name
@@ -1499,6 +1499,14 @@ PrefabInstance:
       propertyPath: highlightSprite
       value: 
       objectReference: {fileID: 1314493054093352901}
+    - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
+      propertyPath: hookSnapDistance
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
+      propertyPath: stoveSnapDistance
+      value: 0.01
+      objectReference: {fileID: 0}
     - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: particleSpawnInterval
       value: 0.8

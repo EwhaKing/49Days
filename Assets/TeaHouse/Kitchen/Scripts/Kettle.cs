@@ -14,7 +14,12 @@ public class Kettle : MonoBehaviour
 
     [SerializeField] float tempChangePerSec = 2f;
     [SerializeField] float pourRadius = 1f;
+
+    //고리에 걸기 위한 거리 판단
     [SerializeField] float hookSnapDistance = 1.2f;
+    //화로까지의 거리 판단
+    [SerializeField] float stoveSnapDistance = 0.3f;
+
     [SerializeField] Transform gaugeNeedle;
     [SerializeField] Transform stovePosition;
     [SerializeField] Transform hookPosition;
@@ -187,12 +192,10 @@ public class Kettle : MonoBehaviour
 
         cachedTemperature = Temperature;
     }
-
     void OnMouseDrag()
     {
         //물 붓는 동안에는 움직이지 마세요 + 드래그 안 하는 중이면 함수 실행시키지 마세요.(당연함)
         if (isPouring || !isDragging) return;
-
 
         // 드래그 중일 때 주전자의 위치를 마우스 위치로 업데이트
         transform.position = GetMouseWorldPos() + dragOffset;
@@ -227,6 +230,8 @@ public class Kettle : MonoBehaviour
 
                     if (success)
                     {
+                        //삭제할 로그
+                        Debug.Log("✅ 다병에 물 붓기 시도");
                         //주전자 위치를 다병의 지정된 위치로 강제 이동
                         Vector3 offset = transform.position - kettleSpoutPosition.position;
                         transform.position = teapot.pourPosition.position + offset;
@@ -246,6 +251,8 @@ public class Kettle : MonoBehaviour
         // 2. 물 안 부었고, 고리 반경 안이면 고리에 걸기
         if (!triedPour && distToHook <= hookSnapDistance)
         {
+            //삭제할 로그
+            Debug.Log("✅ 고리에 걸기 시도");
             Vector3 offset = transform.position - kettleHandlePosition.position;
             transform.position = hookPosition.position + offset;
             currentState = KettleState.OnHook;
@@ -254,8 +261,13 @@ public class Kettle : MonoBehaviour
         // 3. 물도 못 붓고 고리도 아니면 화로로 복귀
         else if (!triedPour)
         {
-            if (distToFire > hookSnapDistance)
+            if (distToFire > stoveSnapDistance)
+            {
                 SetToFire();
+                // 삭제할 로그
+                Debug.Log("✅ 화로로 복귀 시도");
+            }
+
         }
 
     }
