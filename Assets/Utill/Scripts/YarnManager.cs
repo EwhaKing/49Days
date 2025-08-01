@@ -13,6 +13,7 @@ public class YarnManager : SceneSingleton<YarnManager>
     {
         runner.AddCommandHandler<string>("fade_in", FadeIn);
         runner.gameObject.SetActive(false);
+        runner.onDialogueComplete.AddListener(EndDialogue);
     }
 
     public void RunDialogue(string nodeTitle)
@@ -29,5 +30,11 @@ public class YarnManager : SceneSingleton<YarnManager>
         fadeImage.SetNativeSize();
         fadeImage.gameObject.SetActive(true);
         yield return new WaitForSecondsRealtime(fadeImage.GetComponent<UIFadeInOnEnable>().fadeDuration);
+    }
+
+    void EndDialogue()
+    {
+        fadeImage.gameObject.SetActive(false);
+        runner.gameObject.SetActive(true);
     }
 }

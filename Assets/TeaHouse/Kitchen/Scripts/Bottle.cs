@@ -32,6 +32,7 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         highlight.SetActive(false);
         Fill = transform.Find("Fill").gameObject;
         nameTag = transform.Find("Canvas").Find("NameTag").gameObject;
+        nameTag.SetActive(false);
         nameText = nameTag.transform.Find("Name").GetComponent<TMP_Text>();
         countText = nameTag.transform.Find("Count").GetComponent<TMP_Text>();
 

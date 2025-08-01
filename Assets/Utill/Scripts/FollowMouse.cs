@@ -1,14 +1,17 @@
 using UnityEngine;
+using UnityEngine.InputSystem; // 신 Input System 네임스페이스
 
 public class FollowMouse : MonoBehaviour
 {
-     void Update()
+    void Update()
     {
-        Vector3 mousePosition = Input.mousePosition;
-        mousePosition.z = Camera.main.nearClipPlane; // 일반적으로 0 또는 약간 더 크게 (예: 10f)
+        if (Mouse.current == null) return; // 마우스가 없는 환경(모바일 등) 예외 처리
 
-        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-        worldPosition.z = 0f; // 2D니까 z축은 고정
+        Vector2 mousePosition = Mouse.current.position.ReadValue();
+        Vector3 screenPosition = new Vector3(mousePosition.x, mousePosition.y, Camera.main.nearClipPlane);
+
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
+        worldPosition.z = 0f; // 2D 고정
         transform.position = worldPosition;
     }
 }
