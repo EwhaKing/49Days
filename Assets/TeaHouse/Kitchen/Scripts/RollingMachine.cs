@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 
-public class RollingMachine : MonoBehaviour
+
+public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     enum RollingState
     {
@@ -81,7 +84,7 @@ public class RollingMachine : MonoBehaviour
         ClearRollingMachine();
     }
 
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData e)
     {
         TeaIngredient ingredient = Hand.Instance.handIngredient;
         
@@ -91,12 +94,12 @@ public class RollingMachine : MonoBehaviour
         }
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData e)
     {
         spriteRenderer.sprite = defaultSprite;
     }
 
-    private void OnMouseUp()
+    public void OnPointerClick(PointerEventData e)
     {
         switch (state)
         {
@@ -279,12 +282,15 @@ public class RollingMachine : MonoBehaviour
 
     private char GetKeyInput()
     {
-        if (Input.GetKeyDown(KeyCode.W)) return 'W';
-        else if (Input.GetKeyDown(KeyCode.A)) return 'A';
-        else if (Input.GetKeyDown(KeyCode.S)) return 'S';
-        else if (Input.GetKeyDown(KeyCode.D)) return 'D';
+        if (Keyboard.current == null) return '\0';
+
+        if (Keyboard.current.wKey.wasPressedThisFrame) return 'W';
+        else if (Keyboard.current.aKey.wasPressedThisFrame) return 'A';
+        else if (Keyboard.current.sKey.wasPressedThisFrame) return 'S';
+        else if (Keyboard.current.dKey.wasPressedThisFrame) return 'D';
         return '\0';
     }
+
 
     private void OnRollingComplete(bool success)
     {

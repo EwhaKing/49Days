@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CauldronLid : MonoBehaviour
+public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public static CauldronLid Instance { get; private set; }
 
@@ -53,7 +54,7 @@ public class CauldronLid : MonoBehaviour
         ClearCauldronLid();
     }
 
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData e)
     {
         TeaIngredient ingredient = Hand.Instance.handIngredient;
         
@@ -63,12 +64,12 @@ public class CauldronLid : MonoBehaviour
         }
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData e)
     {
         spriteRenderer.sprite = defaultSprite;
     }
 
-    private void OnMouseUp()
+    public void OnPointerClick(PointerEventData e)
     {
         switch (cauldronState)
         {

@@ -16,7 +16,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "New action",
+                    "name": "PC",
                     "type": "Button",
                     "id": "dabcdf16-c31a-4fe4-9882-6cee742e7170",
                     "expectedControlType": "",
@@ -44,7 +44,68 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "PC",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "PlayerActions",
+            "id": "7947913c-7704-4c0c-8955-c7a903d3122b",
+            "actions": [
+                {
+                    "name": "WASD",
+                    "type": "Button",
+                    "id": "baf60fb0-1747-4ffc-998b-5d7ff41f905e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "108fd5f1-be7d-4a58-9b13-7c53b816bdbc",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASD",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c0b757fd-5a4f-43b9-a900-6f206f344662",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASD",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "04b07522-2161-44a8-a4ba-600a1d21b3a3",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASD",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2f42782c-7081-4491-a76f-cc1323d320c5",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "WASD",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
