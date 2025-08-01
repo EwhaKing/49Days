@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
-public class Bottle : MonoBehaviour
+public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 
     [SerializeField] IngredientName ingredientName;
@@ -37,7 +38,7 @@ public class Bottle : MonoBehaviour
         nameText.text = ingredientName.ToKorean();
     }
 
-    void OnMouseUp()
+    public void OnPointerClick(PointerEventData e)
     {
         if (Hand.Instance.handIngredient != null)  // 재료 다시 집어넣기
         {
@@ -65,7 +66,7 @@ public class Bottle : MonoBehaviour
         FillDecision();
     }
 
-    void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData e)
     {
         nameTag.SetActive(true);
         if (Hand.Instance.handIngredient != null && CanGetBackIn(Hand.Instance.handIngredient)
@@ -73,7 +74,7 @@ public class Bottle : MonoBehaviour
             highlight.SetActive(true);
     }
 
-    void OnMouseExit()
+    public void OnPointerExit(PointerEventData e)
     {
         nameTag.SetActive(false);
         highlight.SetActive(false);
