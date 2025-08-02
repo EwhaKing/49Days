@@ -9,6 +9,8 @@ public class UIFadeInOnEnable : MonoBehaviour
 
     private void OnEnable()
     {
+        GameManager.Instance.BlockingUIOn(gameObject);
+
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
         alpha = canvasGroup.alpha;
@@ -25,5 +27,10 @@ public class UIFadeInOnEnable : MonoBehaviour
             canvasGroup.alpha = Mathf.Lerp(0f, alpha, t);
             yield return null;
         }
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.BlockingUIOff(gameObject);
     }
 }

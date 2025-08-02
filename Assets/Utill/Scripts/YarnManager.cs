@@ -19,7 +19,7 @@ public class YarnManager : SceneSingleton<YarnManager>
 
     public void RunDialogue(string nodeTitle)
     {
-        GameManager.Instance.isUIOn = true;
+        GameManager.Instance.BlockingUIOn(gameObject);
 
         runner.gameObject.SetActive(true);
 
@@ -37,7 +37,7 @@ public class YarnManager : SceneSingleton<YarnManager>
 
     void EndDialogue()
     {
-        GameManager.Instance.isUIOn = false;
+        GameManager.Instance.BlockingUIOff(gameObject);
 
         fadeImage.gameObject.SetActive(false);
         runner.gameObject.SetActive(true);
