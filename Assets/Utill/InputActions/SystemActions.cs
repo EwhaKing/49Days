@@ -109,6 +109,15 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ToggleUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""5227a6d0-90e3-4a59-838d-94ddb571c37b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -166,6 +175,28 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""action"": ""WASD"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e8a6642-56cd-458f-8181-7c8eea5fff98"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""ToggleUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0fc1318f-b833-421b-9613-bd99e07a3eef"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""ToggleUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -199,6 +230,7 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         m_SystemActions = asset.FindActionMap("SystemActions", throwIfNotFound: true);
         m_SystemActions_MoveCamera = m_SystemActions.FindAction("MoveCamera", throwIfNotFound: true);
         m_SystemActions_WASD = m_SystemActions.FindAction("WASD", throwIfNotFound: true);
+        m_SystemActions_ToggleUI = m_SystemActions.FindAction("ToggleUI", throwIfNotFound: true);
         // PlayerActions
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
     }
@@ -284,6 +316,7 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
     private List<ISystemActionsActions> m_SystemActionsActionsCallbackInterfaces = new List<ISystemActionsActions>();
     private readonly InputAction m_SystemActions_MoveCamera;
     private readonly InputAction m_SystemActions_WASD;
+    private readonly InputAction m_SystemActions_ToggleUI;
     /// <summary>
     /// Provides access to input actions defined in input action map "SystemActions".
     /// </summary>
@@ -303,6 +336,10 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "SystemActions/WASD".
         /// </summary>
         public InputAction @WASD => m_Wrapper.m_SystemActions_WASD;
+        /// <summary>
+        /// Provides access to the underlying input action "SystemActions/ToggleUI".
+        /// </summary>
+        public InputAction @ToggleUI => m_Wrapper.m_SystemActions_ToggleUI;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -335,6 +372,9 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @WASD.started += instance.OnWASD;
             @WASD.performed += instance.OnWASD;
             @WASD.canceled += instance.OnWASD;
+            @ToggleUI.started += instance.OnToggleUI;
+            @ToggleUI.performed += instance.OnToggleUI;
+            @ToggleUI.canceled += instance.OnToggleUI;
         }
 
         /// <summary>
@@ -352,6 +392,9 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @WASD.started -= instance.OnWASD;
             @WASD.performed -= instance.OnWASD;
             @WASD.canceled -= instance.OnWASD;
+            @ToggleUI.started -= instance.OnToggleUI;
+            @ToggleUI.performed -= instance.OnToggleUI;
+            @ToggleUI.canceled -= instance.OnToggleUI;
         }
 
         /// <summary>
@@ -504,6 +547,13 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnWASD(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleUI" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleUI(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerActions" which allows adding and removing callbacks.

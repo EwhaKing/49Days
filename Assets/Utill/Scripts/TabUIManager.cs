@@ -1,54 +1,34 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TabUIManager : MonoBehaviour
 {
-    public static TabUIManager Instance { get; private set; }
+    [Header("책갈피(토클 버튼)")]
+    [SerializeField] private Toggle[] tabToggles;   // 이곳에 책갈피를 붙이면 됩니다. 인벤토리/레시피/호감도/퀘스트 4개 예정
 
-    [SerializeField] private GameObject TabCanvasPrefab;
-    private GameObject inventoryCanvas;
-    private bool isOpen = false;
+    [Header("정보 패널")]
+    [SerializeField] private GameObject[] panels;   // 이곳에는 패널들을 붙입니다.
 
-    private void Awake()
+    private void Start()
     {
-        if (Instance != null && Instance != this)
+        for (int i = 0; i < tabToggles.Length; i++)
         {
-            Destroy(gameObject);
-            return;
+            int index = i;
+            tabToggles[i].onValueChanged.AddListener((isOn) =>
+            {
+                if (isOn) ShowPanel(index);
+            });
         }
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        if (TabCanvasPrefab != null)
-        {
-            inventoryCanvas = Instantiate(TabCanvasPrefab);
-            inventoryCanvas.SetActive(false);
-            DontDestroyOnLoad(inventoryCanvas);
-        }
+        ShowPanel(0);
     }
 
-    private void Update()
+    private void ShowPanel(int index)
     {
-        if (Input.GetKeyDown(KeyCode.Tab))
+        for (int i = 0; i < panels.Length; i++)
         {
-            ToggleInventory();
+            panels[i].SetActive(i == index);
         }
-        if (Input.GetKeyDown(KeyCode.Escape) && isOpen)
-        {
-            CloseInventory();
-        }
-    }
-
-    public void ToggleInventory()
-    {
-        isOpen = !isOpen;
-        inventoryCanvas.SetActive(isOpen);
-    }
-
-    public void CloseInventory()
-    {
-        isOpen = false;
-        inventoryCanvas.SetActive(false);
     }
 }
