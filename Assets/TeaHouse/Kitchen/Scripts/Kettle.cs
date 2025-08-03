@@ -44,7 +44,6 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
     public bool IsPouring => isPouring;
 
-
     public TeaPot teapot; // Inspector에서 할당
     GameObject heldSmokeObject;
     Animator smokeAnimator;
@@ -79,6 +78,11 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
         if (teapot == null)
             teapot = GameObject.FindObjectOfType<TeaPot>();
+
+        // 연기를 주전자 주둥이의 자식으로.
+        heldSmokeObject.transform.SetParent(kettleSpoutPosition);
+        heldSmokeObject.transform.localPosition = new Vector3(-6.18f, -0.74f, 0); // 위치 보정만 여기서
+
     }
 
     void Update()
@@ -119,8 +123,6 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
         if (heldSmokeObject != null && kettleSpoutPosition != null)
         {
-            heldSmokeObject.transform.position = kettleSpoutPosition.position + new Vector3(-6.18f, -0.74f, 0); // 연기 내 이미지 때문에 벡터 조정
-
             bool shouldShow = Temperature >= 85f;
 
             if (!heldSmokeObject.activeSelf)
@@ -136,11 +138,9 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
     {
         if (heldSmokeObject != null)
         {
-            heldSmokeObject.transform.position = kettleSpoutPosition.position + new Vector3(-6.18f, -0.74f, 0); // 연기 내 이미지 때문에 벡터 조정;
-
             // 주전자(Z축) 회전값의 절반만 연기에 적용
             float parentZ = transform.eulerAngles.z;
-            float smokeZ = parentZ * 0.5f;
+            float smokeZ = parentZ * 0.7f;
 
             heldSmokeObject.transform.rotation = Quaternion.Euler(0, 0, smokeZ);
         }
@@ -309,6 +309,9 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         transform.position += stovePosition.position - kettleBottomPosition.position;
         currentState = KettleState.OnFire;
         GetComponent<SpriteRenderer>().sortingOrder = 3;
+
+        if (teapot.IsMouseOver)
+            TeaPot.Instance?.resetButton?.SetActive(true); // 물 붓기 끝난 후 버튼 표시
     }
 
     // 주전자에 물 붓기 애니메이션 함수
@@ -324,7 +327,7 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         GetComponent<SpriteRenderer>().sortingOrder = 6;
 
         // 연기 알파를 0으로 줄이기 시작
-        StartCoroutine(FadeSmokeTo(0f, smokeFadeSpeed * 3f));
+        StartCoroutine(FadeSmokeTo(0f, smokeFadeSpeed * 3f, 0.7f));
 
         Quaternion originalRotation = transform.rotation;
         Quaternion targetRotation = Quaternion.Euler(0, 0, pourAngle);
@@ -354,13 +357,8 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
         pot.PourWater(cachedTemperature);
 
-        yield return new WaitForSeconds(0.4f); // n초 정지
+        yield return new WaitForSeconds(0.7f); // n초 정지
 
-        // // 파티클 생성 종료
-        // if (waterParticle != null && waterParticle.isPlaying)
-        // {
-        //     waterParticle.Stop(true, ParticleSystemStopBehavior.StopEmitting);
-        // }
         elapsed = 0f;
 
         while (elapsed < pourDuration)
@@ -380,7 +378,8 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         if (Temperature >= 85f) targetAlpha = 1f;
         else if (Temperature >= 70f) targetAlpha = (Temperature - 70f) / 15f;
         // 연기 알파를 다시 복원
-        StartCoroutine(FadeSmokeTo(targetAlpha, smokeFadeSpeed * 3f));
+        StartCoroutine(FadeSmokeTo(targetAlpha, smokeFadeSpeed * 3f, 0.5f));
+
 
         // 정렬 순서 원래대로 복원
         GetComponent<SpriteRenderer>().sortingOrder = 3;
@@ -395,7 +394,7 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
     }
 
     //주전자에 물 부을 때 바뀌는 연기의 투명도 조절
-    IEnumerator FadeSmokeTo(float targetAlpha, float speed)
+    IEnumerator FadeSmokeTo(float targetAlpha, float speed, float holdAtZero = 0f)
     {
         if (heldSmokeObject == null) yield break;
 
@@ -411,6 +410,13 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
             currentColor = spriteRenderer.color;
             yield return null;
         }
+
+        // 2. 알파값이 0이고 holdAtZero > 0이면 그 시간만큼 대기
+        if (Mathf.Approximately(targetAlpha, 0f) && holdAtZero > 0f)
+        {
+            yield return new WaitForSeconds(holdAtZero);
+        }
+
     }
 
     //유니티 내에서 조정이 안 돼서, 코드로 조절(파티클 시스템 속도 조절)

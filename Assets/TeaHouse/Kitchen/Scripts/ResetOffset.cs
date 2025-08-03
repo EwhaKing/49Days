@@ -14,7 +14,7 @@ public class ResetOffset : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (kettle != null && kettle.IsPouring) return; // 🔒 물 붓는 중이면 버튼 비활성화 유지
+        if (kettle != null && kettle.IsPouring) return; // 물 붓는 중이면 버튼 비활성화 유지
 
         if (!isVisible)
         {

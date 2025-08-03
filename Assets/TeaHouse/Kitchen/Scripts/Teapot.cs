@@ -17,7 +17,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
     [SerializeField] GameObject ingredientTooltipPanel;
     [SerializeField] GameObject ingredientImagePrefab; // 재료 하나당 표시할 프리팹 (Image)
     [SerializeField] Transform ingredientListParent; // 재료 이미지들을 담을 부모 오브젝트
-    [SerializeField] GameObject resetButton;//reset 버튼
+    [SerializeField] public GameObject resetButton;//reset 버튼
 
     [SerializeField] Transform ingredientParent;
     [SerializeField] Transform waterEffect;
@@ -28,9 +28,12 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
     [SerializeField] private SpriteRenderer smokeRenderer;
 
+    public bool IsMouseOver { get; private set; } = false;
 
     GameObject teapotSmoke;
     Animator smokeAnimator;
+    Coroutine startSmokeCoroutine;
+
 
     List<TeaIngredient> ingredients = new List<TeaIngredient>();
     float timer = 0f;
@@ -178,23 +181,27 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
         //currentState = State.Brewing;
         timer = 0f;
 
-        // waterEffect?.gameObject.SetActive(true); // 물 효과
-
         Debug.Log($"우림 시작: {waterTemp}도");
 
         //다병 연기 애니메이션 
         if (smokeAnimator != null)
         {
-            teapotSmoke.SetActive(true);
-            smokeAnimator.Play("startSmoke", 0, 0f); // 애니메이션 처음부터 재생
-            smokeAnimator.SetBool("isSmoking", true);
-
-            smokeRenderer.color = new Color(smokeRenderer.color.r, smokeRenderer.color.g, smokeRenderer.color.b, 1f); // 무조건 시작 시 알파 1
+            // 기존 코루틴 정리
+            if (startSmokeCoroutine != null)
+            {
+                StopCoroutine(startSmokeCoroutine);
+                startSmokeCoroutine = null;
+            }
+            if (stopSmokeCoroutine != null)
+            {
+                StopCoroutine(stopSmokeCoroutine);
+                stopSmokeCoroutine = null;
+            }
 
             if (waterTemp >= 70f)
-                stopSmokeCoroutine = StartCoroutine(FadeOutSmokeAfterDelay(30f, 10f)); // 30초 유지 후 10초 페이드
+                stopSmokeCoroutine = StartCoroutine(StartSmokeAfterDelay(1.7f, 30f, 10f)); // 30초 유지 후 10초 페이드
             else if (waterTemp >= 40f)
-                stopSmokeCoroutine = StartCoroutine(FadeOutSmokeAfterDelay(5f, 10f)); // 5초 유지 후 10초 페이드
+                stopSmokeCoroutine = StartCoroutine(StartSmokeAfterDelay(1.0f, 5f, 10f)); // 5초 유지 후 10초 페이드
             else
                 teapotSmoke.SetActive(false); // 너무 차가우면 아예 끔
         }
@@ -233,11 +240,32 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
         targetSliderValue = 0f;
         pourSlider.value = 0f;
 
-        //애니메이션 꺼주기
+        //애니메이션 꺼주기~안전하게 리셋.
         if (teapotSmoke != null)
             teapotSmoke.SetActive(false);
 
-        //   waterEffect?.gameObject.SetActive(false); // 물 효과 비활성화인데 이거 나중에 다시 살려야 함. 
+        if (smokeAnimator != null)
+        {
+            smokeAnimator.SetBool("isSmoking", false);
+            smokeAnimator.Rebind(); // 모든 파라미터, 상태, 트랜지션 초기화
+            smokeAnimator.Update(0f); // 바로 반영
+        }
+        if (smokeRenderer != null)
+        {
+            Color c = smokeRenderer.color;
+            smokeRenderer.color = new Color(c.r, c.g, c.b, 0f);
+        }
+
+        if (stopSmokeCoroutine != null)
+        {
+            StopCoroutine(stopSmokeCoroutine);
+            stopSmokeCoroutine = null;
+        }
+        if (startSmokeCoroutine != null)
+        {
+            StopCoroutine(startSmokeCoroutine);
+            startSmokeCoroutine = null;
+        }
 
         // 재료 오브젝트 제거 추가
         foreach (Transform child in ingredientParent)
@@ -264,14 +292,26 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
     // UI 버튼에서 호출할 초기화 함수
     public void OnClickResetButton()
     {
-        StopCoroutine(stopSmokeCoroutine); // 연기 페이드 코루틴 중지
         Debug.Log("초기화 버튼 눌림");
+
+        // 수정된 부분: 코루틴 안전하게 중지
+        if (startSmokeCoroutine != null)
+        {
+            StopCoroutine(startSmokeCoroutine);
+            startSmokeCoroutine = null;
+        }
+        if (stopSmokeCoroutine != null)
+        {
+            StopCoroutine(stopSmokeCoroutine);
+            stopSmokeCoroutine = null;
+        }
 
         FinishTea();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        IsMouseOver = true;
         var held = Hand.Instance.handIngredient;
 
         // ✅ 하이라이트 처리 ---------------------
@@ -305,6 +345,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        IsMouseOver = false;
         highlightSprite.SetActive(false);
 
         if (ingredientTooltipPanel != null)
@@ -312,6 +353,9 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
             ingredientTooltipPanel.SetActive(false);
             ClearIngredientListUI();
         }
+        // 리셋 버튼도 숨기기
+        if (resetButton != null)
+            resetButton.SetActive(false);
     }
 
     void ShowIngredientListUI()
@@ -350,7 +394,6 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
             RectTransform childRect = child.GetComponent<RectTransform>();
             Debug.Log($"📦 Child Width: {childRect.rect.width}");
         }
-
     }
 
     void ClearIngredientListUI()
@@ -420,9 +463,29 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
             teapotSmoke.SetActive(false);
     }
 
+    IEnumerator StartSmokeAfterDelay(float delay, float holdTime, float fadeDuration)
+    {
+        yield return new WaitForSeconds(delay); // 연기 시작 자체를 딜레이
+
+        teapotSmoke.SetActive(true);
+        smokeAnimator.Play("startSmoke", 0, 0f);
+        smokeAnimator.SetBool("isSmoking", true);
+        smokeRenderer.color = new Color(smokeRenderer.color.r, smokeRenderer.color.g, smokeRenderer.color.b, 1f);
+
+        // 기존 유지 + 페이드 아웃 코루틴 호출
+        stopSmokeCoroutine = StartCoroutine(FadeOutSmokeAfterDelay(holdTime, fadeDuration));
+    }
+
     IEnumerator FadeOutSmokeAfterDelay(float delay, float fadeDuration)
     {
         yield return new WaitForSeconds(delay);
+
+        // 알파값을 다시 1로 보장 (혹시라도 이전 상태에서 꼬인 경우 대비)
+        if (smokeRenderer != null)
+        {
+            Color pre = smokeRenderer.color;
+            smokeRenderer.color = new Color(pre.r, pre.g, pre.b, 1f);
+        }
 
         float elapsed = 0f;
         Color c = smokeRenderer.color;
