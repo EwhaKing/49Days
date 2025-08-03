@@ -155,10 +155,13 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
             ShowIngredientListUI();
         }
 
+        highlightSprite.SetActive(false);
+
         //Debug.Log($"다병에 들어간 재료 상태: {ing.ingredientName}, 산화: {ing.oxidizedDegree}, 스프라이트: {ing.GetComponent<SpriteRenderer>().sprite.name}");
 
     }
 
+    Coroutine stopSmokeCoroutine;
     public bool PourWater(float waterTemp)
     {
         //물은 한 번만 부을 수 있음.
@@ -189,9 +192,9 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
             smokeRenderer.color = new Color(smokeRenderer.color.r, smokeRenderer.color.g, smokeRenderer.color.b, 1f); // 무조건 시작 시 알파 1
 
             if (waterTemp >= 70f)
-                StartCoroutine(FadeOutSmokeAfterDelay(30f, 10f)); // 30초 유지 후 10초 페이드
+                stopSmokeCoroutine = StartCoroutine(FadeOutSmokeAfterDelay(30f, 10f)); // 30초 유지 후 10초 페이드
             else if (waterTemp >= 40f)
-                StartCoroutine(FadeOutSmokeAfterDelay(5f, 10f)); // 5초 유지 후 10초 페이드
+                stopSmokeCoroutine = StartCoroutine(FadeOutSmokeAfterDelay(5f, 10f)); // 5초 유지 후 10초 페이드
             else
                 teapotSmoke.SetActive(false); // 너무 차가우면 아예 끔
         }
@@ -261,11 +264,11 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
     // UI 버튼에서 호출할 초기화 함수
     public void OnClickResetButton()
     {
+        StopCoroutine(stopSmokeCoroutine); // 연기 페이드 코루틴 중지
         Debug.Log("초기화 버튼 눌림");
 
         FinishTea();
     }
-
 
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -379,7 +382,9 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
             // 감속 곡선 적용 (t → 0~1 → EaseOut)
             float easedSpeed = sliderSpeed * (1f - progress); // 마지막에 0에 가까워짐
-            float delta = Time.deltaTime * Mathf.Max(easedSpeed, 0.03f); // 너무 느려지지 않게 최소 보장
+
+            float speedMultiplier = Time.deltaTime / Time.fixedDeltaTime; // 예: 0.0166 / 0.02 ≈ 0.83(보정용 변수)
+            float delta = Time.fixedDeltaTime * Mathf.Max(easedSpeed, 0.03f) * speedMultiplier; // 너무 느려지지 않게 최소 보장
 
             currentSliderValue = Mathf.MoveTowards(currentSliderValue, targetSliderValue, delta);
 
