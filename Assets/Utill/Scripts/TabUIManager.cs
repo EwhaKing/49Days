@@ -24,7 +24,8 @@ public class TabUIManager : MonoBehaviour
         ShowPanel(0);
     }
 
-    private void ShowPanel(int index)
+
+    public void ShowPanel(int index)
     {
         for (int i = 0; i < panels.Length; i++)
         {

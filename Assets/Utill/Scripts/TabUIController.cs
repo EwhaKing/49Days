@@ -27,9 +27,13 @@ public class TabUIController : MonoBehaviour
     /// </summary>
     private void OnToggleUI(InputAction.CallbackContext context)
     {
-        commonPanel.SetActive(!commonPanel.activeSelf);
+        bool nextState = !commonPanel.activeSelf;
+        commonPanel.SetActive(nextState);
+        if (nextState)
+        {
+            FindObjectOfType<TabUIManager>()?.ShowPanel(0);
+        }
     }
-
 
     private void Start()
     {
