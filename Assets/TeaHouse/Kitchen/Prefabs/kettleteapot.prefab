@@ -1313,7 +1313,7 @@ PrefabInstance:
       objectReference: {fileID: 1045621621, guid: 0aa3f93120a262f4992059113d09f8d5, type: 3}
     - target: {fileID: 7596112854082185627, guid: cc3f323627a028a44b3ef8b0a4e64726, type: 3}
       propertyPath: m_SortingOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7982655981436563696, guid: cc3f323627a028a44b3ef8b0a4e64726, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1340,6 +1340,16 @@ Transform:
 --- !u!4 &5188863569030498343 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6783510886987719000, guid: cc3f323627a028a44b3ef8b0a4e64726, type: 3}
+  m_PrefabInstance: {fileID: 1594649040776243583}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &6084492786162004173 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4778637140223220146, guid: cc3f323627a028a44b3ef8b0a4e64726, type: 3}
+  m_PrefabInstance: {fileID: 1594649040776243583}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &9172571024187343076 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 7596112854082185627, guid: cc3f323627a028a44b3ef8b0a4e64726, type: 3}
   m_PrefabInstance: {fileID: 1594649040776243583}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4433170938592847936
@@ -1455,9 +1465,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1314493054093352901}
     - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
+      propertyPath: hookBackRenderer
+      value: 
+      objectReference: {fileID: 9172571024187343076}
+    - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: hookSnapDistance
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
+      propertyPath: hookFrontRenderer
+      value: 
+      objectReference: {fileID: 6084492786162004173}
     - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: stoveSnapDistance
       value: 0.01
