@@ -9,30 +9,43 @@ using UnityEngine;
 public class SceneSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
-    public static T Instance { get { Init(); return _instance; } }
+    private static bool _initialized = false;
 
-    public void Awake()
+    public static T Instance
     {
-        if(Init())
-            Destroy(gameObject);
+        get
+        {
+            if (!_initialized)
+                Initialize();
+            return _instance;
+        }
     }
 
-    static bool Init()
+    protected virtual void Awake()
     {
         if (_instance == null)
         {
-            _instance = FindObjectOfType<T>();
-            
-            if (_instance == null)
-            {
-                GameObject obj = new GameObject { name = typeof(T).ToString() + "(Singleton)" };
-                _instance = obj.AddComponent<T>();
-                return true;
-            }
+            _instance = this as T;
+            _initialized = true;
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
 
-            return false;
+    private static void Initialize()
+    {
+        if (_initialized) return;
+
+        _instance = FindObjectOfType<T>();
+
+        if (_instance == null)
+        {
+            GameObject obj = new GameObject($"{typeof(T).Name}(SceneSingleton)");
+            _instance = obj.AddComponent<T>();
         }
 
-        return true;
+        _initialized = true;
     }
 }

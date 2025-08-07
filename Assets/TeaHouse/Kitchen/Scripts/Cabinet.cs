@@ -6,7 +6,7 @@ using UnityEngine;
 public class Cabinet : SceneSingleton<Cabinet>
 {
     public Dictionary<IngredientName, int> ingredientCounts = new Dictionary<IngredientName, int>();
-    public static Action AfterCabinetInit = () => {};
+    public Action AfterCabinetInit = () => {};
 
     void Start()
     {

@@ -19,7 +19,7 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     void Awake()
     {
-        Cabinet.AfterCabinetInit += () =>
+        Cabinet.Instance.AfterCabinetInit += () =>
         {
             Init();
             FillDecision();
