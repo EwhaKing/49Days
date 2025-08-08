@@ -34,3 +34,10 @@ position: 32,-115
 <<fade_in hotwater>>
 뜨거운 물: 정말 뜨거운 물입니다.
 ===
+
+title: whitetea
+position: -198,31
+---
+<<fade_in whitetea>>
+백차: 백지처럼 하얗습니다.
+===
