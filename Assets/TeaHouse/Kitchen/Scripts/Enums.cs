@@ -63,6 +63,7 @@ public enum OxidizedDegree
 {
     None,        // 산화 안함 = x
     Zero,        // 산화 미미 = 0
+    Low,         // 약산화 = 25
     Half,        // 반산화 = 50
     Full,        // 완전 산화 = 100
     Over         // 탐

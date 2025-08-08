@@ -244,8 +244,8 @@ public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
         switch (activeCount)
         {
-            case 1:
-            case 2: Debug.Log("0"); return OxidizedDegree.Zero;
+            case 1: Debug.Log("0"); return OxidizedDegree.Zero;
+            case 2: Debug.Log("25"); return OxidizedDegree.Low;
             case 3: Debug.Log("50"); return OxidizedDegree.Half;
             case 4: Debug.Log("100"); return OxidizedDegree.Full;
             case 5: Debug.Log("탐"); return OxidizedDegree.Over;
@@ -261,13 +261,15 @@ public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         switch (degree)
         {
             case OxidizedDegree.Zero:
-                sr.color = new Color(0.8f, 1f, 0.8f); break;     // 초록
+                break;
+            case OxidizedDegree.Low:
+                sr.color = new Color(0.88f, 0.85f, 0.60f); break;   // 연두
             case OxidizedDegree.Half:
-                sr.color = new Color(1f, 0.8f, 0.3f); break;     // 노랑
+                sr.color = new Color(1f, 0.8f, 0.3f); break;        // 노랑
             case OxidizedDegree.Full:
-                sr.color = new Color(0.8f, 0.4f, 0.2f); break;   // 주황
+                sr.color = new Color(0.8f, 0.4f, 0.2f); break;      // 주황
             case OxidizedDegree.Over:
-                sr.color = new Color(0.2f, 0.13f, 0.05f); break; // 검정
+                sr.color = new Color(0.2f, 0.13f, 0.05f); break;    // 검정
         }
     }
 
