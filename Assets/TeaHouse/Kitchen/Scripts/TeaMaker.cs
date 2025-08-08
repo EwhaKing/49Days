@@ -23,11 +23,6 @@ public class TeaMaker : SceneSingleton<TeaMaker>
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             teaRecipes = new List<TeaRecipe>(handle.Result);
-
-            foreach (var so in teaRecipes)
-            {
-                Debug.Log($"로드됨: {so.name}");
-            }
         }
         else
         {

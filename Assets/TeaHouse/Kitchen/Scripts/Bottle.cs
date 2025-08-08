@@ -17,15 +17,16 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     TMP_Text countText;
     GameObject Fill;
 
-    void Awake()
+    void Start()
     {
-        Cabinet.Instance.AfterCabinetInit += () =>
+        if (CabinetManager.Instance.isUnlocked(ingredientName))
         {
             Init();
-            FillDecision();
-            countText.text = Cabinet.Instance.ingredientCounts[ingredientName] + "개";
-            Debug.Log($"{ingredientName} 초기화: {Cabinet.Instance.ingredientCounts[ingredientName]}개");
-        };
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
     void Init()
     {
@@ -37,6 +38,8 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         countText = nameTag.transform.Find("Count").GetComponent<TMP_Text>();
 
         nameText.text = ingredientName.ToKorean();
+        FillDecision();
+        countText.text = GetCount() + "개";
     }
 
     public void OnPointerClick(PointerEventData e)
@@ -47,23 +50,21 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
             if (!CanGetBackIn(handIngredient)) return;
 
-            Cabinet.Instance.ingredientCounts[ingredientName] += 1;
+            CabinetManager.Instance.AddIngredient(ingredientName, 1);
             Destroy(Hand.Instance.Drop());
         }
         else  // 재료 빼기
         {
-            if (Cabinet.Instance.ingredientCounts[ingredientName] == 0) return;
+            if (GetCount() == 0) return;
 
-            Cabinet.Instance.ingredientCounts[ingredientName] -= 1;
+            CabinetManager.Instance.SubtractIngredient(ingredientName, 1);
 
             GameObject ingredientObject = Instantiate(ingredientPrefab, transform.position, Quaternion.identity);
             ingredientObject.GetComponent<TeaIngredient>().Init(ingredientName, ingredientType);
             Hand.Instance.Grab(ingredientObject);
-
-            Debug.Log($"{ingredientName}을(를) 꺼냈습니다. 남은 개수: {Cabinet.Instance.ingredientCounts[ingredientName]}개");
         }
 
-        countText.text = Cabinet.Instance.ingredientCounts[ingredientName] + "개";
+        countText.text = GetCount() + "개";
         FillDecision();
     }
 
@@ -71,7 +72,7 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
     {
         nameTag.SetActive(true);
         if (Hand.Instance.handIngredient != null && CanGetBackIn(Hand.Instance.handIngredient)
-        || Hand.Instance.handIngredient == null && Cabinet.Instance.ingredientCounts[ingredientName] > 0)
+        || Hand.Instance.handIngredient == null && GetCount() > 0)
             highlight.SetActive(true);
     }
 
@@ -83,7 +84,7 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
 
     void FillDecision()
     {
-        if (Cabinet.Instance.ingredientCounts[ingredientName] == 0)
+        if (GetCount() == 0)
         {
             Fill.SetActive(false);
         }
@@ -102,5 +103,10 @@ public class Bottle : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler,
         if (handIngredient.rolled != ResultStatus.None) return false;
         
         return true;
+    }
+
+    int GetCount()
+    {
+        return CabinetManager.Instance.GetIngredientCount(ingredientName);
     }
 }

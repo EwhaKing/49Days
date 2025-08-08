@@ -44,7 +44,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6782845755020452321}
   - component: {fileID: 4262827050214783890}
-  - component: {fileID: 3502646269161051234}
   m_Layer: 0
   m_Name: Cabinet
   m_TagString: Untagged
@@ -120,18 +119,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3502646269161051234
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8725186285723440519}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 40577e0d396ca9f4aa2ccf850d44e3c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &142359786669460935
 PrefabInstance:
   m_ObjectHideFlags: 0
