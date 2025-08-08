@@ -164,6 +164,9 @@ public class TeaMaker : SceneSingleton<TeaMaker>
             case OxidizedDegree.Half:
                 ingredient.ChangeIngredientName(IngredientName.TeaLeaf_Oolong);
                 break;
+            case OxidizedDegree.Low:
+                ingredient.ChangeIngredientName(IngredientName.TeaLeaf_White);
+                break;
             case OxidizedDegree.Over:
                 Debug.LogError("탔는데 찻잎이름 바꾸려함");
                 break;
