@@ -15,7 +15,7 @@ public class GameManager : Singleton<GameManager>
     }
     IEnumerator test(){
         yield return new WaitForSeconds(1f);
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Kitchen");
     }
     public void testSave(){
         SaveLoadManager.Instance.SaveAllByDate(1);
