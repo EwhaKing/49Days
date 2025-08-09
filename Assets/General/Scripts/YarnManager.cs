@@ -19,9 +19,7 @@ public class YarnManager : SceneSingleton<YarnManager>
 
     public void RunDialogue(string nodeTitle)
     {
-        GameManager.Instance.BlockingUIOn(gameObject);
-
-        runner.gameObject.SetActive(true);
+        UIManager.Instance.BlockingUIOn(runner.gameObject);
 
         runner.StartDialogue(nodeTitle);
     }
@@ -31,15 +29,13 @@ public class YarnManager : SceneSingleton<YarnManager>
         Sprite sprite = Resources.Load<Sprite>($"Arts/{spriteName}");
         fadeImage.sprite = sprite;
         fadeImage.SetNativeSize();
-        fadeImage.gameObject.SetActive(true);
+        UIManager.Instance.BlockingUIOn(fadeImage.gameObject);
         yield return new WaitForSecondsRealtime(fadeImage.GetComponent<UIFadeInOnEnable>().fadeDuration);
     }
 
     void EndDialogue()
     {
-        GameManager.Instance.BlockingUIOff(gameObject);
-
-        fadeImage.gameObject.SetActive(false);
-        runner.gameObject.SetActive(true);
+        UIManager.Instance.BlockingUIOff(runner.gameObject);
+        UIManager.Instance.BlockingUIOff(fadeImage.gameObject);
     }
 }

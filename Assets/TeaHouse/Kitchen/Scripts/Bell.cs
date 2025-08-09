@@ -52,7 +52,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
         if (tea != null)
         {
-            manufacturingCompletedUI.SetActive(true);
+            UIManager.Instance.BlockingUIOn(manufacturingCompletedUI);
             PauseGame();
             makedTea = TeaMaker.MakeTea(tea);
             StartCoroutine(LatePlayCutScene());
