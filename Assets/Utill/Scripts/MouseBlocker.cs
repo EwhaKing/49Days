@@ -10,16 +10,16 @@ public class MouseBlocker : SceneSingleton<MouseBlocker>
     }
     
     /// <summary>
-    /// 마우스 이벤트를 막는 투명한 이미지를 활성화한다. <br/>
+    /// 마우스 이벤트, 키입력을 막는 투명한 이미지를 활성화한다. <br/>
     /// 사용 후엔 *반드시* Disable을 불러 해제할 것
     /// </summary>
     public void Enable()
     {
-        gameObject.SetActive(true);
+        UIManager.Instance.BlockingUIOn(gameObject);
     }
 
     public void Disable()
     {
-        gameObject.SetActive(false);
+        UIManager.Instance.BlockingUIOn(gameObject);
     }
 }
