@@ -11,9 +11,21 @@ public class CharacterSlot : MonoBehaviour, IPointerClickHandler
     private AffinityPanel panel;
     private Sprite unknownSprite;
 
-    /// <summary>
+    public void Bind(CharacterData d, Sprite unknown, AffinityPanel p)
+    {
+        data = d; panel = p; unknownSprite = unknown;
+
+        if (d == null)
+        {
+            charImage.enabled = false; // 빈칸
+            return;
+        }
+
+        charImage.enabled = true;
+        charImage.sprite = d.hasMet ? d.slotImage : unknownSprite;
+    }
+
     /// 슬롯 초기화
-    /// </summary>
     public void Init(CharacterData data, Sprite unknown, AffinityPanel panel)
     {
         this.data = data;

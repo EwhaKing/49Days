@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class CharacterData : ScriptableObject
 {
     [Header("기본 정보")]
+    public int fixedIndex; // 고정 인덱스 (1부터 시작, slot 에 고정되는 위치.)
     public string characterName;       // 캐릭터 이름
 
     [Header("이미지")]

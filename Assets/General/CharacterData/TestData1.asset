@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e7b987e934af584ebc1ef7ba16175d7, type: 3}
-  m_Name: TestData
+  m_Name: TestData1
   m_EditorClassIdentifier: 
   characterName: ch1
   slotImage: {fileID: 21300000, guid: edf42544f0491ae429d5d416629855e3, type: 3}
   profileImage: {fileID: 21300000, guid: 6eb11d757b3dccc45a9110ca96b8f97b, type: 3}
   hasMet: 0
-  profileText: 
+  profileText: 'i''m ch1
+
+'
   affinity: 10
-  likes: 
-  dislikes: 
+  likes: ch1 like 10
+  dislikes: ch1 dislike

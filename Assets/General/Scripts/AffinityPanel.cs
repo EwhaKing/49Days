@@ -11,6 +11,7 @@ public class AffinityPanel : MonoBehaviour
     [SerializeField] Sprite unknownSprite;
     [SerializeField] Button nextButton;
     [SerializeField] Button prevButton;
+    [SerializeField] TextMeshProUGUI pageText; // 페이지 표시(없으면 null 허용)
 
     [Header("Right Side")]
     [SerializeField] Image profileImage;
@@ -22,62 +23,97 @@ public class AffinityPanel : MonoBehaviour
     [Header("Data")]
     [SerializeField] List<CharacterData> characterDataList;
 
-    private List<GameObject> slots = new List<GameObject>();
+    const int PageSize = 9;
+    int page = 0;            // 내부 인덱스: 0부터
+    int maxPage = 0;         // 내부 인덱스: 0부터
+    readonly List<CharacterSlot> slots = new(); // 풀
 
     void Start()
     {
-        // 슬롯 생성 및 초기화
-        for (int i = 0; i < characterDataList.Count; i++)
+        int total = characterDataList.Count;
+        maxPage = (total == 0) ? 0 : (total - 1) / PageSize;
+
+        if (nextButton) nextButton.onClick.AddListener(() => { if (page < maxPage) { page++; RefreshPage(); } });
+        if (prevButton) prevButton.onClick.AddListener(() => { if (page > 0) { page--; RefreshPage(); } });
+
+        RefreshPage();
+        ClearRightPanel();
+    }
+
+    // 필요 개수만큼 슬롯 보유(부족하면 생성, 남으면 끔)
+    void EnsureSlotCount(int needed)
+    {
+        while (slots.Count < needed)
         {
-            GameObject go = Instantiate(characterSlotPrefab, characterGrid);
-            slots.Add(go);
-            var slotScript = go.GetComponent<CharacterSlot>();
-            slotScript.Init(characterDataList[i], unknownSprite, this);
+            var go = Instantiate(characterSlotPrefab, characterGrid);
+            slots.Add(go.GetComponent<CharacterSlot>());
+        }
+        for (int i = 0; i < slots.Count; i++)
+            slots[i].gameObject.SetActive(i < needed);
+    }
+
+    void RefreshPage()
+    {
+        int total = characterDataList.Count;
+        maxPage = (total == 0) ? 0 : (total - 1) / PageSize;
+        page = Mathf.Clamp(page, 0, maxPage);
+
+        int start = page * PageSize;                       // 이 페이지의 전역 시작 인덱스
+        int countOnPage = Mathf.Clamp(total - start, 0, PageSize); // 이 페이지에 실제로 보여줄 개수
+
+        EnsureSlotCount(countOnPage);
+
+        // i = 페이지 내부 인덱스(0..countOnPage-1)
+        // globalIndex = start + i  (원하는 수식으로 쓰면 slotIndex = (start + i) % 9)
+        for (int i = 0; i < countOnPage; i++)
+        {
+            var data = characterDataList[start + i];
+            slots[i].Bind(data, unknownSprite, this);
         }
 
-        ClearRightPanel();
+        if (prevButton) prevButton.interactable = page > 0;
+        if (nextButton) nextButton.interactable = page < maxPage;
+
+        // 페이지 표시는 1부터
+        int displayPage = (total == 0) ? 0 : page + 1;
+        int displayMax = (total == 0) ? 0 : maxPage + 1;
+        if (pageText) pageText.text = $"{displayPage} / {displayMax}";
+        Debug.Log($"[AffinityPanel] 페이지 표시: {displayPage} / {displayMax}");
     }
 
     public void ShowCharacter(CharacterData data)
     {
-        profileImage.sprite = data.profileImage;
-        profileText.text = data.profileText;
-        likesText.text = data.likes;
-        dislikesText.text = data.dislikes;
+        if (data == null) return;
 
-        float heartsToShow = data.affinity / 2f; // 예: affinity=7 → 3.5칸
+        profileImage.type = Image.Type.Simple;
+        profileImage.preserveAspect = true;
+        profileImage.sprite = data.profileImage;
+        profileImage.enabled = (data.profileImage != null);
+
+        profileText.text = data.profileText ?? "";
+        likesText.text = data.likes ?? "";
+        dislikesText.text = data.dislikes ?? "";
+
+        float heartsToShow = data.affinity / 2f;
 
         for (int i = 0; i < heartContainer.childCount; i++)
         {
             var img = heartContainer.GetChild(i).GetComponent<Image>();
+            if (!img) continue;
 
-            // Image가 없으면 건너뜀
-            if (img == null)
-                continue;
+            img.type = Image.Type.Filled;
+            img.fillMethod = Image.FillMethod.Horizontal;
+            img.gameObject.SetActive(true);
 
-            if (i < Mathf.FloorToInt(heartsToShow))
-            {
-                // 가득 찬 하트
-                img.gameObject.SetActive(true);
-                img.fillAmount = 1f;
-            }
-            else if (i == Mathf.FloorToInt(heartsToShow) && heartsToShow % 1 != 0)
-            {
-                // 반칸 하트
-                img.gameObject.SetActive(true);
-                img.fillAmount = 0.5f;
-            }
-            else
-            {
-                // 비어있는 하트
-                img.gameObject.SetActive(true); // 숨기고 싶으면 false
-                img.fillAmount = 0f;
-            }
+            if (i < Mathf.FloorToInt(heartsToShow)) img.fillAmount = 1f;
+            else if (i == Mathf.FloorToInt(heartsToShow) && heartsToShow % 1 != 0) img.fillAmount = 0.5f;
+            else img.fillAmount = 0f;
         }
     }
 
-    private void ClearRightPanel()
+    void ClearRightPanel()
     {
+        profileImage.enabled = false;
         profileImage.sprite = null;
         profileText.text = "";
         likesText.text = "";
