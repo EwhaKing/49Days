@@ -20,6 +20,6 @@ public class MouseBlocker : SceneSingleton<MouseBlocker>
 
     public void Disable()
     {
-        UIManager.Instance.BlockingUIOn(gameObject);
+        UIManager.Instance.BlockingUIOff(gameObject);
     }
 }
