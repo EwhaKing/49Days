@@ -61,6 +61,7 @@ public class MultiSlicePathChecker : SceneSingleton<MultiSlicePathChecker>, IBeg
                 currentPathIndex++;          // 다음 궤적으로 이동
                 if (currentPathIndex == slicePaths.Length)
                 {
+                    currentPathIndex = 0;
                     finishButton.SetActive(true); // 모든 슬라이스 완료 시 버튼 활성화
                 }
                 isDragging = false;          // 드래그 종료

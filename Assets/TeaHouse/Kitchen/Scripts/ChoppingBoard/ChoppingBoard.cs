@@ -21,6 +21,7 @@ public class ChoppingBoard : MonoBehaviour, IPointerClickHandler, IPointerEnterH
     SpriteRenderer spriteRenderer;
     GameObject ingredientObject;
     TeaIngredient ingredient;
+    GameObject sliceObject;
 
     public void OnPointerClick(PointerEventData e) 
     {
@@ -30,7 +31,7 @@ public class ChoppingBoard : MonoBehaviour, IPointerClickHandler, IPointerEnterH
             ingredientObject = Hand.Instance.Drop();
             spriteRenderer.sprite = originSprite;
 
-            GameObject sliceObject = Instantiate(prefabDict[ingredient.ingredientName], ChoppingBoardUI.transform);
+            sliceObject = Instantiate(prefabDict[ingredient.ingredientName], ChoppingBoardUI.transform);
             sliceObject.GetComponent<SliceController>().Init();
 
             Debug.Log("손질 시작: "+ ingredient.ingredientName);
@@ -47,6 +48,7 @@ public class ChoppingBoard : MonoBehaviour, IPointerClickHandler, IPointerEnterH
         
         ingredient.Chop();
         Hand.Instance.Grab(ingredientObject);
+        Destroy(sliceObject);
         finishButton.SetActive(false);
         ChoppingBoardUI.transform.parent.gameObject.SetActive(false);
     }
