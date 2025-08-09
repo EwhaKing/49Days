@@ -14,7 +14,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine("test");
     }
     IEnumerator test(){
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         SceneManager.LoadScene("SampleScene");
     }
     public void testSave(){

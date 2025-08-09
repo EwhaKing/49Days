@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2eb1465ada78f5846bbfcaa9e9501b02
+guid: a171c0674ec4b2e468f4335bc75827c7
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,18 +108,84 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: trashcan_highlight_0
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 601
+        width: 292
+        height: 300
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f71046131f057304d91afd0f2abaa6d8
+      internalID: -1738316295
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trashcan_highlight_1
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 20
+        width: 637
+        height: 530
+      alignment: 9
+      pivot: {x: 0.572, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc061634de436eb4db177192d3c742e1
+      internalID: -2049762286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trashcan_highlight_2
+      rect:
+        serializedVersion: 2
+        x: 682
+        y: 20
+        width: 556
+        height: 530
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 95f246bd0046b774a8b09f4d602c53b4
+      internalID: -726876855
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: edead1011e98df543a23a1f9fb476469
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      trashcan_highlight_0: -1738316295
+      trashcan_highlight_1: -2049762286
+      trashcan_highlight_2: -726876855
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

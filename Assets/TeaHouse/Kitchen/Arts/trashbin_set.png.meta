@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 06ce6b04d6a458f4994a161b110ec09b
+guid: 5e463cc2fdae385488c2d8d5a5bf8697
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,70 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: trashbin_set_0
+      rect:
+        serializedVersion: 2
+        x: 150
+        y: 601
+        width: 292
+        height: 300
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ec6b563ca485af447be4abc7a0654c2e
+      internalID: -1316354059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trashbin_set_1
+      rect:
+        serializedVersion: 2
+        x: 25
+        y: 25
+        width: 632
+        height: 520
+      alignment: 9
+      pivot: {x: 0.57, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 018844615dbc8294e81c4d7b46ae2ec0
+      internalID: 830197735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: trashbin_set_2
+      rect:
+        serializedVersion: 2
+        x: 687
+        y: 25
+        width: 546
+        height: 520
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a15521139c268724e9fcb14a8730038c
+      internalID: 1245489205
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +182,10 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      trashbin_set_0: -1316354059
+      trashbin_set_1: 830197735
+      trashbin_set_2: 1245489205
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
