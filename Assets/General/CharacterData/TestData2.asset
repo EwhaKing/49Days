@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e7b987e934af584ebc1ef7ba16175d7, type: 3}
+  m_Name: TestData2
+  m_EditorClassIdentifier: 
+  characterName: ch2
+  slotImage: {fileID: 969385787, guid: 7ffd770292dcade48ac822b411db0380, type: 3}
+  profileImage: {fileID: 1757793752, guid: 7ffd770292dcade48ac822b411db0380, type: 3}
+  hasMet: 1
+  profileText: i'm kettle!
+  affinity: 7
+  likes: kettle
+  dislikes: teapot
