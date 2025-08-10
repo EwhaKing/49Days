@@ -41,3 +41,17 @@ position: -198,31
 <<fade_in whitetea>>
 백차: 백지처럼 하얗습니다.
 ===
+
+title: solomonssealtea
+position: -198,31
+---
+<<fade_in solomonssealtea>>
+둥굴레차: 안녕하세요? 둥굴레차입니다. 둥글지 않습니다.
+===
+
+title: rosetea
+position: -198,31
+---
+<<fade_in rosetea>>
+장미차: 진실은 언제나 하나일 듯한 기분이 듭니다.
+===
