@@ -13,6 +13,7 @@ public class MultiSlicePathChecker : SceneSingleton<MultiSlicePathChecker>, IBeg
     private int currentPathIndex = 0;     // 현재 진행 중인 궤적 인덱스
     private int currentCheckpointIndex = 0; // 현재 궤적의 진행 포인트
     private bool isDragging = false;
+    Canvas canvasComponent;
 
     public void StartSlice(SliceController controller)
     {
@@ -42,7 +43,7 @@ public class MultiSlicePathChecker : SceneSingleton<MultiSlicePathChecker>, IBeg
         RectTransformUtility.ScreenPointToWorldPointInRectangle(
             canvas.transform as RectTransform,
             eventData.position,
-            eventData.pressEventCamera,
+            canvasComponent.worldCamera,
             out localPos
         );
 
@@ -75,6 +76,7 @@ public class MultiSlicePathChecker : SceneSingleton<MultiSlicePathChecker>, IBeg
     }
 
     private void Start() {
+        canvasComponent = canvas.GetComponent<Canvas>();
         canvas.SetActive(false);
         finishButton.SetActive(false);
     }
