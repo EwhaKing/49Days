@@ -64,6 +64,17 @@ public class TabAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
+    // 탭이 비활성화될 때 자동으로 호출 - 자꾸 호버링이 남은 상태로 로드되어서...^ ^
+    void OnDisable()
+    {
+        // 선택된 상태가 아닌 탭은 원래 위치로 초기화.
+        if (!IsSelected)
+        {
+            StopAnimation();
+            targetRect.anchoredPosition = originalPosition;
+        }
+    }
+
     public void AnimateUp()       // 토글을 위로 올리는 애니메이션 시작
     {
         StartAnimation(originalPosition + new Vector2(0, moveAmount));
