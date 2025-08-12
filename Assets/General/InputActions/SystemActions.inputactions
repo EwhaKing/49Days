@@ -32,6 +32,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "CloseUI",
+                    "type": "Button",
+                    "id": "8c8a455c-545a-4533-9d53-8cfaf2114331",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -108,7 +117,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";PC",
-                    "action": "ToggleUI",
+                    "action": "CloseUI",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

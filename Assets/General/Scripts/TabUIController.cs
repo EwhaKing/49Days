@@ -7,41 +7,32 @@ using UnityEngine.UI;
 public class TabUIController : MonoBehaviour
 {
     [SerializeField] private GameObject commonPanel;
-    private systemActions controls;     // InputActions에서 생성한 클래스
-
-    private void OnEnable()
-    {
-        if (controls == null) controls = new systemActions();
-        controls.Enable();
-        controls.SystemActions.ToggleUI.performed += OnToggleUI;    // SystemActions의 Tab 키 액션
-    }
-
-    private void OnDisable()
-    {
-        controls.SystemActions.ToggleUI.performed -= OnToggleUI;
-        controls.Disable();
-    }
 
     /// <summary>
+    /// Player Input의 ToggleUI 액션이 호출하는 함수
     /// Tab 키 입력시 CommonPanel 활성화 상태를 토글할 것.
     /// </summary>
-    private void OnToggleUI(InputAction.CallbackContext context)
+    public void OnToggleUI()
     {
         bool nextState = !commonPanel.activeSelf;
         commonPanel.SetActive(nextState);
-        if (nextState)
+    }
+
+    /// <summary>
+    /// Player Input의 CloseUI 액션이 호출하는 함수
+    /// ESC 키 입력 시 CommonPanel이 활성화 상태라면 비활성화.
+    /// </summary>
+    public void OnCloseUI()
+    {
+        if (commonPanel.activeSelf)
         {
-            FindObjectOfType<TabUIManager>()?.ShowPanel(0);
+            commonPanel.SetActive(false);
         }
     }
 
     private void Start()
     {
+        // 게임 시작 시 UI가 닫혀 있도록 세팅.
         commonPanel.SetActive(false);
-    }
-
-    void Update()
-    {
-        
     }
 }
