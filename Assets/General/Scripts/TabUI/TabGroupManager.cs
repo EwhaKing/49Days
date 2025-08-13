@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 // 뭐하는 스크립트인가요?
@@ -10,7 +11,6 @@ using UnityEngine.UI;
 // 토글 그룹(토글들의 부모 오브젝트, TabTags)에 붙여서 사용.
 public class TabGroupManager : MonoBehaviour
 {
-    // 각 탭의 토글과 패널을 연결하기 위한 클래스
     [System.Serializable]
     public class TabInfo
     {
@@ -19,77 +19,110 @@ public class TabGroupManager : MonoBehaviour
         [HideInInspector] public TabAnimator animator;
     }
 
-    [Tooltip("관리할 탭 리스트")]
+    [Header("탭 설정")]
     public List<TabInfo> tabs;
+    [Tooltip("토글들을 관리하는 ToggleGroup 컴포넌트")]
+    [SerializeField] private ToggleGroup toggleGroup;
+
+    [Header("기본 탭 인덱스 설정")]
+    [SerializeField] private string kitchenSceneName = "KitchenScene";
+    [SerializeField] private int kitchenDefaultIndex = 1;
+    [SerializeField] private int fieldDefaultIndex = 0;
 
     private static int? lastKnownTabIndex = null;
     private int _currentTabIndex = -1;
 
+    // 게임을 시작할 때 static 변수를 초기화, Scene을 다시 로드해도 이전 Tab 열람 기록이 남지 않음.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    private static void ResetStaticData()
-    {
-        lastKnownTabIndex = null;
-    }
+    private static void ResetStaticData() { lastKnownTabIndex = null; }
 
     void Awake()
     {
+        if (toggleGroup == null)
+        {
+            toggleGroup = GetComponent<ToggleGroup>();
+        }
+
         for (int i = 0; i < tabs.Count; i++)
         {
             var tab = tabs[i];
-            tab.animator = tab.toggle.GetComponent<TabAnimator>();
-
-            int index = i;
-            tab.toggle.onValueChanged.AddListener((isOn) => {
-                if (isOn)
+            if (tab.toggle != null)
+            {
+                tab.animator = tab.toggle.GetComponent<TabAnimator>();
+                int index = i;
+                tab.toggle.onValueChanged.RemoveAllListeners();
+                tab.toggle.onValueChanged.AddListener((isOn) =>
                 {
-                    SelectTab(index, true);
-                }
-            });
+                    if (isOn) SelectTab(index, true);
+                });
+            }
+            else
+            {
+                Debug.Log($"TabGroupManager: 탭 리스트의 {i}번째 Toggle이 비어 있으니 인스펙터 확인 요망.");
+            }
+
         }
     }
 
     void OnEnable()
     {
-        // static 변수에서 마지막 인덱스를 불러옴. 값이 없다면(e.g. 씬 첫 실행) 0을 사용
-        int lastIndex = lastKnownTabIndex ?? 0;
-        SelectTab(lastIndex, false);
+        // 토글-패널 간섭을 방지하기 위해 비활성화
+        toggleGroup.enabled = false;
+        int indexToOpen;
+
+        if (lastKnownTabIndex.HasValue) // 이전에 탭을 열람한 기록이 있다면, 해당 탭을 표시
+        {
+            indexToOpen = lastKnownTabIndex.Value;
+        }
+        else    // 이전에 열람한 기록이 없다면(e.g. 씬 로드)
+        {
+            string currentScene = SceneManager.GetActiveScene().name;   // 현재 씬 확인 후 탭 결정
+            indexToOpen = (currentScene == kitchenSceneName) ? kitchenDefaultIndex : fieldDefaultIndex; // 주방이라면 레시피, 필드라면 인벤토리
+        }
+        SelectTab(indexToOpen, false);
+        StartCoroutine(ReEnableToggleGroupAfterFrame());
+    }
+
+    private IEnumerator ReEnableToggleGroupAfterFrame()
+    {
+        yield return null;
+        toggleGroup.enabled = true;
     }
 
     private void SelectTab(int index, bool animate)
     {
-        if (index < 0 || index >= tabs.Count || index == _currentTabIndex)
-        {
-            return;
-        }
+        if (index < 0 || index >= tabs.Count || (_currentTabIndex != -1 && index == _currentTabIndex)) return;
+
         _currentTabIndex = index;
-        lastKnownTabIndex = index;  // static 변수에 현재 탭 인덱스를 저장
+        lastKnownTabIndex = index;  // 마지막 탭을 static 변수로 기록
 
         for (int i = 0; i < tabs.Count; i++)
         {
             var tab = tabs[i];
-            bool IsSelected = (i == index);
+            bool isSelected = (i == index);
 
-            tab.animator.SetSelectionState(IsSelected, animate);
-            tab.contentPanel.SetActive(IsSelected);
-            tab.toggle.SetIsOnWithoutNotify(IsSelected);
-
-            // if (i == index)
-            // {
-            //     if (animate) tab.animator.AnimateUp();
-            //     else tab.animator.SetUp();
-
-            //     tab.contentPanel.SetActive(true);
-            //     tab.toggle.SetIsOnWithoutNotify(true);
-            // }
-
-            // else
-            // {
-            //     if (animate) tab.animator.AnimateDown();
-            //     else tab.animator.SetDown();
-
-            //     tab.contentPanel.SetActive(false);
-            //     tab.toggle.SetIsOnWithoutNotify(false);
-            // }
+            if (tab.animator != null)
+            {
+                tab.animator.SetSelectionState(isSelected, animate);
+            }
+            else
+            {
+                Debug.Log($"Tab {i} ({tab.toggle.name})에 TabAnimator 컴포넌트가 없으니 확인.");
+            }
+            if (tab.contentPanel != null)
+            {
+                tab.contentPanel.SetActive(isSelected);   
+            }
+            if (tab.toggle != null)
+            {
+                tab.toggle.SetIsOnWithoutNotify(isSelected);
+            }
         }
+        Debug.Log($"TabGroupManager: 탭 {index} 선택됨");
+    }
+
+    public void ForceSelectTab(int index)
+    {
+        SelectTab(index, true);
     }
 }
