@@ -1765,10 +1765,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: AffinityPanel
       objectReference: {fileID: 0}
-    - target: {fileID: 6778868360085830416, guid: 885a9699d9c357e4aaf4e158e920502f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 9160642260158602700, guid: 885a9699d9c357e4aaf4e158e920502f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

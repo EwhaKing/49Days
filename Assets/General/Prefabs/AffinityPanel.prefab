@@ -2113,7 +2113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9160642260158602700
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2152,14 +2152,13 @@ MonoBehaviour:
   unknownSprite: {fileID: 21300000, guid: 40f6e6b55e3d5b444ad08dcd33f1a4d8, type: 3}
   nextButton: {fileID: 5562444687091050118}
   prevButton: {fileID: 215710549374479452}
+  pageText: {fileID: 0}
   profileImage: {fileID: 4131755195575028207}
   profileText: {fileID: 4136785961994721179}
-  heartContainer: {fileID: 607374860768572385}
+  heartBar: {fileID: 0}
   likesText: {fileID: 2471556880482243867}
   dislikesText: {fileID: 3327256168132923633}
-  characterDataList:
-  - {fileID: 11400000, guid: 57518c47f6720b84e898229f2bbfb6e5, type: 2}
-  - {fileID: 11400000, guid: eb1df3784e85e2c459e8760380996ffa, type: 2}
+  heartSectionRoot: {fileID: 0}
 --- !u!222 &2220079816561910329
 CanvasRenderer:
   m_ObjectHideFlags: 0
