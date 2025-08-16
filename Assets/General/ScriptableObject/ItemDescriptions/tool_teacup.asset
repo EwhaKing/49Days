@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e72e409e5bf0124dbd732a3c971c34f, type: 3}
+  m_Name: tool_teacup
+  m_EditorClassIdentifier: 
+  itemID: tool_teacup
+  itemName: "\uCC3B\uC794"
+  itemDescription: "\uB358\uC9C0\uBA74 \uC190\uB2D8\uB4E4\uC774 \uBB3C\uB7EC\uAC04\uB2E4.
+    \uC88B\uC740 \uB9C8\uAC10 \uC544\uC774\uD15C."
+  itemIcon: {fileID: 239605714, guid: 7ffd770292dcade48ac822b411db0380, type: 3}
+  itemType: 3
+  maxStack: 1

@@ -185,7 +185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tabs:
   - toggle: {fileID: 5614125473147649739}
-    contentPanel: {fileID: 2934970968485924965}
+    contentPanel: {fileID: 2353456367210085297}
     animator: {fileID: 0}
   - toggle: {fileID: 1540865915625673147}
     contentPanel: {fileID: 3714406008755605820}
@@ -1778,7 +1778,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2495593978735828163}
+  - {fileID: 3075981717470131991}
   - {fileID: 5250907276119146710}
   - {fileID: 2882441375089069806}
   - {fileID: 7505737224587987206}
@@ -1789,7 +1789,7 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1001 &872879632531019802
+--- !u!1001 &292492039599125454
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2274,15 +2274,15 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7bd05ef4eccb03449a9e97c2785370c6, type: 3}
---- !u!224 &2495593978735828163 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3368471411835815129, guid: 7bd05ef4eccb03449a9e97c2785370c6, type: 3}
-  m_PrefabInstance: {fileID: 872879632531019802}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &2934970968485924965 stripped
+--- !u!1 &2353456367210085297 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2640811344539895935, guid: 7bd05ef4eccb03449a9e97c2785370c6, type: 3}
-  m_PrefabInstance: {fileID: 872879632531019802}
+  m_PrefabInstance: {fileID: 292492039599125454}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &3075981717470131991 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3368471411835815129, guid: 7bd05ef4eccb03449a9e97c2785370c6, type: 3}
+  m_PrefabInstance: {fileID: 292492039599125454}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2278495280218104628
 PrefabInstance:
