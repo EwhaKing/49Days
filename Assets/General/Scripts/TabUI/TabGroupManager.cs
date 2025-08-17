@@ -11,12 +11,13 @@ using UnityEngine.SceneManagement;
 // 토글 그룹(토글들의 부모 오브젝트, TabTags)에 붙여서 사용.
 public class TabGroupManager : MonoBehaviour
 {
+    // 개별 탭 하나를 구성하는 UI 요소들의 묶음.
     [System.Serializable]
     public class TabInfo
     {
-        public Toggle toggle;
-        public GameObject contentPanel;
-        [HideInInspector] public TabAnimator animator;
+        public Toggle toggle;                           // 책갈피 역할의 토글 버튼
+        public GameObject contentPanel;                 // 해당 토글이 선택되었을 때 활성화할 패널
+        [HideInInspector] public TabAnimator animator;  // 토글에 연결된 애니메이터.
     }
 
     [Header("탭 설정")]
@@ -29,8 +30,8 @@ public class TabGroupManager : MonoBehaviour
     [SerializeField] private int kitchenDefaultIndex = 1;
     [SerializeField] private int fieldDefaultIndex = 0;
 
-    private static int? lastKnownTabIndex = null;
-    private int _currentTabIndex = -1;
+    private static int? lastKnownTabIndex = null;      // 마지막으로 선택한 탭을 기억함.
+    private int _currentTabIndex = -1; 
 
     // 게임을 시작할 때 static 변수를 초기화, Scene을 다시 로드해도 이전 Tab 열람 기록이 남지 않음.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -43,14 +44,14 @@ public class TabGroupManager : MonoBehaviour
             toggleGroup = GetComponent<ToggleGroup>();
         }
 
-        for (int i = 0; i < tabs.Count; i++)
+        for (int i = 0; i < tabs.Count; i++)    // 모든 탭을 순회하며 초기 설정.
         {
             var tab = tabs[i];
             if (tab.toggle != null)
             {
-                tab.animator = tab.toggle.GetComponent<TabAnimator>();
+                tab.animator = tab.toggle.GetComponent<TabAnimator>();  // TabAnimator 컴포넌트를 찾아오기
                 int index = i;
-                tab.toggle.onValueChanged.RemoveAllListeners();
+                tab.toggle.onValueChanged.RemoveAllListeners();         // 인덱스를 지역 변수에 복사 (뭔 클로저 문제가 있다는데요)
                 tab.toggle.onValueChanged.AddListener((isOn) =>
                 {
                     if (isOn) SelectTab(index, true);
@@ -89,14 +90,22 @@ public class TabGroupManager : MonoBehaviour
         toggleGroup.enabled = true;
     }
 
+
+
+    /// <summary>
+    /// 특정 인덱스의 탭을 선택하고 나머지 탭들은 비선택 상태로 만듭니다.
+    /// </summary>
+    /// <param name="index">선택할 탭의 인덱스</param>
+    /// <param name="animate">애니메이션 재생 여부</param>
     private void SelectTab(int index, bool animate)
     {
+        // 현재 인덱스 OR 유효하지 않은 인덱스 -> 아무고토 하지 않은.
         if (index < 0 || index >= tabs.Count || (_currentTabIndex != -1 && index == _currentTabIndex)) return;
 
         _currentTabIndex = index;
         lastKnownTabIndex = index;  // 마지막 탭을 static 변수로 기록
 
-        for (int i = 0; i < tabs.Count; i++)
+        for (int i = 0; i < tabs.Count; i++)    // 탭을 돌며 상태 업데이트
         {
             var tab = tabs[i];
             bool isSelected = (i == index);
@@ -111,7 +120,7 @@ public class TabGroupManager : MonoBehaviour
             }
             if (tab.contentPanel != null)
             {
-                tab.contentPanel.SetActive(isSelected);   
+                tab.contentPanel.SetActive(isSelected);
             }
             if (tab.toggle != null)
             {

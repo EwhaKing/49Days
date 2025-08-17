@@ -5,38 +5,39 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// 인벤토리 UI의 모든 Visual Element와 Interaction을 관리하는 클래스.
+/// InventoryManager로부터 데이터를 받아와 UI에 표시함.
+/// </summary>
 public class InventoryUI : MonoBehaviour
 {
-    [Header("슬롯 관리")]
-    [SerializeField] private Transform slotGrid;
+    [Header("UI 요소 연결")]
+    [SerializeField] private Transform slotGrid;                    // 슬롯들이 배치될 부모 오브젝트(SlotGrid)의 Transform
+    [SerializeField] private Image itemInfoImage;                   // 아이템 정보 패널 - 아이템 이미지
+    [SerializeField] private TextMeshProUGUI itemNameText;          // 아이템 정보 패널 - 아이템 이름
+    [SerializeField] private TextMeshProUGUI itemDescriptionText;   // 아이템 정보 패널 - 설명
+    [SerializeField] private GameObject itemInfoPanel;              // 아이템 정보 패널 전체 (On/Off 제어용)
+    [SerializeField] private Toggle[] categoryToggles;              // 카테고리 필터링 토글 버튼들
+    [SerializeField] private Image dragIcon;                        // 드래그 시 마우스를 따라다닐 아이콘
+    [SerializeField] private CanvasGroup categoryTogglesGroup;      // 드래그 시 상호작용을 막을 토글 그룹
+
+    [Header("씬별 특별 설정")]
+    [SerializeField] private string kitchenSceneName = "Kitchen";   // 주방 씬에서 토글 비활성화 해야 하니까 이름 넣어둡니다.
+    [SerializeField] private Color disabledColor = new Color(0.5f, 0.2f, 0.2f, 1f);     // 비활성화된 토글의 색상
+    [SerializeField] private int kitchenDefaultCategoryIndex = 3;   // 주방 씬에서의 기본 카테고리 인덱스 (2가 퀘스트, 3이 도구)
+
+
+
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
-
-    [Header("아이템 정보 패널")]
-    [SerializeField] private Image itemInfoImage;
-    [SerializeField] private TextMeshProUGUI itemNameText;
-    [SerializeField] private TextMeshProUGUI itemDescriptionText;
-    [SerializeField] private GameObject itemInfoPanel;
-
-    [Header("필터링")]
-    [SerializeField] private Toggle[] categoryToggles;
-
-    [Header("드래그 앤 드롭")]
-    [SerializeField] private Image dragIcon;
-    [SerializeField] private CanvasGroup categoryTogglesGroup;
-    
-    [Header("씬별 설정")]
-    [SerializeField] private string kitchenSceneName = "Kitchen";
-    [SerializeField] private Color disabledColor = new Color(0.5f, 0.2f, 0.2f, 1f);
-    [SerializeField] private int kitchenDefaultCategoryIndex = 3; 
-
     private bool isDragging = false;
     private ItemType currentCategory = ItemType.Ingredient;
     private int draggedSlotIndex = -1;
+    private bool dropSuccessful = false;
     private List<Color> originalToggleColors = new List<Color>();
-    private bool dropSuccessful = false; // [추가] 드롭이 성공적으로 처리되었는지 확인하는 변수
 
-    void Awake()
+    private void Awake()
     {
+        // 주방에서 토글 비활성화(색상 변경)하기 전 원래 색상을 저장.
         foreach (var toggle in categoryToggles)
         {
             var image = toggle.targetGraphic as Image;
@@ -44,12 +45,13 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    void Start()
+    private void Start()
     {
-        // [수정] 쓰레기통 이벤트를 구독
+        // TrashBin 이벤트를 구독 - 아이템이 버려졌을 때를 감지.
         TrashBin.OnItemDroppedOnTrash += HandleTrashDrop;
 
-        slotGrid.GetComponentsInChildren<InventorySlotUI>(true, uiSlots);
+        // 자식으로 있는 모든 슬롯 UI를 찾아와 초기화. 그리고 이벤트 연결.
+        slotGrid.GetComponentsInChildren(true, uiSlots);
         for (int i = 0; i < uiSlots.Count; i++)
         {
             uiSlots[i].Init(i);
@@ -59,22 +61,26 @@ public class InventoryUI : MonoBehaviour
             uiSlots[i].OnEndDragSlot += EndDrag;
         }
 
+        // 카테고리 토글 버튼들에 리스너를 추가.
         for (int i = 0; i < categoryToggles.Length; i++)
         {
             int index = i;
             categoryToggles[i].onValueChanged.AddListener((isOn) => { if (isOn) SetCategory((ItemType)index); });
         }
 
+        // 현재 씬에 따라 토글 상태를 업데이트 -> 기본 카테고리를 설정.
         bool isKitchen = SceneManager.GetActiveScene().name == kitchenSceneName;
         UpdateCategoryTogglesForScene(isKitchen);
         ItemType defaultCategory = isKitchen ? (ItemType)kitchenDefaultCategoryIndex : ItemType.Ingredient;
         categoryToggles[(int)defaultCategory].isOn = true;
         
+        // InventoryManager의 데이터 변경 이벤트 구독.
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.OnInventoryChanged += UpdateInventoryDisplay;
         }
 
+        // 초기 UI 상태 설정.
         if (itemInfoPanel != null) itemInfoPanel.SetActive(false);
         if (dragIcon != null)
         {
@@ -83,8 +89,9 @@ public class InventoryUI : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
+        // 드래그 중일 때, dragIcon이 마우스 위치를 따라다니도록 조정.
         if (isDragging && dragIcon != null)
         {
             dragIcon.transform.position = Mouse.current.position.ReadValue();
@@ -93,86 +100,17 @@ public class InventoryUI : MonoBehaviour
     
     private void OnDestroy()
     {
-        // [수정] 쓰레기통 이벤트 구독 해제
+        // 오브젝트 파괴 시, 구독했던 모든 이벤트를 해제.
         TrashBin.OnItemDroppedOnTrash -= HandleTrashDrop;
-
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.OnInventoryChanged -= UpdateInventoryDisplay;
         }
     }
 
-    // [추가] 쓰레기통에 아이템이 드롭되었을 때 호출될 함수
-    private void HandleTrashDrop()
-    {
-        if (isDragging)
-        {
-            InventoryManager.Instance.RemoveItem(currentCategory, draggedSlotIndex);
-            dropSuccessful = true; // 드롭 성공으로 표시
-        }
-    }
-
-    public void StartDrag(int slotIndex)
-    {
-        var inv = InventoryManager.Instance.GetInventory(currentCategory);
-        if (inv == null || slotIndex < 0 || slotIndex >= inv.Length || inv[slotIndex] == null) return;
-        
-        dropSuccessful = false; // [추가] 드래그 시작 시 드롭 상태 초기화
-        draggedSlotIndex = slotIndex;
-        isDragging = true;
-
-        if (dragIcon != null)
-        {
-            dragIcon.sprite = inv[slotIndex].itemData.itemIcon;
-            dragIcon.gameObject.SetActive(true);
-        }
-        if (categoryTogglesGroup != null) categoryTogglesGroup.blocksRaycasts = false;
-        
-        uiSlots[slotIndex].ClearSlot();
-        if (itemInfoPanel != null) itemInfoPanel.SetActive(false);
-    }
-
-    public void EndDrag()
-    {
-        // [수정] 드롭이 성공하지 않았다면(허공에 드롭했다면) 아이템이 원래대로 돌아가도록 UI만 새로고침
-        if (!dropSuccessful)
-        {
-            UpdateInventoryDisplay();
-        }
-
-        isDragging = false;
-        draggedSlotIndex = -1;
-
-        if (dragIcon != null) dragIcon.gameObject.SetActive(false);
-        if (categoryTogglesGroup != null) categoryTogglesGroup.blocksRaycasts = true;
-    }
-
-    public void OnDrop(int dropSlotIndex)
-    {
-        if (draggedSlotIndex != -1)
-        {
-            InventoryManager.Instance.SwapItems(currentCategory, draggedSlotIndex, dropSlotIndex);
-            dropSuccessful = true; // [추가] 슬롯 간 교환도 성공으로 표시
-        }
-    }
-
-    // --- 이하 함수들은 변경 없음 ---
-
-    private void UpdateCategoryTogglesForScene(bool isKitchen)
-    {
-        for (int i = 0; i < categoryToggles.Length; i++)
-        {
-            Toggle toggle = categoryToggles[i];
-            Image image = toggle.targetGraphic as Image;
-            bool shouldDisable = isKitchen && (i == (int)ItemType.Ingredient || i == (int)ItemType.Topping);
-            toggle.interactable = !shouldDisable;
-            if (image != null && i < originalToggleColors.Count)
-            {
-                image.color = shouldDisable ? disabledColor : originalToggleColors[i];
-            }
-        }
-    }
-
+    /// <summary>
+    /// InventoryManager의 데이터가 변경될 때마다 호출 -> 화면 새로고침.
+    /// </summary>
     private void UpdateInventoryDisplay()
     {
         var inventory = InventoryManager.Instance.GetInventory(currentCategory);
@@ -190,14 +128,11 @@ public class InventoryUI : MonoBehaviour
             }
         }
     }
-    
-    private void SetCategory(ItemType newCategory)
-    {
-        currentCategory = newCategory;
-        if (itemInfoPanel != null) itemInfoPanel.SetActive(false); 
-        UpdateInventoryDisplay();
-    }
-    
+
+    #region 이벤트 핸들러
+    /// <summary>
+    /// 슬롯을 클릭했을 때 호출 -> 아이템 정보 패널 표시.
+    /// </summary>
     private void ShowItemInfo(int slotIndex)
     {
         var inv = InventoryManager.Instance.GetInventory(currentCategory);
@@ -209,9 +144,111 @@ public class InventoryUI : MonoBehaviour
             return;
         }
         if (itemInfoPanel == null || itemInfoImage == null || itemNameText == null || itemDescriptionText == null) return;
+        
         itemInfoImage.sprite = slotData.itemData.itemIcon;
         itemNameText.text = slotData.itemData.itemName;
         itemDescriptionText.text = slotData.itemData.itemDescription;
         itemInfoPanel.SetActive(true);
     }
+
+    /// <summary>
+    /// 아이템을 쓰레기통에 버렸을 때 호출.
+    /// 드래그 중인 아이템이 있다면 해당 아이템을 인벤토리에서 삭제.
+    /// </summary>
+    private void HandleTrashDrop()
+    {
+        if (isDragging)
+        {
+            InventoryManager.Instance.RemoveItem(currentCategory, draggedSlotIndex);
+            dropSuccessful = true;
+        }
+    }
+
+    /// <summary>
+    /// 카테고리 탭을 변경했을 때 호출.
+    /// 현재 카테고리를 변경하고, UI를 업데이트.
+    /// 씬이 "Kitchen"일 때는 특정 카테고리 토글을 비활성화.
+    /// </summary>
+    private void SetCategory(ItemType newCategory)
+    {
+        currentCategory = newCategory;
+        if (itemInfoPanel != null) itemInfoPanel.SetActive(false); 
+        UpdateInventoryDisplay();
+    }
+
+    /// <summary>
+    /// 주방에서 일부 카테고리 토글을 비활성화.
+    /// </summary>
+    private void UpdateCategoryTogglesForScene(bool isKitchen)
+    {
+        for (int i = 0; i < categoryToggles.Length; i++)
+        {
+            Toggle toggle = categoryToggles[i];
+            Image image = toggle.targetGraphic as Image;
+            bool shouldDisable = isKitchen && (i == (int)ItemType.Ingredient || i == (int)ItemType.Topping);
+            toggle.interactable = !shouldDisable;
+            if (image != null && i < originalToggleColors.Count)
+            {
+                image.color = shouldDisable ? disabledColor : originalToggleColors[i];
+            }
+        }
+    }
+    #endregion
+
+    #region 드래그 앤 드롭
+    /// <summary>
+    /// 슬롯에서 드래그를 시작했을 때 호출.
+    /// </summary>
+    public void StartDrag(int slotIndex)
+    {
+        var inv = InventoryManager.Instance.GetInventory(currentCategory);
+        if (inv == null || slotIndex < 0 || slotIndex >= inv.Length || inv[slotIndex] == null) return;
+        
+        dropSuccessful = false;
+        draggedSlotIndex = slotIndex;
+        isDragging = true;
+
+        if (dragIcon != null)
+        {
+            dragIcon.sprite = inv[slotIndex].itemData.itemIcon;
+            dragIcon.gameObject.SetActive(true);
+        }
+        if (categoryTogglesGroup != null) categoryTogglesGroup.blocksRaycasts = false;
+        
+        uiSlots[slotIndex].ClearSlot();
+        if (itemInfoPanel != null) itemInfoPanel.SetActive(false);
+    }
+
+    /// <summary>
+    /// 드래그를 마쳤을 때 호출 - 마우스 버튼을 뗐을 때.
+    /// 드롭이 성공하지 않았다면 아이템을 원래 자리로 되돌림.
+    /// </summary>
+    public void EndDrag()
+    {
+        // 만약 드롭이 성공하지 않았다면/허공에 드롭하면, 아이템을 원래 자리로 되돌림.
+        if (!dropSuccessful)
+        {
+            UpdateInventoryDisplay();
+        }
+
+        isDragging = false;
+        draggedSlotIndex = -1;
+
+        if (dragIcon != null) dragIcon.gameObject.SetActive(false);
+        if (categoryTogglesGroup != null) categoryTogglesGroup.blocksRaycasts = true;
+    }
+
+    /// <summary>
+    /// 다른 슬롯 위에 드롭했을 때 호출.
+    /// 드래그 중인 아이템이 있다면, 해당 슬롯과의 위치를 교환.
+    /// </summary>
+    public void OnDrop(int dropSlotIndex)
+    {
+        if (draggedSlotIndex != -1)
+        {
+            InventoryManager.Instance.SwapItems(currentCategory, draggedSlotIndex, dropSlotIndex);
+            dropSuccessful = true;
+        }
+    }
+    #endregion
 }

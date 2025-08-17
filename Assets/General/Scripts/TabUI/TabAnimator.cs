@@ -19,9 +19,9 @@ public class TabAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [Tooltip("애니메이션 재생 시간")]
     public float animationDuration = 0.15f;
 
-    public bool IsSelected { get; private set; }
-    private Vector2 originalPosition;
-    private Coroutine animationCoroutine;
+    public bool IsSelected { get; private set; }    // 선택되었나요~?
+    private Vector2 originalPosition;               // 원래 위치 저장
+    private Coroutine animationCoroutine;           // 현재 애니메이션 코루틴
 
     void Awake()
     {
@@ -33,6 +33,11 @@ public class TabAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         originalPosition = targetRect.anchoredPosition;
     }
 
+    /// <summary>
+    /// TabGroupManager에 의해 호출되어 탭의 선택 상태를 설정합니다.
+    /// </summary>
+    /// <param name="selected">선택 여부</param>
+    /// <param name="animate">애니메이션 재생 여부</param>
     public void SetSelectionState(bool selected, bool animate)
     {
         IsSelected = selected;
@@ -48,32 +53,25 @@ public class TabAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         }
     }
 
-    public void OnPointerEnter(PointerEventData eventData)
+    #region 마우스 이벤트
+    public void OnPointerEnter(PointerEventData eventData)      // 마우스 포인터가 이 UI 요소 위로 올라왔을 때 호출
     {
+        // 아직 선택되지 않은 탭 위에 마우스를 올렸을 때만 위로 올라가는 효과.
         if (!IsSelected)
         {
             AnimateUp();
         }
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnPointerExit(PointerEventData eventData)       // 마우스 포인터가 이 UI 요소에서 벗어났을 때 호출
     {
+        // 선택되지 않은 탭에서 마우스가 벗어났을 때는 아래로 내려가는 효과.
         if (!IsSelected)
         {
             AnimateDown();
         }
     }
-
-    // 탭이 비활성화될 때 자동으로 호출 - 자꾸 호버링이 남은 상태로 로드되어서...^ ^
-    void OnDisable()
-    {
-        // 선택된 상태가 아닌 탭은 원래 위치로 초기화.
-        if (!IsSelected)
-        {
-            StopAnimation();
-            targetRect.anchoredPosition = originalPosition;
-        }
-    }
+    #endregion
 
     public void AnimateUp()       // 토글을 위로 올리는 애니메이션 시작
     {
@@ -99,11 +97,11 @@ public class TabAnimator : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void StartAnimation(Vector2 targetPos)
     {
-        StopAnimation();
+        StopAnimation();    // 새로운 애니메이션 시작하기 전에 기존 애니메이션 중지
         animationCoroutine = StartCoroutine(AnimatePosition(targetPos));
     }
 
-    private void StopAnimation()
+    private void StopAnimation()    // 현재 재생 중인 애니메이션 코루틴 중지
     {
         if (animationCoroutine != null)
         {
