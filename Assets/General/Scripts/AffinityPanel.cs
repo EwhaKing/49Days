@@ -63,6 +63,20 @@ public class AffinityPanel : MonoBehaviour
             slots[i].gameObject.SetActive(i < needed);
     }
 
+
+    // //버튼의 투명도를 0으로 조절해버리기 위해.(어차피 클릭 안되는 첫/마지막 페이지에서)
+    // void SetButtonAlpha(Button btn, float alpha)
+    // {
+    //     if (!btn) return;
+    //     var img = btn.GetComponent<Image>();
+    //     if (img)
+    //     {
+    //         var c = img.color;
+    //         c.a = alpha;
+    //         img.color = c;
+    //     }
+    // }
+
     public void RefreshPage()
     {
         var cm = CharacterManager.Instance;
@@ -83,20 +97,20 @@ public class AffinityPanel : MonoBehaviour
 
         if (prevButton) prevButton.interactable = page > 0;
         if (nextButton) nextButton.interactable = page < maxPage;
+        // //안 눌리면 투명도 0으로 바꿔버리기.
+        // SetButtonAlpha(prevButton, page > 0 ? 1f : 0f);
+        // SetButtonAlpha(nextButton, page < maxPage ? 1f : 0f);
+
 
         if (pageText)
         {
             int dispPage = (total == 0) ? 0 : page + 1;
             int dispMax = (total == 0) ? 0 : maxPage + 1;
-            pageText.text = $"{dispPage} / {dispMax}";
+            pageText.text = $"{dispPage}";
         }
     }
 
-    // 필드 교체
-    // [SerializeField] Transform heartContainer;
     [SerializeField] GameObject heartSectionRoot; // HeartSectionContainer를 연결
-
-    // ...
 
     public void ShowCharacter(CharacterData data)
     {
@@ -133,7 +147,7 @@ public class AffinityPanel : MonoBehaviour
 
         // 하트는 전담 컴포넌트로 초기화하고 섹션만 숨김
         if (heartBar) heartBar.SetValue(0);
-        if (heartSectionRoot) heartSectionRoot.SetActive(false);
+        if (heartSectionRoot) heartSectionRoot.SetActive(true);
     }
 
 }
