@@ -39,16 +39,16 @@ public class TeaMaker : SceneSingleton<TeaMaker>
     {
         foreach (TeaIngredient ingredient in tea.ingredients)
         {
+            // 찻잎일 경우 산화정도에 따라 이름 바꿈
+            if (ingredient.ingredientName == IngredientName.TeaLeaf)
+                ChangeTeaLeafName(ingredient);
+            
             // 재료가 옳게 가공되었는지 평가
             if (!IsIngredientProcessRight(ingredient))
             {
                 Debug.Log($"{ingredient.ingredientName}의 가공이 잘못되었습니다: 알 수 없는 차 생성");
                 return new MakedTea { TeaName = TeaName.Unknown };
             }
-
-            // 찻잎일 경우 산화정도에 따라 이름 바꿈
-            if (ingredient.ingredientName == IngredientName.TeaLeaf)
-                ChangeTeaLeafName(ingredient);
         }
 
         // 레시피 찾기 (기준: 재료들이 정확히 일치하는지)
@@ -125,6 +125,11 @@ public class TeaMaker : SceneSingleton<TeaMaker>
         switch (ingredient.ingredientType)
         {
             case IngredientType.TeaLeaf:
+                if (ingredient.ingredientName == IngredientName.TeaLeaf_White)  // 백차 예외처리
+                    if(ingredient.rolled == ResultStatus.None && ingredient.roasted == ResultStatus.None)
+                        return true;
+                    else 
+                        return false;
                 if (ingredient.roasted != ResultStatus.Success) return false;
                 if (ingredient.rolled != ResultStatus.Success) return false;
                 if (ingredient.oxidizedDegree == OxidizedDegree.Over) return false;
@@ -168,7 +173,6 @@ public class TeaMaker : SceneSingleton<TeaMaker>
                 ingredient.ChangeIngredientName(IngredientName.TeaLeaf_White);
                 break;
             case OxidizedDegree.Over:
-                Debug.LogError("탔는데 찻잎이름 바꾸려함");
                 break;
         }
     }
