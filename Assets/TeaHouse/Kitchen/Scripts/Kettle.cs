@@ -31,6 +31,8 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
     [SerializeField] Transform kettleBottomPosition;
     [SerializeField] float smokeFadeSpeed = 0.2f; // 연기 투명도 변화 속도 (초당 변화량)
     [SerializeField] GameObject highlightSprite; // 하이라이트용 스프라이트 오브젝트
+    [SerializeField] SpriteRenderer hookFrontRenderer;
+    [SerializeField] SpriteRenderer hookBackRenderer;
 
     //주전자 회전 관련 변수들 
     [SerializeField] float pourDuration = 2f;
@@ -197,6 +199,9 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
 
         cachedTemperature = Temperature;
+
+        //드래그할 때 hook layer
+        SetHookSortingOrder(7); // 주전자보다 낮게
     }
     public void OnDrag(PointerEventData eventData)
     {
@@ -274,6 +279,8 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
                 Debug.Log("✅ 화로로 복귀 시도");
             }
         }
+
+        SetHookSortingOrder(10); // 원래대로 복구
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
@@ -385,7 +392,7 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         GetComponent<SpriteRenderer>().sortingOrder = 3;
 
         isPouring = false;
-        // 애니메이션 끝났으니 화로로 복귀(0.2초만 있다가)
+        // 애니메이션 끝났으니 화로로 복귀(0.5초만 있다가)
         yield return new WaitForSeconds(0.5f);
 
         teapot.SetBrewingState(); // 다병 상태를 Brewing으로 변경
@@ -448,7 +455,10 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         velocityOverLifetime.z = new ParticleSystem.MinMaxCurve(1f, zCurve); // 중요
     }
 
-
+    void SetHookSortingOrder(int order)
+    {
+        if (hookFrontRenderer != null) hookFrontRenderer.sortingOrder = order;
+    }
 
     /// <summary>
     /// 연기 애니메이션 정지 (Animator bool 파라미터 'isSmoking'을 false로 설정)
@@ -467,6 +477,4 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
         Gizmos.color = Color.cyan; // 확인용 색상
         Gizmos.DrawWireSphere(kettleSpoutPosition.position, pourRadius);
     }
-
-
 }
