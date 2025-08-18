@@ -47,7 +47,7 @@ public class TeaMaker : SceneSingleton<TeaMaker>
             if (!IsIngredientProcessRight(ingredient))
             {
                 Debug.Log($"{ingredient.ingredientName}의 가공이 잘못되었습니다: 알 수 없는 차 생성");
-                return new MakedTea { TeaName = TeaName.Unknown };
+                return new MakedTea { teaName = TeaName.Unknown };
             }
         }
 
@@ -58,12 +58,12 @@ public class TeaMaker : SceneSingleton<TeaMaker>
         if (!recipe)
         {
             Debug.Log("재료에 해당하는 레시피를 찾을 수 없습니다: 알 수 없는 차 생성");
-            return new MakedTea { TeaName = TeaName.Unknown };
+            return new MakedTea { teaName = TeaName.Unknown };
         }
 
         MakedTea makedTea = new MakedTea
         {
-            TeaName = recipe.teaName,
+            teaName = recipe.teaName,
             brewTimeGap = tea.timeBrewed - recipe.brewTime,
             temperatureGap = tea.temperature - recipe.temperature
         };

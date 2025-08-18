@@ -79,14 +79,14 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         isSkipped = true;
         cutScene.SetActive(false);
 
-        string teaString = makedTea.TeaName.ToLowerString();
+        string teaString = makedTea.teaName.ToLowerString();
         if (makedTea.additionalIngredient != IngredientName.None)
             teaString += "_" + makedTea.additionalIngredient;
 
         Debug.Log(teaString);
 
         // 얀스피너로 makedTea이름 및 추가재료로 설명과 이미지 띄우기
-        YarnManager.Instance.RunDialogue(teaString);
+        TeaResultYarnManager.Instance.RunDialogue(teaString);
     }
 
     IEnumerator LatePlayCutScene()

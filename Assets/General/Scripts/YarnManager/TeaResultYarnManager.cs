@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Yarn.Unity;
 using UnityEngine.SceneManagement;
 
-public class YarnManager : SceneSingleton<YarnManager>
+public class TeaResultYarnManager : SceneSingleton<TeaResultYarnManager>
 {
     [SerializeField] DialogueRunner runner;
     [SerializeField] Image fadeImage;

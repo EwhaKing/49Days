@@ -1,0 +1,28 @@
+﻿title: FunctionExample
+---
+찻집 카운터에서 부를 수 있는 함수 예시들입니다.
+각 밤 진입점 'n일차_밤'으로 통일
+<<enter_and_sit 한아 1>>
+<<exit 한아>>
+<<change_sprite 한아 hana_default>>
+<<affinity_change 한아 1>>
+<<zoom 1>>  // 줌 프리셋 지정
+<<split_zoom 한아 희원>>
+<<add_success_tea greentea honey>>
+<<add_success_tea greentea>>
+<<order 조리후노드이름 false>>  // 호출 후 success_tea 기준 초기화, 두번째인자: 자동계산여부
+<<pay>>
+<<if get_evaluation_result() != "완벽">>
+<<endif>>
+<<if get_tea_name() != "녹차">>
+<<endif>>
+<<if get_additional_ingredient() == "꿀">>
+<<endif>>
+<<if get_brew_time_gap() > 2>>
+<<endif>>
+<<if get_temperature_gap() < -10>>
+<<endif>>
+<<show_image tea_image>>
+<<play_sfx sfxName>>
+<<change_bgm bgmName>>
+===
