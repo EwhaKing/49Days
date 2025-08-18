@@ -7,6 +7,22 @@ using UnityEngine;
 public static class Extensions
 {
     /// <summary>
+    /// 문자열을 Enum 타입으로 변환합니다. <br/>
+    /// 대소문자를 구분하지 않으며, 변환 실패 시 기본값을 반환합니다.
+    /// *기본값 지정 가능
+    /// </summary>
+    public static T ToEnum<T>(this string value, T defaultValue = default) where T : struct
+    {
+        if (Enum.TryParse<T>(value, true, out var result))
+        {
+            return result;
+        }
+
+        Debug.LogError($"Enum 변환 실패: '{value}' -> {typeof(T).Name}. 기본값 반환.");
+        return defaultValue;
+    }
+
+    /// <summary>
     /// Enum 값을 소문자 알파벳 문자열로 변환합니다.
     /// 예: MyEnum.ValueOne → "valueone"
     /// </summary>
