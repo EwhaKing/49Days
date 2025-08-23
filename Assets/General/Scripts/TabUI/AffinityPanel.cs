@@ -117,7 +117,7 @@ public class AffinityPanel : MonoBehaviour
         if (data == null) { ClearRightPanel(); return; }
 
         var cm = CharacterManager.Instance;
-        if (cm == null || !cm.HasMet(data.fixedIndex))  // 미만남이면 아무 것도 안 띄움 (클릭 자체가 막혀있음)
+        if (cm == null || !cm.HasMet(data.characterName))  // 미만남이면 아무 것도 안 띄움 (클릭 자체가 막혀있음)
         {
             ClearRightPanel();
             return;
@@ -134,7 +134,7 @@ public class AffinityPanel : MonoBehaviour
 
         // 하트 섹션 보이기 + 값 반영
         if (heartSectionRoot) heartSectionRoot.SetActive(true);
-        if (heartBar) heartBar.SetValue(cm.GetAffinity(data.fixedIndex)); // 0~100
+        if (heartBar) heartBar.SetValue(cm.GetAffinity(data.characterName)); // 0~100
     }
 
     void ClearRightPanel()
