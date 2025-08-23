@@ -7,33 +7,36 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
 {
     private HashSet<string> unlockedRecipeNames = new HashSet<string>();
-    private List<RecipeDiscription> recipeDiscriptions;
-    private Dictionary<string, RecipeDiscription> recipeDescriptionDict;
+    private List<RecipeDescription> recipeDescriptions;
+    private Dictionary<string, RecipeDescription> recipeDescriptionDict;
 
+    public int Count
+    {
+        get { return recipeDescriptions?.Count ?? 0; }
+    }
     void Start()
     {
-        LoadeRecipeDiscriptions();
+        LoadRecipeDescriptions();
     }
-
-    async void LoadeRecipeDiscriptions()
+    async void LoadRecipeDescriptions()
     {
-        AsyncOperationHandle<IList<RecipeDiscription>> handle =
-            Addressables.LoadAssetsAsync<RecipeDiscription>("recipedescription", null); // label 기반 로드
+        AsyncOperationHandle<IList<RecipeDescription>> handle =
+            Addressables.LoadAssetsAsync<RecipeDescription>("recipedescription", null); // label 기반 로드
 
         await handle.Task;
 
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
-            recipeDiscriptions = new List<RecipeDiscription>(handle.Result);
+            recipeDescriptions = new List<RecipeDescription>(handle.Result);
         }
         else
         {
-            Debug.LogError("recipediscription 그룹 로드 실패");
+            Debug.LogError("recipedescription 그룹 로드 실패");
         }
 
         // 레시피 설명을 딕셔너리에 저장
-        recipeDescriptionDict = new Dictionary<string, RecipeDiscription>();
-        foreach (var recipe in recipeDiscriptions)
+        recipeDescriptionDict = new Dictionary<string, RecipeDescription>();
+        foreach (var recipe in recipeDescriptions)
         {
             if (!recipeDescriptionDict.ContainsKey(recipe.recipeName))
             {
@@ -46,9 +49,9 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
         }
     }
 
-    public RecipeDiscription GetRecipeDescription(string recipeName)
+    public RecipeDescription GetRecipeDescription(string recipeName)
     {
-        if (recipeDiscriptions == null || recipeDiscriptions.Count == 0)
+        if (recipeDescriptions == null || recipeDescriptions.Count == 0)
         {
             Debug.LogWarning("레시피 설명이 로드되지 않았습니다.");
             return null;
@@ -62,13 +65,24 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
         return unlockedRecipeNames.Contains(recipeName);
     }
 
-    void OnEnable() {
+    void OnEnable()
+    {
         SaveLoadManager.Instance.onSave += () => SaveLoadManager.Instance.Save<HashSet<string>>(unlockedRecipeNames);
-        SaveLoadManager.Instance.onLoad += () => {unlockedRecipeNames = SaveLoadManager.Instance.Load<HashSet<string>>();};
+        SaveLoadManager.Instance.onLoad += () => { unlockedRecipeNames = SaveLoadManager.Instance.Load<HashSet<string>>(); };
     }
 
-    void OnDisable() {
+    void OnDisable()
+    {
         SaveLoadManager.Instance.onSave -= () => SaveLoadManager.Instance.Save<HashSet<string>>(unlockedRecipeNames);
-        SaveLoadManager.Instance.onLoad -= () => {unlockedRecipeNames = SaveLoadManager.Instance.Load<HashSet<string>>();};
+        SaveLoadManager.Instance.onLoad -= () => { unlockedRecipeNames = SaveLoadManager.Instance.Load<HashSet<string>>(); };
+    }
+    public List<RecipeDescription> GetAllRecipeDescriptions()
+    {
+        return recipeDescriptions;
+    }
+
+    public int GetRecipeCount()
+    {
+        return recipeDescriptions?.Count ?? 0;
     }
 }
