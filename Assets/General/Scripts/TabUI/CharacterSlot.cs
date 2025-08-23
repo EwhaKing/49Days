@@ -2,9 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CharacterSlot : MonoBehaviour, IPointerClickHandler
+public class CharacterSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] Image charImage; // 왼쪽 그리드의 슬롯 썸네일
+    [SerializeField] Image highlight; // 하이라이트용 (별도 오버레이 이미지)
+
     CharacterData boundData;
     AffinityPanel panel;
     bool clickable; // 안전장치(미만남 클릭 방지)
@@ -27,7 +29,7 @@ public class CharacterSlot : MonoBehaviour, IPointerClickHandler
         // 2) 정상 데이터면 슬롯을 보이게 하고, 만남 여부에 따라 썸네일 결정
         gameObject.SetActive(true);
 
-        bool met = cm.HasMet(data.fixedIndex);
+        bool met = cm.HasMet(data.characterName);
         clickable = met; // 미만남이면 클릭 불가
 
         // 왼쪽 슬롯 썸네일: 만남 → data.slotImage, 미만남 → unknown
@@ -38,6 +40,10 @@ public class CharacterSlot : MonoBehaviour, IPointerClickHandler
         }
         charImage.enabled = true;
         charImage.sprite = met && data.slotImage != null ? data.slotImage : unknown;
+
+        //하이라이트는 항상 초기화(꺼진 상태)로 시작
+        if (highlight != null)
+            highlight.enabled = false;
     }
 
 
@@ -48,8 +54,23 @@ public class CharacterSlot : MonoBehaviour, IPointerClickHandler
 
         // 안전: 런타임 중 상태가 바뀌었을 수도 있으니 한 번 더 체크
         var cm = CharacterManager.Instance;
-        if (cm == null || !cm.HasMet(boundData.fixedIndex)) return;
+        if (cm == null || !cm.HasMet(boundData.characterName)) return;
 
         panel.ShowCharacter(boundData);
+    }
+
+    //만날 수 있는 애들은 마우스 오버 시 하이라이트
+    // 마우스 오버
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (clickable && highlight != null)
+            highlight.enabled = true;
+    }
+
+    // 마우스 아웃
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (highlight != null)
+            highlight.enabled = false;
     }
 }

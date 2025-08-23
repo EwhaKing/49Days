@@ -365,7 +365,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
         if (ingredients.Count == 0)
         {
-            Debug.Log("재료가 없어서 UI 생성 안 함");
+            //Debug.Log("재료가 없어서 UI 생성 안 함");
             return;
         }
 
@@ -378,8 +378,20 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
                 GameObject imgObj = Instantiate(ingredientImagePrefab, ingredientListParent);
                 UnityEngine.UI.Image img = imgObj.GetComponent<UnityEngine.UI.Image>();
                 if (img != null)
+                {
                     img.sprite = sr.sprite;
-                img.color = sr.color;  // ✅ 색상까지 복사
+                    img.color = sr.color;  // ✅ 색상까지 복사
+
+                    // 2️⃣ 세로 고정값 지정
+                    float fixedHeight = 100f; // 원하는 세로 크기
+                    float aspect = (float)sr.sprite.rect.width / sr.sprite.rect.height; // 스프라이트 비율
+                    float width = fixedHeight * aspect;
+
+                    // 3️⃣ RectTransform 크기 조정
+                    RectTransform rt = img.GetComponent<RectTransform>();
+                    rt.sizeDelta = new Vector2(width, fixedHeight);
+                }
+
                 Debug.Log($"🖼 UI Image에 할당된 스프라이트: {img.sprite?.name}");
             }
         }

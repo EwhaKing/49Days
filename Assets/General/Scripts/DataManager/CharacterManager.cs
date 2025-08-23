@@ -9,7 +9,8 @@ using UnityEngine;
 [Serializable]
 public class CharacterProgress
 {
-    public int fixedIndex;   // 0-base, 리스트 인덱스와 동일
+    //public int fixedIndex;   // 0-base, 리스트 인덱스와 동일(이거 안 쓸 거임.)
+    public string characterName;   // 이름을 고유 키로 사용
     public bool hasMet;
     public int affinity;     // 0..100
 }
@@ -31,24 +32,23 @@ public class CharacterManager : SceneSingleton<CharacterManager>
     public int Count => characters?.Count ?? 0;
     public CharacterData GetStatic(int fixedIndex) => characters[fixedIndex];
 
-    public bool HasMet(int fixedIndex) => GetByIndex(fixedIndex).hasMet;
-    public int GetAffinity(int fixedIndex) => GetByIndex(fixedIndex).affinity;
+    public bool HasMet(string name) => GetProgress(name).hasMet;
+    public int GetAffinity(string name) => GetProgress(name).affinity;
 
-    public void Meet(int fixedIndex, bool met = true)
+    public void Meet(string name, bool met = true)
     {
-        GetByIndex(fixedIndex).hasMet = met;
+        GetProgress(name).hasMet = met;
+    }
+    public void SetAffinity(string name, int value)
+    {
+        var p = GetProgress(name);
+        p.affinity = Mathf.Clamp(value, 0, 100);
     }
 
-    public void SetAffinity(int fixedIndex, int value)
+    public void AddAffinity(string name, int delta)
     {
-        var p = GetByIndex(fixedIndex);
-        p.affinity = Mathf.Clamp(value, 0, 100); // 이제 0~100 단위로 저장
-    }
-
-    public void AddAffinity(int fixedIndex, int delta)
-    {
-        var p = GetByIndex(fixedIndex);
-        p.affinity = Mathf.Clamp(p.affinity + delta, 0, 100); // 0~100 범위
+        var p = GetProgress(name);
+        p.affinity = Mathf.Clamp(p.affinity + delta, 0, 100);
     }
 
     // ===== 라이프사이클 =====
@@ -101,7 +101,32 @@ public class CharacterManager : SceneSingleton<CharacterManager>
 
         if (loaded != null && loaded.list != null && loaded.list.Count == characters.Count)
         {
-            db = loaded;
+            // 변경됨: fixedIndex 개수 검사 대신 이름 기반 매칭
+            db = new CharacterDB { list = new List<CharacterProgress>() };
+
+            foreach (var c in characters)
+            {
+                var saved = loaded.list.Find(x => x.characterName == c.characterName);
+                if (saved != null)
+                {
+                    db.list.Add(new CharacterProgress
+                    {
+                        characterName = saved.characterName,
+                        hasMet = saved.hasMet,
+                        affinity = Mathf.Clamp(saved.affinity, 0, 100)
+                    });
+                }
+                else
+                {
+                    // 신규 캐릭터 → 기본값으로 추가
+                    db.list.Add(new CharacterProgress
+                    {
+                        characterName = c.characterName,
+                        hasMet = false,
+                        affinity = 0
+                    });
+                }
+            }
         }
         else
         {
@@ -109,72 +134,38 @@ public class CharacterManager : SceneSingleton<CharacterManager>
             InitializeProgressFromStatic();
         }
 
-        // 인덱스 정합성 보장
-        db.list.Sort((a, b) => a.fixedIndex.CompareTo(b.fixedIndex));
-        for (int i = 0; i < db.list.Count; i++)
-        {
-            if (db.list[i] == null)
-                db.list[i] = new CharacterProgress();
-            db.list[i].fixedIndex = i;
-            db.list[i].affinity = Mathf.Clamp(db.list[i].affinity, 0, 100);
-        }
+        // // 인덱스 정합성 보장
+        // db.list.Sort((a, b) => a.fixedIndex.CompareTo(b.fixedIndex));
+        // for (int i = 0; i < db.list.Count; i++)
+        // {
+        //     if (db.list[i] == null)
+        //         db.list[i] = new CharacterProgress();
+        //     db.list[i].fixedIndex = i;
+        //     db.list[i].affinity = Mathf.Clamp(db.list[i].affinity, 0, 100);
+        // }
     }
 
     // ===== 내부 유틸 =====
     private void InitializeProgressFromStatic()
     {
         db.list = new List<CharacterProgress>(characters.Count);
-        for (int i = 0; i < characters.Count; i++)
+        foreach (var c in characters)
         {
             db.list.Add(new CharacterProgress
             {
-                fixedIndex = i,
-                hasMet = false, //첫 시작 : 모두 미만남
-                affinity = 0 //  첫 시작 : 모두 호감도 0
+                characterName = c.characterName,
+                hasMet = false,
+                affinity = 0
             });
         }
     }
 
-    private CharacterProgress GetByIndex(int fixedIndex)
+    private CharacterProgress GetProgress(string name)
     {
-        if (fixedIndex < 0 || fixedIndex >= db.list.Count)
-            throw new IndexOutOfRangeException(
-                $"Character index {fixedIndex} out of range (Count={db.list.Count}).");
-        return db.list[fixedIndex];
+        var p = db.list.Find(x => x.characterName == name);
+        if (p == null)
+            throw new ArgumentException($"Character with name '{name}' not found.");
+        return p;
     }
-
-
-    //여기부터 테스트용 함수. 삭제해야 함
-
-    // #if UNITY_EDITOR
-    //     [ContextMenu("Dev/Seed: Meet ALL + 0..100 by 5")]
-    //     private void Dev_SeedAll_Stepped()
-    //     {
-    //         for (int i = 0; i < Count; i++)
-    //         {
-    //             Meet(i, true);
-    //             SetAffinity(i, (i * 5) % 105); // 0,5,10,...,100 반복
-    //         }
-    //         // 패널 새로고침
-    //         var panel = FindObjectOfType<AffinityPanel>();
-    //         if (panel) panel.RefreshPage();
-    //     }
-
-    //     [ContextMenu("Dev/Seed: Meet FIRST PAGE + Random(5-step)")]
-    //     private void Dev_SeedFirstPage_Random()
-    //     {
-    //         var rand = new System.Random(1234);
-    //         int firstPageCount = Mathf.Min(Count, 9);
-    //         for (int i = 0; i < Count; i++)
-    //         {
-    //             bool met = i < firstPageCount; // 첫 페이지(0~8)만 만남 처리
-    //             Meet(i, met);
-    //             int val = met ? (rand.Next(0, 21) * 5) : 0; // 0..100, 5단위
-    //             SetAffinity(i, val);
-    //         }
-    //         var panel = FindObjectOfType<AffinityPanel>();
-    //         if (panel) panel.RefreshPage();
-    //     }
-    // #endif
 
 }

@@ -41,8 +41,9 @@ public class DevSyncFromCharacterDataOnPlay : MonoBehaviour
                 aff = 0;
             }
 
-            cm.Meet(i, met);
-            cm.SetAffinity(i, Mathf.Clamp(aff, 0, 100));
+            // 변경됨 ↓: 이름 기반으로 호출
+            cm.Meet(cd.characterName, met);               // 변경됨
+            cm.SetAffinity(cd.characterName, Mathf.Clamp(aff, 0, 100)); // 변경됨
         }
 
         // 왼쪽 그리드/오른쪽 패널 갱신
