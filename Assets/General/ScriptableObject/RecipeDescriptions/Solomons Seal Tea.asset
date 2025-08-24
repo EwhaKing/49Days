@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 618a5f946b70e1746ac20297239e1adf, type: 3}
-  m_Name: NewRecipeDiscription
+  m_Name: Solomons Seal Tea
   m_EditorClassIdentifier: 
-  recipeName: 
-  teaImage: {fileID: 0}
-  simpleRecipeImage: {fileID: 0}
-  description: dsddasda
+  recipeName: "\uB465\uAD74\uB808\uCC28"
+  teaImage: {fileID: 21300000, guid: 5e36a04665b72d142b0d56d7e6ec89cd, type: 3}
+  simpleRecipeImage: {fileID: -1671600655, guid: 7a71695a909af774eb4d4caaaf94c74a, type: 3}
+  description: "1.\uB465\uAD74\uB808\uCC28\uC785\uB2C8\uB2E4. 2. \uC124\uBA85\uC774
+    \uC5C6\uC2B5\uB2C8\uB2E4."
