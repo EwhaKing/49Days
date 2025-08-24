@@ -73,6 +73,8 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         Vector3 spawnPosition = targetChair.position + spawnOffset;
         GameObject customerObject = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
         Customer customer = customerObject.GetComponent<Customer>();
+        customerObject.name = characterName;
+
 
         if (customer != null)
         {
@@ -108,7 +110,18 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         }
         else
         {
-            Debug.Log($"{characterName}번 의자에는 손님이 없습니다.");
+            Debug.Log($"{characterName} 손님이 없습니다.");
         }
     }
+
+
+    public void HeartUp()
+    {
+    }
+
+    public void HeartDown()
+    {
+    }
+    
+
 }
