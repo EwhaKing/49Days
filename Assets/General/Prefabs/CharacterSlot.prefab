@@ -422,3 +422,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charImage: {fileID: 8061975515596698172}
   highlight: {fileID: 2500747044041095095}
+  nameText: {fileID: 3273613572995672}
