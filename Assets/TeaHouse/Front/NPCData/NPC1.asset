@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f1b37ea5c3638945b1705951efffeaa, type: 3}
   m_Name: NPC1
   m_EditorClassIdentifier: 
-  characterName: "\uC190\uB2D81"
+  characterName: "\uD0A4\uB8E8\uC2A4"
   poses:
   - poseName: "\uBB34\uD45C\uC815"
     bodySprite: {fileID: -1967894621, guid: a6dc8dc8f68b5234a89b682a3438d530, type: 3}
