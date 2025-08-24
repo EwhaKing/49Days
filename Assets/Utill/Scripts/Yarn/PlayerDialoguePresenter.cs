@@ -224,8 +224,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     public override async YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, CancellationToken cancellationToken)
     {
-        Debug.Log($"RunOptionsAsync 호출됨, 옵션 개수: {dialogueOptions.Length}");
-
         ValidateReferences();
         if (optionPanelController == null)
             throw new System.InvalidOperationException("optionPanelController가 할당되지 않았습니다.");

@@ -14,7 +14,6 @@ public class DialogueLogManager : Singleton<DialogueLogManager>
     public void AddLog(string characterName, string text)
     {
         dialogueLogs.Add(new DialogueLogEntry(characterName, text));
-        Debug.Log("로그 호출 완료");
         UpdateLogUI();
 
         // LogText가 활성화된 경우에만 코루틴 실행
