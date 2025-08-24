@@ -187,9 +187,11 @@ MonoBehaviour:
   eyesRenderer: {fileID: 2755596780834286794}
   moveSpeed: 5
   fadeDuration: 0.5
+  exitOffset: {x: -0.5, y: 0, z: 0}
   minBlinkInterval: 3
   maxBlinkInterval: 7
   blinkDuration: 0.1
+  chairIndex: 0
 --- !u!1 &6164964107076355746
 GameObject:
   m_ObjectHideFlags: 0

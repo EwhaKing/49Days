@@ -12,20 +12,27 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     [SerializeField] private GameObject customerPrefab;
     [SerializeField] private Vector3 spawnOffset = new Vector3(1, 1, 0);
 
+
+    [Header("이펙트 설정")]
+    [Tooltip("호감도 상승/하락 시 나타날 하트 이펙트 프리팹")]
+    [SerializeField] private GameObject heartEffectPrefab;
+    [Tooltip("손님 머리 위로 이펙트가 나타날 위치 오프셋")]
+    [SerializeField] private Vector3 heartOffset = new Vector3(0, 0.5f, 0);
+
+    [Tooltip("하트 이펙트가 생성될 부모 Canvas의 RectTransform")]
+    [SerializeField] private RectTransform mainCanvasRectTransform;
+
+
+
     [Header("캐릭터 데이터베이스")]
     [Tooltip("게임에 등장할 모든 CustomerData 파일을 여기에 등록.")]
     [SerializeField] private List<CustomerData> customerDatabase;
 
 
     // 어떤 의자(int)에 어떤 손님(Customer)이 앉아있는지 기록
-    private static Dictionary<string, Customer> seatedCustomers;
+    private static Dictionary<string, Customer> seatedCustomers = new Dictionary<string, Customer>();
     private Dictionary<string, CustomerData> customerDataDict;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-    private static void InitializeOnPlay()
-    {
-        seatedCustomers = new Dictionary<string, Customer>();
-    }
 
     protected override void Awake()
     {
@@ -35,6 +42,24 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             customerDataDict = customerDatabase.ToDictionary(data => data.characterName);
         }
     }
+
+    void Start()
+    {
+        // 씬이 다시 로드되었을 때, DontDestroyOnLoad로 유지된 손님들을 다시 의자에 배치.
+        if (seatedCustomers != null)
+        {
+            foreach (var customer in seatedCustomers.Values)
+            {
+                if (customer != null && customer.chairIndex >= 0 && customer.chairIndex < chairTransforms.Count)
+                {
+                    Transform targetChair = chairTransforms[customer.chairIndex];
+                    customer.PlaceAt(targetChair); // 즉시 해당 위치로 이동
+                }
+            }
+        }
+    }
+
+
     void Update()   // TESTTESTTESTTEST
     {
         if (Keyboard.current == null) return;
@@ -52,6 +77,15 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             if (Keyboard.current.digit2Key.wasPressedThisFrame) ExitCustomerAt("키루스");
             if (Keyboard.current.digit3Key.wasPressedThisFrame) ExitCustomerAt("나란");
             if (Keyboard.current.digit4Key.wasPressedThisFrame) ExitCustomerAt("나란");
+        }
+
+        if (Keyboard.current.hKey.wasPressedThisFrame)
+        {
+            HeartUp("키루스");
+        }
+        if (Keyboard.current.jKey.wasPressedThisFrame)
+        {
+            HeartDown("키루스");
         }
     }
 
@@ -114,13 +148,46 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         }
     }
 
-
-    public void HeartUp()
+    public void HeartUp(string characterName)
     {
+        if (seatedCustomers.TryGetValue(characterName, out Customer customer))
+        {
+            ShowHeartEffect(customer, HeartEffect.HeartType.Full);
+        }
+        else
+        {
+            Debug.LogWarning($"{characterName} 손님이 앉아있지 않아 호감도 이펙트를 표시할 수 없습니다.");
+        }
     }
 
-    public void HeartDown()
+    public void HeartDown(string characterName)
     {
+        if (seatedCustomers.TryGetValue(characterName, out Customer customer))
+        {
+            ShowHeartEffect(customer, HeartEffect.HeartType.Broken);
+        }
+        else
+        {
+            Debug.LogWarning($"{characterName} 손님이 앉아있지 않아 호감도 이펙트를 표시할 수 없습니다.");
+        }
+    }
+    
+        private void ShowHeartEffect(Customer customer, HeartEffect.HeartType type)
+    {
+        if (heartEffectPrefab == null || mainCanvasRectTransform == null || customer == null)
+        {
+            Debug.LogError("Heart Effect Prefab 또는 Main Canvas가 설정되지 않았습니다!");
+            return;
+        }
+
+        GameObject effectObject = Instantiate(heartEffectPrefab, mainCanvasRectTransform);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(customer.transform.position + heartOffset);
+        effectObject.transform.position = screenPos;
+        HeartEffect heartEffect = effectObject.GetComponent<HeartEffect>();
+        if (heartEffect != null)
+        {
+            heartEffect.ShowEffect(type);
+        }
     }
     
 

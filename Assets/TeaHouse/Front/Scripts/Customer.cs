@@ -21,6 +21,8 @@ public class Customer : MonoBehaviour
     [SerializeField] private float minBlinkInterval = 3f;
     [SerializeField] private float maxBlinkInterval = 7f;
     [SerializeField] private float blinkDuration = 0.1f;
+
+    public int chairIndex;
     
     private CustomerData customerData;
     private CharacterPose currentPose;
@@ -40,6 +42,20 @@ public class Customer : MonoBehaviour
         currentActionCoroutine = StartCoroutine(EnterRoutine(target.position));
     }
 
+    public void PlaceAt(Transform target)
+    {
+        // 진행 중인 다른 코루틴이 있다면 중지
+        if (currentActionCoroutine != null) StopCoroutine(currentActionCoroutine);
+
+        transform.position = target.position;
+        SetRenderersColor(originalColor);
+        
+        // 눈 깜빡임 시작
+        if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
+        blinkCoroutine = StartCoroutine(BlinkRoutine());
+    }
+
+    
     // 스프라이트 변경할 때 이거 사용.
     public void ChangePose(string poseName)
     {
