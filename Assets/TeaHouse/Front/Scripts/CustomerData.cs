@@ -25,8 +25,6 @@ public class CharacterPose
 public class CustomerData : ScriptableObject
 {
     [Header("캐릭터 기본 정보")]
-    [Tooltip("캐릭터 식별 ID")]
-    public string characterID;
     [Tooltip("캐릭터 이름")]
     public string characterName;
 

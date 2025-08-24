@@ -1,18 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Linq;
+
 
 // 손님 생성/퇴장을 관리하는 매니저
 public class CustomerManager : SceneSingleton<CustomerManager>
 {
     [Header("설정")]
-    [Tooltip("손님이 앉을 수 있는 모든 의자의 위치(Transform) 리스트")]
     [SerializeField] private List<Transform> chairTransforms;
-
-    [Tooltip("생성할 손님 프리팹 (Customer.cs가 붙어있어야 함)")]
     [SerializeField] private GameObject customerPrefab;
-
-    [Tooltip("의자 위치 기준으로 손님이 처음 생성될 위치 오프셋")]
     [SerializeField] private Vector3 spawnOffset = new Vector3(1, 1, 0);
 
     [Header("캐릭터 데이터베이스")]
@@ -21,7 +18,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
 
 
     // 어떤 의자(int)에 어떤 손님(Customer)이 앉아있는지 기록
-    private static Dictionary<int, Customer> seatedCustomers = new Dictionary<int, Customer>();
+    private static Dictionary<int, Customer> seatedCustomers;
     private Dictionary<string, CustomerData> customerDataDict;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -30,16 +27,23 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         seatedCustomers = new Dictionary<int, Customer>();
     }
 
-
+    protected override void Awake()
+    {
+        base.Awake();
+        if (customerDatabase != null)
+        {
+            customerDataDict = customerDatabase.ToDictionary(data => data.characterName);
+        }
+    }
     void Update()   // TESTTESTTESTTEST
     {
         if (Keyboard.current == null) return;
 
         // 숫자 키로 손님 등장
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) SpawnCustomerAt(0);
-        if (Keyboard.current.digit2Key.wasPressedThisFrame) SpawnCustomerAt(1);
-        if (Keyboard.current.digit3Key.wasPressedThisFrame) SpawnCustomerAt(2);
-        if (Keyboard.current.digit4Key.wasPressedThisFrame) SpawnCustomerAt(3);
+        if (Keyboard.current.digit1Key.wasPressedThisFrame) SpawnCustomer("손님1", 0);
+        if (Keyboard.current.digit2Key.wasPressedThisFrame) SpawnCustomer("손님1", 1);
+        if (Keyboard.current.digit3Key.wasPressedThisFrame) SpawnCustomer("손님2", 2);
+        if (Keyboard.current.digit4Key.wasPressedThisFrame) SpawnCustomer("손님2", 3);
 
         // Shift + 숫자 키로 손님 퇴장
         if (Keyboard.current.leftShiftKey.isPressed)
@@ -52,28 +56,32 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     }
 
     // 캐릭터 스폰 시에는 이 함수를 사용합니다.
-    public void SpawnCustomerAt(int chairIndex)
+    public Customer SpawnCustomer(string characterName, int chairIndex)
     {
-        if (chairIndex < 0 || chairIndex >= chairTransforms.Count) { Debug.Log($"잘못된 의자 번호입니다: {chairIndex}"); return; }
-        if (customerPrefab == null) { Debug.Log("손님 프리팹이 설정되지 않았습니다."); return; }
-        
+        if (!customerDataDict.TryGetValue(characterName, out CustomerData dataToSpawn))
+        {
+            Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
+            return null;
+        }
         if (seatedCustomers.ContainsKey(chairIndex))
         {
             Debug.Log($"{chairIndex}번 의자에는 이미 손님이 있습니다.");
-            return;
+            return null;
         }
 
         Transform targetChair = chairTransforms[chairIndex];
         Vector3 spawnPosition = targetChair.position + spawnOffset;
-        
         GameObject customerObject = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
         Customer customer = customerObject.GetComponent<Customer>();
 
         if (customer != null)
         {
-            seatedCustomers[chairIndex] = customer;
+            customer.Initialize(dataToSpawn);
             customer.GoToTarget(targetChair);
+            seatedCustomers[chairIndex] = customer;
+            return customer;
         }
+        return null;
     }
 
     // 손님의 포즈를 변경할 때 이 함수.
@@ -82,6 +90,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         if (seatedCustomers.TryGetValue(chairIndex, out Customer customer))
         {
             customer.ChangePose(poseName);
+            // "무표정"만 있음...
         }
         else
         {

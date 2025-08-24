@@ -31,7 +31,7 @@ public class Customer : MonoBehaviour
     public void Initialize(CustomerData data)
     {
         customerData = data;
-        ChangePose("Neutral");  // 디폴트는 무표정?
+        ChangePose("무표정");  // 디폴트는 무표정?
     }
 
     public void GoToTarget(Transform target)
