@@ -24,9 +24,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     public void OnPanelClicked()
     {
-        if (IsBlockedUI())
-            return;
-
         // 클릭의 의미를 현재 단계 기준으로 결정
         if (phase == Phase.Typing)
             isClickedForSkip = true;
