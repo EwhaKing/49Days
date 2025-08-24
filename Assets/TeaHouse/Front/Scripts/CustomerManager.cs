@@ -13,6 +13,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     [SerializeField] private Vector3 spawnOffset = new Vector3(1, 1, 0);
 
 
+
     [Header("이펙트 설정")]
     [Tooltip("호감도 상승/하락 시 나타날 하트 이펙트 프리팹")]
     [SerializeField] private GameObject heartEffectPrefab;
@@ -28,8 +29,9 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     [Tooltip("게임에 등장할 모든 CustomerData 파일을 여기에 등록.")]
     [SerializeField] private List<CustomerData> customerDatabase;
 
-
-    // 어떤 의자(int)에 어떤 손님(Customer)이 앉아있는지 기록
+    // 씬 전환 시에도 유지될 착석 정보(Key: 의자 인덱스, Value: 캐릭터 이름)
+    private static Dictionary<int, string> seatedCustomerInfo;
+    // 현재 씬에 존재하는 손님 인스턴스 관리 (Key: 캐릭터 이름, Value: Customer 컴포넌트)
     private static Dictionary<string, Customer> seatedCustomers = new Dictionary<string, Customer>();
     private Dictionary<string, CustomerData> customerDataDict;
 
@@ -37,6 +39,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     protected override void Awake()
     {
         base.Awake();
+        DontDestroyOnLoad(gameObject);
         if (customerDatabase != null)
         {
             customerDataDict = customerDatabase.ToDictionary(data => data.characterName);
@@ -45,17 +48,17 @@ public class CustomerManager : SceneSingleton<CustomerManager>
 
     void Start()
     {
-        // 씬이 다시 로드되었을 때, DontDestroyOnLoad로 유지된 손님들을 다시 의자에 배치.
-        if (seatedCustomers != null)
+        foreach (var customer in seatedCustomers.Values)
         {
-            foreach (var customer in seatedCustomers.Values)
-            {
-                if (customer != null && customer.chairIndex >= 0 && customer.chairIndex < chairTransforms.Count)
-                {
-                    Transform targetChair = chairTransforms[customer.chairIndex];
-                    customer.PlaceAt(targetChair); // 즉시 해당 위치로 이동
-                }
-            }
+            if (customer != null) Destroy(customer.gameObject);
+        }
+        seatedCustomers.Clear();
+
+        foreach (var entry in seatedCustomerInfo)
+        {
+            int chairIndex = entry.Key;
+            string characterName = entry.Value;
+            SpawnCustomer(characterName, chairIndex);
         }
     }
 
@@ -92,6 +95,9 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     // 캐릭터 스폰 시에는 이 함수를 사용합니다.
     public Customer SpawnCustomer(string characterName, int chairIndex)
     {
+        if (seatedCustomerInfo == null) {
+            seatedCustomerInfo = new Dictionary<int, string>();
+        }
         if (!customerDataDict.TryGetValue(characterName, out CustomerData dataToSpawn))
         {
             Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
@@ -115,6 +121,8 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             customer.Initialize(dataToSpawn);
             customer.GoToTarget(targetChair);
             seatedCustomers[characterName] = customer;
+            seatedCustomers[characterName] = customer;
+            seatedCustomerInfo[chairIndex] = characterName; // static 변수에 저장
             return customer;
         }
         return null;
@@ -139,6 +147,11 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     {
         if (seatedCustomers.TryGetValue(characterName, out Customer customerToExit) && customerToExit != null)
         {
+            int chairIndex = customerToExit.ChairIndex;
+            if (seatedCustomerInfo.ContainsKey(chairIndex))
+            {
+                seatedCustomerInfo.Remove(chairIndex); // static 변수에서 삭제
+            }
             customerToExit.Exit();
             seatedCustomers.Remove(characterName);
         }
@@ -147,6 +160,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             Debug.Log($"{characterName} 손님이 없습니다.");
         }
     }
+
 
     public void HeartUp(string characterName)
     {

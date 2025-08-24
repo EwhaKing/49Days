@@ -22,7 +22,7 @@ public class Customer : MonoBehaviour
     [SerializeField] private float maxBlinkInterval = 7f;
     [SerializeField] private float blinkDuration = 0.1f;
 
-    public int chairIndex;
+    public int ChairIndex { get; set; }
     
     private CustomerData customerData;
     private CharacterPose currentPose;
