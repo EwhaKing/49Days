@@ -17,8 +17,6 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     public Transform? npcTransform;                // NPC 월드 좌표 (동적 할당)
     public Vector2 nameBoxOffset = new(-10f, 20f); // NameBox 오프셋 (좌상단 기준)
 
-    public GameObject? logPanel;
-
     private bool isClickedForSkip = false;
     private bool isClickedForNext = false;
     private Camera? mainCamera;
@@ -28,6 +26,9 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     public void OnPanelClicked()
     {
+        if (IsBlockedUI())
+            return;
+
         // 클릭의 의미를 현재 단계 기준으로 결정
         if (phase == Phase.Typing)
             isClickedForSkip = true;
@@ -50,22 +51,14 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         }
     }
 
-    private void Update()
+    public void OnDialogueContinue()
     {
-        // 옵션 패널이 열려있으면 입력 무시
         if (DialoguePresenterRouter.isOptionPanelActive)
             return;
-
-        // 로그 패널이 열려있으면 입력 무시
-        if (logPanel != null && logPanel.activeSelf)
+        if (DialogueLogManager.Instance != null && DialogueLogManager.Instance.IsLogPanelOpen())
             return;
-
-        // 스페이스바 입력 시 대사 넘기기
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (dialogueBox != null && dialogueBox.gameObject.activeSelf)
-                OnPanelClicked();
-        }
+        if (dialogueBox != null && dialogueBox.gameObject.activeSelf)
+            OnPanelClicked();
     }
 
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken cancellationToken)
@@ -125,7 +118,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     private void CalculateDialogueBoxSize(string processedText)
     {
         float minWidth = 180f, minHeight = 65f;
-        float paddingLeft = 30f, paddingRight = 150f;
+        float paddingLeft = 30f, paddingRight = 80f;
         float paddingTop = 60f, paddingBottom = 40f;
         float maxWidth = 650f;
 

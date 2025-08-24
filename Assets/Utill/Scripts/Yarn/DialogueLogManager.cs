@@ -4,21 +4,12 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueLogManager : MonoBehaviour
+public class DialogueLogManager : Singleton<DialogueLogManager>
 {
-    public static DialogueLogManager Instance { get; private set; }
-
     private readonly List<DialogueLogEntry> dialogueLogs = new();
     [SerializeField] private TextMeshProUGUI logTextUI;
     [SerializeField] private LogScrollController logScrollController;
-
-    private void Awake()
-    {
-        if (Instance == null)
-            Instance = this;
-        else
-            Destroy(gameObject);
-    }
+    [SerializeField] private GameObject logPanel;
 
     public void AddLog(string characterName, string text)
     {
@@ -49,4 +40,9 @@ public class DialogueLogManager : MonoBehaviour
     }
 
     public IReadOnlyList<DialogueLogEntry> GetLogs() => dialogueLogs;
+
+    public bool IsLogPanelOpen()
+    {
+        return logPanel != null && logPanel.activeSelf;
+    }
 }

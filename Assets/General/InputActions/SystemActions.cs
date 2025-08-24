@@ -214,6 +214,34 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             ""id"": ""7947913c-7704-4c0c-8955-c7a903d3122b"",
             ""actions"": [],
             ""bindings"": []
+        },
+        {
+            ""name"": ""DialogueContinue"",
+            ""id"": ""ff118bed-e995-4022-a503-9e14b30798b7"",
+            ""actions"": [
+                {
+                    ""name"": ""DialogueContinue"",
+                    ""type"": ""Button"",
+                    ""id"": ""f0d54c44-1c52-4cbf-94d7-d882b6ea35a4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""119da73b-463e-4cc4-a17c-a442b29bb62a"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DialogueContinue"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -243,12 +271,16 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         m_SystemActions_CloseUI = m_SystemActions.FindAction("CloseUI", throwIfNotFound: true);
         // PlayerActions
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
+        // DialogueContinue
+        m_DialogueContinue = asset.FindActionMap("DialogueContinue", throwIfNotFound: true);
+        m_DialogueContinue_DialogueContinue = m_DialogueContinue.FindAction("DialogueContinue", throwIfNotFound: true);
     }
 
     ~@systemActions()
     {
         UnityEngine.Debug.Assert(!m_SystemActions.enabled, "This will cause a leak and performance issues, systemActions.SystemActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PlayerActions.enabled, "This will cause a leak and performance issues, systemActions.PlayerActions.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_DialogueContinue.enabled, "This will cause a leak and performance issues, systemActions.DialogueContinue.Disable() has not been called.");
     }
 
     /// <summary>
@@ -534,6 +566,102 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActionsActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActionsActions @PlayerActions => new PlayerActionsActions(this);
+
+    // DialogueContinue
+    private readonly InputActionMap m_DialogueContinue;
+    private List<IDialogueContinueActions> m_DialogueContinueActionsCallbackInterfaces = new List<IDialogueContinueActions>();
+    private readonly InputAction m_DialogueContinue_DialogueContinue;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "DialogueContinue".
+    /// </summary>
+    public struct DialogueContinueActions
+    {
+        private @systemActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public DialogueContinueActions(@systemActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "DialogueContinue/DialogueContinue".
+        /// </summary>
+        public InputAction @DialogueContinue => m_Wrapper.m_DialogueContinue_DialogueContinue;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_DialogueContinue; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="DialogueContinueActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(DialogueContinueActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="DialogueContinueActions" />
+        public void AddCallbacks(IDialogueContinueActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DialogueContinueActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DialogueContinueActionsCallbackInterfaces.Add(instance);
+            @DialogueContinue.started += instance.OnDialogueContinue;
+            @DialogueContinue.performed += instance.OnDialogueContinue;
+            @DialogueContinue.canceled += instance.OnDialogueContinue;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="DialogueContinueActions" />
+        private void UnregisterCallbacks(IDialogueContinueActions instance)
+        {
+            @DialogueContinue.started -= instance.OnDialogueContinue;
+            @DialogueContinue.performed -= instance.OnDialogueContinue;
+            @DialogueContinue.canceled -= instance.OnDialogueContinue;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DialogueContinueActions.UnregisterCallbacks(IDialogueContinueActions)" />.
+        /// </summary>
+        /// <seealso cref="DialogueContinueActions.UnregisterCallbacks(IDialogueContinueActions)" />
+        public void RemoveCallbacks(IDialogueContinueActions instance)
+        {
+            if (m_Wrapper.m_DialogueContinueActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="DialogueContinueActions.AddCallbacks(IDialogueContinueActions)" />
+        /// <seealso cref="DialogueContinueActions.RemoveCallbacks(IDialogueContinueActions)" />
+        /// <seealso cref="DialogueContinueActions.UnregisterCallbacks(IDialogueContinueActions)" />
+        public void SetCallbacks(IDialogueContinueActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DialogueContinueActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DialogueContinueActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="DialogueContinueActions" /> instance referencing this action map.
+    /// </summary>
+    public DialogueContinueActions @DialogueContinue => new DialogueContinueActions(this);
     private int m_PCSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -590,5 +718,20 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
     /// <seealso cref="PlayerActionsActions.RemoveCallbacks(IPlayerActionsActions)" />
     public interface IPlayerActionsActions
     {
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "DialogueContinue" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="DialogueContinueActions.AddCallbacks(IDialogueContinueActions)" />
+    /// <seealso cref="DialogueContinueActions.RemoveCallbacks(IDialogueContinueActions)" />
+    public interface IDialogueContinueActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "DialogueContinue" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDialogueContinue(InputAction.CallbackContext context);
     }
 }

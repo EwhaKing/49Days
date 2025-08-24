@@ -14,7 +14,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     public TextMeshProUGUI? nameText;
 
     public OptionPanelController? optionPanelController;
-    public GameObject? logPanel;
 
     private bool isClickedForSkip = false;
     private bool isClickedForNext = false;
@@ -25,6 +24,9 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     public void OnPanelClicked()
     {
+        if (IsBlockedUI())
+            return;
+
         // 클릭의 의미를 현재 단계 기준으로 결정
         if (phase == Phase.Typing)
             isClickedForSkip = true;
@@ -47,22 +49,14 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         }
     }
 
-    private void Update()
+    public void OnDialogueContinue()
     {
-        // 옵션 패널이 열려있으면 입력 무시
         if (DialoguePresenterRouter.isOptionPanelActive)
             return;
-
-        // 로그 패널이 열려있으면 입력 무시
-        if (logPanel != null && logPanel.activeSelf)
-            return;  
-
-        // 스페이스바 입력 시 대사 넘기기
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (dialogueBox != null && dialogueBox.gameObject.activeSelf)
-                OnPanelClicked();
-        }
+        if (DialogueLogManager.Instance != null && DialogueLogManager.Instance.IsLogPanelOpen())
+            return;
+        if (dialogueBox != null && dialogueBox.gameObject.activeSelf)
+            OnPanelClicked();
     }
 
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken cancellationToken)
@@ -121,7 +115,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     private void CalculateDialogueBoxSize(string processedText)
     {
         const float minWidth = 180f, minHeight = 65f;
-        const float paddingLeft = 30f, paddingRight = 150f;
+        const float paddingLeft = 30f, paddingRight = 80f;
         const float paddingTop = 60f, paddingBottom = 40f;
         const float maxWidth = 650f;
 
