@@ -239,6 +239,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     public void SetTargetTransform(Transform target)
     {
         npcTransform = target;
-        followingUI.SetTarget(target.gameObject);
+        if (followingUI != null)
+            followingUI.SetTarget(target!.gameObject);
     }
 }
