@@ -18,4 +18,9 @@ public class FollowingUI : MonoBehaviour
         Vector3 targetPosition = Camera.main.WorldToScreenPoint(target.transform.position + offset);
         transform.position = targetPosition;
     }
+
+    public void SetTarget(GameObject newTarget)
+    {
+        target = newTarget;
+    }
 }

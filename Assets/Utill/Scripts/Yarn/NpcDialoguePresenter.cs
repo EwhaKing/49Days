@@ -23,7 +23,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     private enum Phase { Typing, AwaitingNext }
     private Phase phase = Phase.AwaitingNext;
-
+    public FollowingUI? followingUI;
     public void OnPanelClicked()
     {
         // 클릭의 의미를 현재 단계 기준으로 결정
@@ -159,8 +159,8 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         Vector3 screenPos = mainCamera!.WorldToScreenPoint(npcTransform!.position);
         RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect!, screenPos, cam, out Vector2 canvasPos);
 
-        // NPC 머리 위에서 아래로 350px
-        dialogueBox.anchoredPosition = canvasPos + new Vector2(0f, -350f);
+        // NPC 머리 위에서 아래로 200px
+        dialogueBox.anchoredPosition = canvasPos + new Vector2(0f, -200f);
     }
 
     private void PositionNameBox()
@@ -239,5 +239,6 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     public void SetTargetTransform(Transform target)
     {
         npcTransform = target;
+        followingUI.SetTarget(target.gameObject);
     }
 }

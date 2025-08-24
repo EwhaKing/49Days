@@ -12,12 +12,33 @@ public class DialoguePresenterRouter : DialoguePresenterBase
     public NpcDialoguePresenter? npcPresenter;
     public static bool isOptionPanelActive { get; set; } = false;
 
+    private GameObject? npcObj;
+    private string? currentSpeaker;
+
+    public void SetSpeaker(string? speaker)
+    {
+        currentSpeaker = speaker ?? string.Empty;
+    }
+
+    void Update()
+    {
+        if (npcPresenter != null && !string.IsNullOrEmpty(currentSpeaker) && currentSpeaker != "Player")
+        {
+            var foundNpcObj = GameObject.Find(currentSpeaker);
+            if (foundNpcObj != null && foundNpcObj != npcObj)
+            {
+                npcObj = foundNpcObj;
+                npcPresenter.SetTargetTransform(npcObj.transform);
+            }
+        }
+    }
+
     public override YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken cancellationToken)
     {
-        var speaker = line.CharacterName;
+        SetSpeaker(line.CharacterName);
         DialoguePresenterBase? targetPresenter = null;
 
-        if (speaker == "Player")
+        if (line.CharacterName == "Player")
         {
             targetPresenter = playerPresenter;
         }
@@ -26,21 +47,20 @@ public class DialoguePresenterRouter : DialoguePresenterBase
             targetPresenter = npcPresenter;
             if (npcPresenter != null)
             {
-                // 씬에서 NPC 오브젝트를 이름으로 찾기
-                var npcObj = GameObject.Find(speaker);
-                if (npcObj != null)
+                var foundNpcObj = GameObject.Find(line.CharacterName);
+                if (foundNpcObj != null)
                 {
-                    npcPresenter.SetTargetTransform(npcObj.transform);
+                    npcPresenter.SetTargetTransform(foundNpcObj.transform);
                 }
                 else
                 {
-                    Debug.LogWarning($"NPC 오브젝트 '{speaker}'를 씬에서 찾을 수 없습니다.");
+                    Debug.LogWarning($"NPC 오브젝트 '{line.CharacterName}'를 씬에서 찾을 수 없습니다.");
                 }
             }
         }
 
         if (targetPresenter == null)
-            throw new System.InvalidOperationException($"'{speaker}'에 해당하는 DialoguePresenter가 할당되지 않았습니다.");
+            throw new System.InvalidOperationException($"'{line.CharacterName}'에 해당하는 DialoguePresenter가 할당되지 않았습니다.");
 
         return targetPresenter.RunLineAsync(line, cancellationToken);
     }
