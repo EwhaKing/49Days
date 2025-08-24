@@ -1469,7 +1469,7 @@ PrefabInstance:
       objectReference: {fileID: 3683085789221336783}
     - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: pourRadius
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: hookPosition
@@ -1498,6 +1498,10 @@ PrefabInstance:
     - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: hookSnapDistance
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
+      propertyPath: tempChangePerSec
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8266425545512643759, guid: fd8dd1e3b4fdb4b47a480f69543b1c1d, type: 3}
       propertyPath: hookFrontRenderer
