@@ -18,13 +18,13 @@ public class CustomerManager : SceneSingleton<CustomerManager>
 
 
     // 어떤 의자(int)에 어떤 손님(Customer)이 앉아있는지 기록
-    private static Dictionary<int, Customer> seatedCustomers;
+    private static Dictionary<string, Customer> seatedCustomers;
     private Dictionary<string, CustomerData> customerDataDict;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void InitializeOnPlay()
     {
-        seatedCustomers = new Dictionary<int, Customer>();
+        seatedCustomers = new Dictionary<string, Customer>();
     }
 
     protected override void Awake()
@@ -40,18 +40,18 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         if (Keyboard.current == null) return;
 
         // 숫자 키로 손님 등장
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) SpawnCustomer("손님1", 0);
-        if (Keyboard.current.digit2Key.wasPressedThisFrame) SpawnCustomer("손님1", 1);
-        if (Keyboard.current.digit3Key.wasPressedThisFrame) SpawnCustomer("손님2", 2);
-        if (Keyboard.current.digit4Key.wasPressedThisFrame) SpawnCustomer("손님2", 3);
+        if (Keyboard.current.digit1Key.wasPressedThisFrame) SpawnCustomer("키루스", 0);
+        if (Keyboard.current.digit2Key.wasPressedThisFrame) SpawnCustomer("키루스", 1);
+        if (Keyboard.current.digit3Key.wasPressedThisFrame) SpawnCustomer("나란", 2);
+        if (Keyboard.current.digit4Key.wasPressedThisFrame) SpawnCustomer("나란", 3);
 
         // Shift + 숫자 키로 손님 퇴장
         if (Keyboard.current.leftShiftKey.isPressed)
         {
-            if (Keyboard.current.digit1Key.wasPressedThisFrame) ExitCustomerAt(0);
-            if (Keyboard.current.digit2Key.wasPressedThisFrame) ExitCustomerAt(1);
-            if (Keyboard.current.digit3Key.wasPressedThisFrame) ExitCustomerAt(2);
-            if (Keyboard.current.digit4Key.wasPressedThisFrame) ExitCustomerAt(3);
+            if (Keyboard.current.digit1Key.wasPressedThisFrame) ExitCustomerAt("키루스");
+            if (Keyboard.current.digit2Key.wasPressedThisFrame) ExitCustomerAt("키루스");
+            if (Keyboard.current.digit3Key.wasPressedThisFrame) ExitCustomerAt("나란");
+            if (Keyboard.current.digit4Key.wasPressedThisFrame) ExitCustomerAt("나란");
         }
     }
 
@@ -63,7 +63,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
             return null;
         }
-        if (seatedCustomers.ContainsKey(chairIndex))
+        if (seatedCustomers.ContainsKey(characterName))
         {
             Debug.Log($"{chairIndex}번 의자에는 이미 손님이 있습니다.");
             return null;
@@ -78,37 +78,37 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         {
             customer.Initialize(dataToSpawn);
             customer.GoToTarget(targetChair);
-            seatedCustomers[chairIndex] = customer;
+            seatedCustomers[characterName] = customer;
             return customer;
         }
         return null;
     }
 
     // 손님의 포즈를 변경할 때 이 함수.
-    public void ChangeCustomerPose(int chairIndex, string poseName)
+    public void ChangeCustomerPose(string characterName, string poseName)
     {
-        if (seatedCustomers.TryGetValue(chairIndex, out Customer customer))
+        if (seatedCustomers.TryGetValue(characterName, out Customer customer))
         {
             customer.ChangePose(poseName);
             // "무표정"만 있음...
         }
         else
         {
-            Debug.Log($"{chairIndex}번 의자에는 손님이 없습니다.");
+            Debug.Log($"{characterName}");
         }
     }
 
     // 캐릭터 퇴장 시에는 이 함수를 사용합니다.
-    public void ExitCustomerAt(int chairIndex)
+    public void ExitCustomerAt(string characterName)
     {
-        if (seatedCustomers.TryGetValue(chairIndex, out Customer customerToExit) && customerToExit != null)
+        if (seatedCustomers.TryGetValue(characterName, out Customer customerToExit) && customerToExit != null)
         {
             customerToExit.Exit();
-            seatedCustomers.Remove(chairIndex);
+            seatedCustomers.Remove(characterName);
         }
         else
         {
-            Debug.Log($"{chairIndex}번 의자에는 손님이 없습니다.");
+            Debug.Log($"{characterName}번 의자에는 손님이 없습니다.");
         }
     }
 }
