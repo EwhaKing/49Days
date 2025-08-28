@@ -29,17 +29,14 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     [Tooltip("게임에 등장할 모든 CustomerData 파일을 여기에 등록.")]
     [SerializeField] private List<CustomerData> customerDatabase;
 
-    // 씬 전환 시에도 유지될 착석 정보(Key: 의자 인덱스, Value: 캐릭터 이름)
-    private static Dictionary<int, string> seatedCustomerInfo;
     // 현재 씬에 존재하는 손님 인스턴스 관리 (Key: 캐릭터 이름, Value: Customer 컴포넌트)
-    private static Dictionary<string, Customer> seatedCustomers = new Dictionary<string, Customer>();
+    private Dictionary<string, Customer> seatedCustomers = new Dictionary<string, Customer>();
     private Dictionary<string, CustomerData> customerDataDict;
 
 
     protected override void Awake()
     {
         base.Awake();
-        DontDestroyOnLoad(gameObject);
         if (customerDatabase != null)
         {
             customerDataDict = customerDatabase.ToDictionary(data => data.characterName);
@@ -54,7 +51,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         }
         seatedCustomers.Clear();
 
-        foreach (var entry in seatedCustomerInfo)
+        foreach (var entry in OrderManager.Instance.seatedCustomerInfo)
         {
             int chairIndex = entry.Key;
             string characterName = entry.Value;
@@ -63,41 +60,9 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     }
 
 
-    void Update()   // TESTTESTTESTTEST
-    {
-        if (Keyboard.current == null) return;
-
-        // 숫자 키로 손님 등장
-        if (Keyboard.current.digit1Key.wasPressedThisFrame) SpawnCustomer("키루스", 0);
-        if (Keyboard.current.digit2Key.wasPressedThisFrame) SpawnCustomer("키루스", 1);
-        if (Keyboard.current.digit3Key.wasPressedThisFrame) SpawnCustomer("나란", 2);
-        if (Keyboard.current.digit4Key.wasPressedThisFrame) SpawnCustomer("나란", 3);
-
-        // Shift + 숫자 키로 손님 퇴장
-        if (Keyboard.current.leftShiftKey.isPressed)
-        {
-            if (Keyboard.current.digit1Key.wasPressedThisFrame) ExitCustomerAt("키루스");
-            if (Keyboard.current.digit2Key.wasPressedThisFrame) ExitCustomerAt("키루스");
-            if (Keyboard.current.digit3Key.wasPressedThisFrame) ExitCustomerAt("나란");
-            if (Keyboard.current.digit4Key.wasPressedThisFrame) ExitCustomerAt("나란");
-        }
-
-        if (Keyboard.current.hKey.wasPressedThisFrame)
-        {
-            HeartUp("키루스");
-        }
-        if (Keyboard.current.jKey.wasPressedThisFrame)
-        {
-            HeartDown("키루스");
-        }
-    }
-
     // 캐릭터 스폰 시에는 이 함수를 사용합니다.
     public Customer SpawnCustomer(string characterName, int chairIndex)
     {
-        if (seatedCustomerInfo == null) {
-            seatedCustomerInfo = new Dictionary<int, string>();
-        }
         if (!customerDataDict.TryGetValue(characterName, out CustomerData dataToSpawn))
         {
             Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
@@ -122,7 +87,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             customer.GoToTarget(targetChair);
             seatedCustomers[characterName] = customer;
             seatedCustomers[characterName] = customer;
-            seatedCustomerInfo[chairIndex] = characterName; // static 변수에 저장
+            OrderManager.Instance.seatedCustomerInfo.Add(chairIndex, characterName); // static 변수에 저장
             return customer;
         }
         return null;
@@ -148,9 +113,9 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         if (seatedCustomers.TryGetValue(characterName, out Customer customerToExit) && customerToExit != null)
         {
             int chairIndex = customerToExit.ChairIndex;
-            if (seatedCustomerInfo.ContainsKey(chairIndex))
+            if (OrderManager.Instance.seatedCustomerInfo.ContainsKey(chairIndex))
             {
-                seatedCustomerInfo.Remove(chairIndex); // static 변수에서 삭제
+                OrderManager.Instance.seatedCustomerInfo.Remove(chairIndex); // static 변수에서 삭제
             }
             customerToExit.Exit();
             seatedCustomers.Remove(characterName);

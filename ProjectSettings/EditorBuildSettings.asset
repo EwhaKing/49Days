@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Kitchen.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/TeaHouseFront.unity
+    guid: 8ae98d12bb643ea40ba1d4a48daf143a
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 42b2d481a94b92a40a6ceacd07bb8f33, type: 2}

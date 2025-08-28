@@ -13,6 +13,7 @@ public class TeaResultYarnManager : SceneSingleton<TeaResultYarnManager>
     void Start()
     {
         runner.AddCommandHandler<string>("fade_in", FadeIn);
+        runner.AddCommandHandler<int>("price", SetPrice);
         runner.gameObject.SetActive(false);
         runner.onDialogueComplete.AddListener(EndDialogue);
     }
@@ -33,9 +34,16 @@ public class TeaResultYarnManager : SceneSingleton<TeaResultYarnManager>
         yield return new WaitForSecondsRealtime(fadeImage.GetComponent<UIFadeInOnEnable>().fadeDuration);
     }
 
+    void SetPrice(int price)
+    {
+        OrderManager.Instance.SetPrice(price);
+    }
+
     void EndDialogue()
     {
         UIManager.Instance.BlockingUIOff(runner.gameObject);
         UIManager.Instance.BlockingUIOff(fadeImage.gameObject);
+        
+        GameFlowManager.Instance.FinishKitchen();
     }
 }

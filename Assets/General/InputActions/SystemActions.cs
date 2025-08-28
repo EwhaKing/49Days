@@ -242,6 +242,45 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Dialogue(temp)"",
+            ""id"": ""8ba0c072-5b67-4c53-a65e-11f7185869dd"",
+            ""actions"": [
+                {
+                    ""name"": ""DialogueHurryUp"",
+                    ""type"": ""Button"",
+                    ""id"": ""e0139aef-e42c-4913-8cf7-e048dcd06a6d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""52406670-739a-4fae-8dae-d8d20101e68f"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""DialogueHurryUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3f600d4d-b9d0-4823-b77d-b121cfd99e3c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""DialogueHurryUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -274,6 +313,9 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         // DialogueContinue
         m_DialogueContinue = asset.FindActionMap("DialogueContinue", throwIfNotFound: true);
         m_DialogueContinue_DialogueContinue = m_DialogueContinue.FindAction("DialogueContinue", throwIfNotFound: true);
+        // Dialogue(temp)
+        m_Dialoguetemp = asset.FindActionMap("Dialogue(temp)", throwIfNotFound: true);
+        m_Dialoguetemp_DialogueHurryUp = m_Dialoguetemp.FindAction("DialogueHurryUp", throwIfNotFound: true);
     }
 
     ~@systemActions()
@@ -281,6 +323,7 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         UnityEngine.Debug.Assert(!m_SystemActions.enabled, "This will cause a leak and performance issues, systemActions.SystemActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_PlayerActions.enabled, "This will cause a leak and performance issues, systemActions.PlayerActions.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_DialogueContinue.enabled, "This will cause a leak and performance issues, systemActions.DialogueContinue.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_Dialoguetemp.enabled, "This will cause a leak and performance issues, systemActions.Dialoguetemp.Disable() has not been called.");
     }
 
     /// <summary>
@@ -662,6 +705,102 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="DialogueContinueActions" /> instance referencing this action map.
     /// </summary>
     public DialogueContinueActions @DialogueContinue => new DialogueContinueActions(this);
+
+    // Dialogue(temp)
+    private readonly InputActionMap m_Dialoguetemp;
+    private List<IDialoguetempActions> m_DialoguetempActionsCallbackInterfaces = new List<IDialoguetempActions>();
+    private readonly InputAction m_Dialoguetemp_DialogueHurryUp;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "Dialogue(temp)".
+    /// </summary>
+    public struct DialoguetempActions
+    {
+        private @systemActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public DialoguetempActions(@systemActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "Dialoguetemp/DialogueHurryUp".
+        /// </summary>
+        public InputAction @DialogueHurryUp => m_Wrapper.m_Dialoguetemp_DialogueHurryUp;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_Dialoguetemp; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="DialoguetempActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(DialoguetempActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="DialoguetempActions" />
+        public void AddCallbacks(IDialoguetempActions instance)
+        {
+            if (instance == null || m_Wrapper.m_DialoguetempActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_DialoguetempActionsCallbackInterfaces.Add(instance);
+            @DialogueHurryUp.started += instance.OnDialogueHurryUp;
+            @DialogueHurryUp.performed += instance.OnDialogueHurryUp;
+            @DialogueHurryUp.canceled += instance.OnDialogueHurryUp;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="DialoguetempActions" />
+        private void UnregisterCallbacks(IDialoguetempActions instance)
+        {
+            @DialogueHurryUp.started -= instance.OnDialogueHurryUp;
+            @DialogueHurryUp.performed -= instance.OnDialogueHurryUp;
+            @DialogueHurryUp.canceled -= instance.OnDialogueHurryUp;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="DialoguetempActions.UnregisterCallbacks(IDialoguetempActions)" />.
+        /// </summary>
+        /// <seealso cref="DialoguetempActions.UnregisterCallbacks(IDialoguetempActions)" />
+        public void RemoveCallbacks(IDialoguetempActions instance)
+        {
+            if (m_Wrapper.m_DialoguetempActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="DialoguetempActions.AddCallbacks(IDialoguetempActions)" />
+        /// <seealso cref="DialoguetempActions.RemoveCallbacks(IDialoguetempActions)" />
+        /// <seealso cref="DialoguetempActions.UnregisterCallbacks(IDialoguetempActions)" />
+        public void SetCallbacks(IDialoguetempActions instance)
+        {
+            foreach (var item in m_Wrapper.m_DialoguetempActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_DialoguetempActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="DialoguetempActions" /> instance referencing this action map.
+    /// </summary>
+    public DialoguetempActions @Dialoguetemp => new DialoguetempActions(this);
     private int m_PCSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -733,5 +872,20 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnDialogueContinue(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Dialogue(temp)" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="DialoguetempActions.AddCallbacks(IDialoguetempActions)" />
+    /// <seealso cref="DialoguetempActions.RemoveCallbacks(IDialoguetempActions)" />
+    public interface IDialoguetempActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "DialogueHurryUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnDialogueHurryUp(InputAction.CallbackContext context);
     }
 }

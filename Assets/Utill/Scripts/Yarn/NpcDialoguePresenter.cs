@@ -14,8 +14,8 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     public TextMeshProUGUI? nameText;
 
     [Header("NPC Settings")]
-    public Transform? npcTransform;                // NPC ¿ùµå ÁÂÇ¥ (µ¿Àû ÇÒ´ç)
-    public Vector2 nameBoxOffset = new(-10f, 20f); // NameBox ¿ÀÇÁ¼Â (ÁÂ»ó´Ü ±âÁØ)
+    public Transform? npcTransform;                // NPC ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ (ï¿½ï¿½ï¿½ï¿½ ï¿½Ò´ï¿½)
+    public Vector2 nameBoxOffset = new(-10f, 20f); // NameBox ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½Â»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½)
 
     private bool isClickedForSkip = false;
     private bool isClickedForNext = false;
@@ -26,7 +26,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     public FollowingUI? followingUI;
     public void OnPanelClicked()
     {
-        // Å¬¸¯ÀÇ ÀÇ¹Ì¸¦ ÇöÀç ´Ü°è ±âÁØÀ¸·Î °áÁ¤
+        // Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (phase == Phase.Typing)
             isClickedForSkip = true;
         else
@@ -35,7 +35,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     private void Awake()
     {
-        // UI ±âº» ½ºÅ¸ÀÏÀº ÇÑ ¹ø¸¸ ¼³Á¤
+        // UI ï¿½âº» ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (dialogueText != null)
         {
             dialogueText.fontSize = 34;
@@ -73,27 +73,27 @@ public class NpcDialoguePresenter : DialoguePresenterBase
             ? line.TextWithoutCharacterName.Text
             : line.Text.Text;
 
-        // ÅØ½ºÆ® Àû¿ë
+        // ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         dialogueText!.text = processedText;
         dialogueText.ForceMeshUpdate();
         nameText!.text = characterName;
         nameText.ForceMeshUpdate();
 
-        // Å©±â °è»ê
+        // Å©ï¿½ï¿½ ï¿½ï¿½ï¿½
         CalculateDialogueBoxSize(processedText);
         CalculateNameBoxSize(characterName);
 
-        // À§Ä¡ °è»ê
+        // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
         PositionDialogueBox();
         PositionNameBox();
 
-        // ·Î±× Ãß°¡
+        // ï¿½Î±ï¿½ ï¿½ß°ï¿½
         DialogueLogManager.Instance.AddLog(characterName, processedText);
 
-        // Å¸ÀÌÇÎ È¿°ú (Å¬¸¯ ½Ã ½ºÅµ °¡´É)
+        // Å¸ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ (Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Åµ ï¿½ï¿½ï¿½ï¿½)
         await TypeTextWithSkipAsync(processedText);
 
-        // ´ÙÀ½ ´ë»ç·Î ³Ñ¾î°¡±â Àü Å¬¸¯ ´ë±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½
         await WaitForClickAsync();
 
         dialogueBox!.gameObject.SetActive(false);
@@ -102,14 +102,14 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     private void ValidateReferences()
     {
-        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        if (nameBox == null) throw new System.InvalidOperationException("nameBox°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        if (nameText == null) throw new System.InvalidOperationException("nameText°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        if (npcTransform == null) throw new System.InvalidOperationException("npcTransformÀÌ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBoxï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
+        if (nameBox == null) throw new System.InvalidOperationException("nameBoxï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
+        if (dialogueText == null) throw new System.InvalidOperationException("dialogueTextï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
+        if (nameText == null) throw new System.InvalidOperationException("nameTextï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
+        if (npcTransform == null) throw new System.InvalidOperationException("npcTransformï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
 
-        mainCamera = Camera.main ?? throw new System.InvalidOperationException("Main Camera¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBoxÀÇ »óÀ§¿¡ Canvas°¡ ¾ø½À´Ï´Ù.");
+        mainCamera = Camera.main ?? throw new System.InvalidOperationException("Main Cameraï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBoxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Canvasï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
     }
 
     private void CalculateDialogueBoxSize(string processedText)
@@ -119,7 +119,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         float paddingTop = 60f, paddingBottom = 40f;
         float maxWidth = 650f;
 
-        // TMP·Î Æø Á¦ÇÑ Àû¿ë ÈÄ ³ôÀÌ °è»ê
+        // TMPï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         var preferredSize = dialogueText!.GetPreferredValues(processedText, maxWidth - (paddingLeft + paddingRight), 0f);
 
         float finalWidth = Mathf.Clamp(preferredSize.x + paddingLeft + paddingRight, minWidth, maxWidth);
@@ -151,21 +151,21 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         Camera? cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : mainCamera;
         var parentRect = dialogueBox.parent as RectTransform;
 
-        // Anchor/Pivot »ó´Ü Áß¾Ó
+        // Anchor/Pivot ï¿½ï¿½ï¿½ ï¿½ß¾ï¿½
         dialogueBox.anchorMin = new Vector2(0.5f, 1f);
         dialogueBox.anchorMax = new Vector2(0.5f, 1f);
         dialogueBox.pivot = new Vector2(0.5f, 1f);
 
-        Vector3 screenPos = mainCamera!.WorldToScreenPoint(npcTransform!.position);
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect!, screenPos, cam, out Vector2 canvasPos);
+        //Vector3 screenPos = mainCamera!.WorldToScreenPoint(npcTransform!.position);
+        //RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect!, screenPos, cam, out Vector2 canvasPos);
 
-        // NPC ¸Ó¸® À§¿¡¼­ ¾Æ·¡·Î 200px
-        dialogueBox.anchoredPosition = canvasPos + new Vector2(0f, -200f);
+        // NPC ï¿½Ó¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ 200px
+        //dialogueBox.anchoredPosition = canvasPos + new Vector2(0f, -200f);
     }
 
     private void PositionNameBox()
     {
-        // NameBox¸¦ DialogueBox ÀÚ½ÄÀ¸·Î µÎ°í ÁÂ»ó´Ü ±âÁØ ¿ÀÇÁ¼Â Àû¿ë
+        // NameBoxï¿½ï¿½ DialogueBox ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î°ï¿½ ï¿½Â»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         nameBox!.SetParent(dialogueBox, worldPositionStays: false);
         nameBox.anchorMin = new Vector2(0f, 1f);
         nameBox.anchorMax = new Vector2(0f, 1f);
@@ -178,7 +178,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         const float typingSpeed = 0.04f;
         dialogueText!.text = "";
 
-        // Å¸ÀÌÇÎ ´Ü°è ÁøÀÔ
+        // Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½
         phase = Phase.Typing;
 
         bool skipped = false;
@@ -194,14 +194,14 @@ public class NpcDialoguePresenter : DialoguePresenterBase
             await WaitOrSkipAsync(typingSpeed, () => skipped = true);
         }
 
-        // Å¸ÀÌÇÎÀÌ ÀÚ¿¬ Á¾·áµÈ °æ¿ì¿¡µµ ÀüÃ¼ Ç¥½Ã
+        // Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½Ã¼ Ç¥ï¿½ï¿½
         if (!skipped && dialogueText.text != processedText)
             dialogueText.text = processedText;
 
-        // ´ÙÀ½ Å¬¸¯ ´ë±â ´Ü°è·Î ÀüÈ¯
+        // ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ï¿½ ï¿½ï¿½È¯
         phase = Phase.AwaitingNext;
 
-        // ½ºÅµ ÇÃ·¡±×´Â ¿©±â¼­ ÃÊ±âÈ­
+        // ï¿½ï¿½Åµ ï¿½Ã·ï¿½ï¿½×´ï¿½ ï¿½ï¿½ï¿½â¼­ ï¿½Ê±ï¿½È­
         isClickedForSkip = false;
     }
 
@@ -212,7 +212,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         {
             if (isClickedForSkip)
             {
-                // ½ºÅµ ¼Òºñ
+                // ï¿½ï¿½Åµ ï¿½Òºï¿½
                 isClickedForSkip = false;
                 onSkip();
                 break;

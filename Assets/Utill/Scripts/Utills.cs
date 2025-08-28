@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine;
 
 public static class Utills
 {
@@ -11,4 +12,35 @@ public static class Utills
     {
         return (T[])Enum.GetValues(typeof(T));
     }
+
 }
+
+public class CoroutineUtil : MonoBehaviour
+{
+    private static CoroutineUtil _instance;
+    public static CoroutineUtil Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                var go = new GameObject("CoroutineUtil");
+                _instance = go.AddComponent<CoroutineUtil>();
+                DontDestroyOnLoad(go);
+            }
+            return _instance;
+        }
+    }
+
+    public void RunAfterFirstFrame(Action action)
+    {
+        StartCoroutine(AfterFirstFrame(action));
+    }
+
+    private IEnumerator AfterFirstFrame(Action action)
+    {
+        yield return null; // 한 프레임 대기
+        action?.Invoke();
+    }
+}
+

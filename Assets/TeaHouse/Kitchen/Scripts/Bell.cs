@@ -55,6 +55,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
             UIManager.Instance.BlockingUIOn(manufacturingCompletedUI);
             PauseGame();
             makedTea = TeaMaker.MakeTea(tea);
+            OrderManager.Instance.SetMakedTea(makedTea);  // 만든 차 OrderManager에 저장
             StartCoroutine(LatePlayCutScene());
             image.sprite = originSprite;
         } 

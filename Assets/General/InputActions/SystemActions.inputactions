@@ -156,6 +156,45 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Dialogue(temp)",
+            "id": "8ba0c072-5b67-4c53-a65e-11f7185869dd",
+            "actions": [
+                {
+                    "name": "DialogueHurryUp",
+                    "type": "Button",
+                    "id": "e0139aef-e42c-4913-8cf7-e048dcd06a6d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "52406670-739a-4fae-8dae-d8d20101e68f",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC",
+                    "action": "DialogueHurryUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f600d4d-b9d0-4823-b77d-b121cfd99e3c",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";PC",
+                    "action": "DialogueHurryUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

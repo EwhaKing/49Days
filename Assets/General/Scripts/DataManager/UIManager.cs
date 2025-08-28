@@ -44,4 +44,13 @@ public class UIManager : SceneSingleton<UIManager>
 
         return true;
     }
+
+    public void ClearAllBlockingUI()
+    {
+        foreach (var ui in blockingUISet)
+        {
+            ui.SetActive(false);
+        }
+        blockingUISet.Clear();
+    }
 }

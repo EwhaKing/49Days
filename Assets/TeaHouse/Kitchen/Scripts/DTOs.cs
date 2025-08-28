@@ -8,7 +8,7 @@ using Newtonsoft.Json.Converters;
 /// 차 제작 완료 후 씬이 넘어갈 때 전달용
 /// </summary>
 /// <value></value>
-public record MakedTea
+public class MakedTea
 {
     // 유니티 버전이 C# 9.0을 지원하지 않아서 init을 사용할 수 없음... 레코드 사용의미 퇴색
     public TeaName teaName;

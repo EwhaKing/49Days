@@ -3,14 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Yarn.Unity;
+using Cinemachine;
 using System;
 
-public class TeaHouseYarnManager : MonoBehaviour
+public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
 {
     [SerializeField] DialogueRunner runner;
+    [SerializeField] Image fadeImage;
+    [SerializeField] CinemachineVirtualCamera[] cameras;
+
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private Camera subCamera;
+
+    [SerializeField] private CinemachineVirtualCamera mainVCam;  // left 
+    [SerializeField] private CinemachineVirtualCamera subVCam;  // right
 
     void Start()
     {
+        subCamera.enabled = false;
+        mainCamera = Camera.main;
+        CameraZoom(OrderManager.Instance.zoomPreset);
+        fadeImage.transform.parent.gameObject.SetActive(false);
+
         runner.onDialogueComplete.AddListener(EndDialogue);
         
         runner.AddCommandHandler<string, int>("enter_and_sit", EnterAndSit);
@@ -27,11 +41,22 @@ public class TeaHouseYarnManager : MonoBehaviour
         runner.AddFunction<string>("get_additional_ingredient", GetAdditionalIngredientInLowerCase);
         runner.AddFunction<int>("get_brew_time_gap", GetBrewTimeGap);
         runner.AddFunction<int>("get_temperature_gap", GetTemperatureGap);
-        runner.AddCommandHandler<string>("show_image", ShowImage);
+        runner.AddCommandHandler<string>("show_image", FadeIn);
         runner.AddCommandHandler<string>("play_sfx", PlaySfx);
         runner.AddCommandHandler<string>("change_bgm", ChangeBgm);
+        runner.AddCommandHandler("skip_tutorial", SkipTutorial);
 
         runner.gameObject.SetActive(false);
+        
+        GameFlowManager.Instance.StartTeaHouseFront();
+    }
+
+    void Update() // TODO: 최적화
+    {
+        if (subVCam != null && subCamera != null) 
+        {
+            subCamera.transform.position = subVCam.transform.position;
+        }
     }
 
     public void RunDialogue(string nodeTitle)
@@ -40,110 +65,157 @@ public class TeaHouseYarnManager : MonoBehaviour
         runner.StartDialogue(nodeTitle);
     }
 
-    public void EndDialogue()
+    void EndDialogue()
     {
         UIManager.Instance.BlockingUIOff(runner.gameObject);
+        UIManager.Instance.BlockingUIOff(fadeImage.transform.parent.gameObject);  // TODO: 리팩토링
     }
 
-    public void EnterAndSit(string npcName, int seatIndex)
+    IEnumerator EnterAndSit(string npcName, int seatIndex)
     {
-        // 종 울리고 1초뒤 착석
+        SoundManager.Instance.PlaySfx("bell");
+        yield return new WaitForSecondsRealtime(1f);
+        CustomerManager.Instance.SpawnCustomer(npcName, seatIndex);
     }
 
     public void Exit(string npcName)
     {
-
+        CustomerManager.Instance.ExitCustomerAt(npcName);
     }
 
     public void AffinityChange(string npcName, int change)
     {
-        // npc는 enum 만들고 변환해서 사용
+        if (change > 0)
+            CustomerManager.Instance.HeartUp(npcName);
+        else
+            CustomerManager.Instance.HeartDown(npcName);
+
+        CharacterManager.Instance.AddAffinity(npcName, change);
     }
 
-    public void ChangeNpcSprite(string npcName, string spriteName)
+    public void ChangeNpcSprite(string npcName, string poseName)
     {
-
+        CustomerManager.Instance.ChangeCustomerPose(npcName, poseName);
     }
 
     public void CameraZoom(int zoomPreset)
     {
+        OrderManager.Instance.zoomPreset = zoomPreset;
+        for(int i = 0; i < cameras.Length; i++)
+        {
+            cameras[i].Priority = (i == zoomPreset) ? 10 : 0;
+        }
 
+        mainCamera.rect = new Rect(0, 0, 1, 1);
+        subCamera.enabled = false;
     }
 
     public void CameraSplitZoom(string left, string right)
     {
+        var leftTarget = GameObject.Find(left);
+        var rightTarget = GameObject.Find(right);
 
+        if (leftTarget == null || rightTarget == null) return;
+
+        mainVCam.Priority = 10;
+
+        for(int i = 0; i < cameras.Length; i++)
+        {
+            cameras[i].Priority = 0;
+        }
+
+        // 왼쪽 뷰
+        mainVCam.Follow = leftTarget.transform;
+        mainVCam.LookAt = leftTarget.transform;
+        mainCamera.rect = new Rect(0, 0, 0.5f, 1);
+
+        // 오른쪽 뷰
+        subCamera.enabled = true;
+        subCamera.rect = new Rect(0.5f, 0, 0.5f, 1);
+
+        subVCam.Follow = rightTarget.transform;
+        subVCam.LookAt = rightTarget.transform;
     }
 
     public void Order(string afterNodeTitle, bool autoPay = true)
     {
-
+        OrderManager.Instance.Order(afterNodeTitle, autoPay);
     }
 
     public void AddSuccessTea(string teaName, string additionalIngredient = "None")
     {
-        // 성공 차 추가 로직
-    }
-
-    public void Evaluate(bool autoPay = true)  // afterNodeTitle 재생할때 자동으로 채점
-    {
-        // TeaName teaName = tea.ToEnum<TeaName>();
-        // IngredientName additionalIngredientName = additionalIngredient.ToEnum<IngredientName>();
-
-        // 평가 후 자동으로 pay 처리
-        if (autoPay)
-        {
-            Pay();
-        }
+        TeaName tea = teaName.ToEnum<TeaName>();
+        IngredientName additionalIngredientName = additionalIngredient.ToEnum<IngredientName>();
+        OrderManager.Instance.AddSuccessTea(tea, additionalIngredientName);
     }
 
     public void Pay()
     {
-        // 결제 로직
+        OrderManager.Instance.Pay();
     }
 
     public string GetEvaluationResult()
     {
-        // 평가 결과 반환
-        return "평가 결과";  // 완벽, 보통, 나쁨
+        switch(OrderManager.Instance.GetEvaluationResult())
+        {
+            case EvaluationResult.Excellent:
+                Debug.Log("평가 결과: 완벽");
+                return "완벽";
+            case EvaluationResult.Normal:
+                Debug.Log("평가 결과: 보통");
+                return "보통";
+            case EvaluationResult.Bad:
+                Debug.Log("평가 결과: 나쁨");
+                return "나쁨";
+            default:
+                return "컴파일러 오류 방지용";
+        }
     }
 
     public string GetTeaNameInLowerCase()
     {
-        // 만든 차 이름 반환
-        return "차 이름";
+        string teaName = OrderManager.Instance.GetMakedTeaName().ToLowerString();
+        return teaName;
     }
 
     public string GetAdditionalIngredientInLowerCase()
     {
-        // 추가 재료 이름 반환
-        return "추가 재료 이름";
+        string ingredientName = OrderManager.Instance.GetMakedAdditionalIngredient().ToLowerString();
+        return ingredientName;
     }
 
     public int GetBrewTimeGap()
     {
-        // 우린 시간 차 반환
-        return 0;
+        return OrderManager.Instance.GetMakedBrewTimeGap();
     }
 
     public int GetTemperatureGap()
     {
-        // 온도 차 반환
-        return 0;
+        return OrderManager.Instance.GetMakedTemperatureGap();
     }
 
-    public void ShowImage(string imageName)
+    IEnumerator FadeIn(string spriteName)  // TODO: 리팩토링
     {
-
+        yield return new WaitForSecondsRealtime(1f);
+        Sprite sprite = Resources.Load<Sprite>($"Arts/{spriteName}");
+        fadeImage.sprite = sprite;
+        fadeImage.SetNativeSize();
+        UIManager.Instance.BlockingUIOn(fadeImage.transform.parent.gameObject);
+        yield return new WaitForSecondsRealtime(fadeImage.transform.parent.GetComponent<UIFadeInOnEnable>().fadeDuration);
     }
 
     public void PlaySfx(string sfxName)
     {
-        
+        SoundManager.Instance.PlaySfx(sfxName);
     }
 
     public void ChangeBgm(string bgmName)
     {
+        SoundManager.Instance.PlayBgm(bgmName);
+    }
 
+    public void SkipTutorial()
+    {
+        GameManager.Instance.TutorialComplete();
     }
 }

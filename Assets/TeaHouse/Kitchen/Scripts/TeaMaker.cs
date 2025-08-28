@@ -74,36 +74,6 @@ public class TeaMaker : SceneSingleton<TeaMaker>
             makedTea.additionalIngredient = tea.additionalIngredient.ingredientName;
         }
 
-        // 아래는 평가로직에 넣기
-        // short failCount = 0;
-
-        // if (!tea.temperature.IsNear(recipe.temperature))
-        // {
-        //     Debug.Log($"차의 온도가 레시피에 근접하지 않습니다. (레시피: {recipe.temperature}°C, 실제: {tea.temperature}°C)");
-        //     failCount++;
-        // }
-
-        // if (tea.timeBrewed != recipe.brewTime)
-        // {
-        //     Debug.Log($"차를 우린 시간이 레시피와 다릅니다. (레시피: {recipe.temperature})초, 실제: {tea.temperature}초");
-        //     failCount++;
-        // }
-        // 
-        // TODO: 추가재료 채점
-
-        // switch (failCount)
-        // {
-        //     case 0:
-        //         makedTea.Evaluation = EvaluationResult.Excellent;
-        //         break;
-        //     case 1:
-        //         makedTea.Evaluation = EvaluationResult.Normal;
-        //         break;
-        //     default:
-        //         makedTea.Evaluation = EvaluationResult.Bad;
-        //         break;
-        // }
-
         return makedTea;
     }
 

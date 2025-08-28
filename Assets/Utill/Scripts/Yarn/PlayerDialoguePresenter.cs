@@ -24,7 +24,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     public void OnPanelClicked()
     {
-        // Å¬¸¯ÀÇ ÀÇ¹Ì¸¦ ÇöÀç ´Ü°è ±âÁØÀ¸·Î °áÁ¤
+        // Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¹Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (phase == Phase.Typing)
             isClickedForSkip = true;
         else
@@ -33,7 +33,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void Awake()
     {
-        // UI ±âº» ½ºÅ¸ÀÏÀº ÇÑ ¹ø¸¸ ¼³Á¤
+        // UI ï¿½âº» ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (dialogueText != null)
         {
             dialogueText.fontSize = 34;
@@ -71,27 +71,27 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
             ? line.Text.Text
             : line.TextWithoutCharacterName.Text;
 
-        // ÅØ½ºÆ® Àû¿ë
+        // ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         dialogueText!.text = processedText;
         dialogueText.ForceMeshUpdate();
         nameText!.text = characterName;
         nameText.ForceMeshUpdate();
 
-        // Å©±â °è»ê
+        // Å©ï¿½ï¿½ ï¿½ï¿½ï¿½
         CalculateDialogueBoxSize(processedText);
         CalculateNameBoxSize(characterName);
 
-        // À§Ä¡ °è»ê
+        // ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½
         PositionDialogueBox();
         PositionNameBox();
 
-        // ·Î±× Ãß°¡
+        // ï¿½Î±ï¿½ ï¿½ß°ï¿½
         DialogueLogManager.Instance.AddLog(characterName, processedText);
 
-        // Å¸ÀÌÇÎ È¿°ú (Å¬¸¯ ½Ã ½ºÅµ °¡´É)
+        // Å¸ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ (Å¬ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Åµ ï¿½ï¿½ï¿½ï¿½)
         await TypeTextWithSkipAsync(processedText);
 
-        // ´ÙÀ½ ´ë»ç·Î ³Ñ¾î°¡±â Àü Å¬¸¯ ´ë±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾î°¡ï¿½ï¿½ ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½
         await WaitForClickAsync();
 
         dialogueBox!.gameObject.SetActive(false);
@@ -100,13 +100,13 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void ValidateReferences()
     {
-        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        if (nameBox == null) throw new System.InvalidOperationException("nameBox°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
-        if (nameText == null) throw new System.InvalidOperationException("nameText°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBoxï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
+        if (nameBox == null) throw new System.InvalidOperationException("nameBoxï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
+        if (dialogueText == null) throw new System.InvalidOperationException("dialogueTextï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
+        if (nameText == null) throw new System.InvalidOperationException("nameTextï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
 
-        mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Camera¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBoxÀÇ »óÀ§¿¡ Canvas°¡ ¾ø½À´Ï´Ù.");
+        mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Cameraï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBoxï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Canvasï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
     }
 
     private void CalculateDialogueBoxSize(string processedText)
@@ -118,7 +118,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
         float textWidthLimit = maxWidth - (paddingLeft + paddingRight);
 
-        // TMP·Î Æø Á¦ÇÑ Àû¿ë ÈÄ ³ôÀÌ °è»ê
+        // TMPï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         var preferredSize = dialogueText!.GetPreferredValues(processedText, textWidthLimit, 0f);
 
         float finalWidth = Mathf.Clamp(preferredSize.x + paddingLeft + paddingRight, minWidth, maxWidth);
@@ -146,7 +146,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void PositionDialogueBox()
     {
-        // »ó´Ü Áß¾Ó °íÁ¤
+        // ï¿½ï¿½ï¿½ ï¿½ß¾ï¿½ ï¿½ï¿½ï¿½ï¿½
         dialogueBox!.anchorMin = new Vector2(0.5f, 1f);
         dialogueBox.anchorMax = new Vector2(0.5f, 1f);
         dialogueBox.pivot = new Vector2(0.5f, 1f);
@@ -156,7 +156,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void PositionNameBox()
     {
-        // NameBox¸¦ DialogueBoxÀÇ ÁÂ»ó´Ü¿¡ ºÙÀÌ±â
+        // NameBoxï¿½ï¿½ DialogueBoxï¿½ï¿½ ï¿½Â»ï¿½Ü¿ï¿½ ï¿½ï¿½ï¿½Ì±ï¿½
         nameBox!.SetParent(dialogueBox, false);
         nameBox.anchorMin = new Vector2(0f, 1f);
         nameBox.anchorMax = new Vector2(0f, 1f);
@@ -169,7 +169,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         const float typingSpeed = 0.04f;
         dialogueText!.text = "";
 
-        // Å¸ÀÌÇÎ ´Ü°è ÁøÀÔ
+        // Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ ï¿½ï¿½ï¿½ï¿½
         phase = Phase.Typing;
 
         bool skipped = false;
@@ -185,14 +185,14 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
             await WaitOrSkipAsync(typingSpeed, () => skipped = true);
         }
 
-        // Å¸ÀÌÇÎÀÌ ÀÚ¿¬ Á¾·áµÈ °æ¿ì¿¡µµ ÀüÃ¼ Ç¥½Ã
+        // Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½Ã¼ Ç¥ï¿½ï¿½
         if (!skipped && dialogueText.text != processedText)
             dialogueText.text = processedText;
 
-        // ´ÙÀ½ Å¬¸¯ ´ë±â ´Ü°è·Î ÀüÈ¯
+        // ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ü°ï¿½ï¿½ ï¿½ï¿½È¯
         phase = Phase.AwaitingNext;
 
-        // ½ºÅµ ÇÃ·¡±×´Â ¿©±â¼­ ÃÊ±âÈ­
+        // ï¿½ï¿½Åµ ï¿½Ã·ï¿½ï¿½×´ï¿½ ï¿½ï¿½ï¿½â¼­ ï¿½Ê±ï¿½È­
         isClickedForSkip = false;
     }
 
@@ -203,7 +203,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         {
             if (isClickedForSkip)
             {
-                // ½ºÅµ ¼Òºñ
+                // ï¿½ï¿½Åµ ï¿½Òºï¿½
                 isClickedForSkip = false;
                 onSkip();
                 break;
@@ -226,13 +226,13 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     {
         ValidateReferences();
         if (optionPanelController == null)
-            throw new System.InvalidOperationException("optionPanelController°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            throw new System.InvalidOperationException("optionPanelControllerï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
 
-        DialoguePresenterRouter.isOptionPanelActive = true; // ¿É¼Ç ÆÐ³Î È°¼ºÈ­
+        DialoguePresenterRouter.isOptionPanelActive = true; // ï¿½É¼ï¿½ ï¿½Ð³ï¿½ È°ï¿½ï¿½È­
 
         int selected = await optionPanelController.ShowOptionsAsync(dialogueOptions, cancellationToken);
 
-        DialoguePresenterRouter.isOptionPanelActive = false; // ¿É¼Ç ÆÐ³Î ºñÈ°¼ºÈ­
+        DialoguePresenterRouter.isOptionPanelActive = false; // ï¿½É¼ï¿½ ï¿½Ð³ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
 
         return dialogueOptions[selected];
     }
