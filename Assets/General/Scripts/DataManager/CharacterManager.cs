@@ -5,6 +5,11 @@ using UnityEditor;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
+
 
 [Serializable]
 public class CharacterProgress
@@ -24,7 +29,9 @@ public class CharacterDB
 public class CharacterManager : SceneSingleton<CharacterManager>
 {
     [Header("Static Character Data (order = fixedIndex)")]
-    [SerializeField] private List<CharacterData> characters = new(); // 프로필/텍스트 등 정적 정보
+    //[SerializeField] private List<CharacterData> characters = new(); // 인스펙트 드래그 드롭 형식
+    private List<CharacterData> characters = new(); // Addressables로 로드(로딩 후 자동으로 채워지니까 리스트를 빈 상태로)
+
 
     private CharacterDB db = new CharacterDB();
 
@@ -51,10 +58,31 @@ public class CharacterManager : SceneSingleton<CharacterManager>
         p.affinity = Mathf.Clamp(p.affinity + delta, 0, 100);
     }
 
+    //비동기 로드
+    private async Task LoadCharactersAsync()
+    {
+        AsyncOperationHandle<IList<CharacterData>> handle =
+            Addressables.LoadAssetsAsync<CharacterData>("characterdata", null); // label 기반 로드
+
+        await handle.Task;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            characters = new List<CharacterData>(handle.Result);
+        }
+        else
+        {
+            Debug.LogError("CharacterData 로드 실패");
+        }
+    }
+
+
     // ===== 라이프사이클 =====
-    protected override void Awake()
+    protected override async void Awake()
     {
         base.Awake(); //부모 Awake 호출
+
+        await LoadCharactersAsync();   // Addressables에서 로드
 
         // CharacterData 고정 인덱스 동기화 (리스트 순서 = fixedIndex)
         for (int i = 0; i < characters.Count; i++)

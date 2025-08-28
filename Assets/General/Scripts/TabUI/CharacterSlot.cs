@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class CharacterSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] Image charImage; // 왼쪽 그리드의 슬롯 썸네일
     [SerializeField] Image highlight; // 하이라이트용 (별도 오버레이 이미지)
+    [SerializeField] TextMeshProUGUI nameText;
 
     CharacterData boundData;
     AffinityPanel panel;
@@ -40,6 +42,19 @@ public class CharacterSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterH
         }
         charImage.enabled = true;
         charImage.sprite = met && data.slotImage != null ? data.slotImage : unknown;
+
+        //이름 텍스트 반영
+        if (nameText != null)
+        {
+            if (met)
+                nameText.text = data.characterName; // 만난 경우
+            else
+                nameText.text = "???";              // 안 만난 경우
+        }
+        else
+        {
+            Debug.LogWarning("[CharacterSlot] nameText 미할당");
+        }
 
         //하이라이트는 항상 초기화(꺼진 상태)로 시작
         if (highlight != null)

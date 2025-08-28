@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
+using TMPro;
 
 
 public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler  //싱글톤(알아보기)
@@ -27,6 +28,9 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
     [SerializeField] private GameObject highlightSprite;
 
     [SerializeField] private SpriteRenderer smokeRenderer;
+
+    //다병 타이머 표시
+    [SerializeField] private TextMeshProUGUI timerText;
 
     public bool IsMouseOver { get; private set; } = false;
 
@@ -76,6 +80,15 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
         if (currentState == State.Brewing)
         {
             timer += Time.deltaTime;
+
+            //타이머 임시 표시
+            if (timerText != null)
+                timerText.text = timer.ToString("F1"); // 소수점 1자리까지 표시
+        }
+        else
+        {
+            if (timerText != null)
+                timerText.text = "";
         }
     }
 
