@@ -1,25 +1,27 @@
 using System.Collections;
 using UnityEngine;
 
+//해당 코드도 비동기에 맞춰 수정.
 public class DevSyncFromCharacterDataOnPlay : MonoBehaviour
 {
-    public bool useCharacterData = true;   // CharacterData의 hasMet/affinity를 그대로 씀
-    public bool overrideAllMet = false;    // 전부 만난 상태로 강제
-    public bool randomizeAffinity = false; // 5단위 랜덤(0~100)
+    public bool useCharacterData = true;
+    public bool overrideAllMet = false;
+    public bool randomizeAffinity = false;
 
     IEnumerator Start()
     {
-        // 로드가 db에 반영된 다음 실행되도록 한 프레임 대기
-        yield return null;
-
         var cm = CharacterManager.Instance;
-        if (cm == null) { Debug.LogWarning("[DevSync] CharacterManager.Instance 없음"); yield break; }
+        if (cm == null) yield break;
+
+        // CharacterData 로딩 끝날 때까지 대기
+        while (cm.Count == 0)
+            yield return null;
 
         var rand = new System.Random(1234);
 
         for (int i = 0; i < cm.Count; i++)
         {
-            var cd = cm.GetStatic(i);  // CharacterData (정적)
+            var cd = cm.GetStatic(i);
             bool met;
             int aff;
 
@@ -30,25 +32,21 @@ public class DevSyncFromCharacterDataOnPlay : MonoBehaviour
             }
             else if (useCharacterData)
             {
-                // SO에 설정해둔 값으로 동기화
                 met = cd.hasMet;
                 aff = cd.affinity;
             }
             else
             {
-                // 기본(모두 미만남)
                 met = false;
                 aff = 0;
             }
 
-            // 변경됨 ↓: 이름 기반으로 호출
-            cm.Meet(cd.characterName, met);               // 변경됨
-            cm.SetAffinity(cd.characterName, Mathf.Clamp(aff, 0, 100)); // 변경됨
+            cm.Meet(cd.characterName, met);
+            cm.SetAffinity(cd.characterName, Mathf.Clamp(aff, 0, 100));
         }
 
-        // 왼쪽 그리드/오른쪽 패널 갱신
-        var panels = FindObjectsOfType<AffinityPanel>(true);
-        foreach (var p in panels) p.RefreshPage();
+        foreach (var p in FindObjectsOfType<AffinityPanel>(true))
+            p.RefreshPage();
 
         Debug.Log("[DevSync] 완료");
     }

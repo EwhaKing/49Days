@@ -14,7 +14,7 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
     public float Temperature { get; private set; } = 100;
 
-    [SerializeField] float tempChangePerSec = 2f;
+    [SerializeField] float tempChangePerSec = 4f;
     [SerializeField] float pourRadius = 4f;
 
     //고리에 걸기 위한 거리 판단
