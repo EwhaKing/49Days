@@ -55,7 +55,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         {
             int chairIndex = entry.Key;
             string characterName = entry.Value;
-            SpawnCustomer(characterName, chairIndex);
+            SpawnSatCustomer(characterName, chairIndex);
         }
     }
 
@@ -93,7 +93,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         return null;
     }
 
-    public void SpawnSatCustomer(string characterName, int chairIndex)
+    public Customer SpawnSatCustomer(string characterName, int chairIndex)
     {
         if (!customerDataDict.TryGetValue(characterName, out CustomerData dataToSpawn))
         {
@@ -117,7 +117,6 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             customer.Initialize(dataToSpawn);
             customer.PlaceAt(targetChair);
             seatedCustomers[characterName] = customer;
-            OrderManager.Instance.seatedCustomerInfo.Add(chairIndex, characterName); // static 변수에 저장
             return customer;
         }
         return null;

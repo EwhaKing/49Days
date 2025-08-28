@@ -29,6 +29,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - characterdata
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9965c34e5cbeb7142afe16f3bcc6891a
+    m_Address: Assets/General/ScriptableObject/CharacterData/data5.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - characterdata
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da83250b909bb79448e9aec464ee5d4f
     m_Address: Assets/General/CharacterData/data2.asset
     m_ReadOnly: 0
