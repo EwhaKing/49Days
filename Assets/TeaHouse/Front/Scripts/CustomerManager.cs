@@ -93,6 +93,36 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         return null;
     }
 
+    public void SpawnSatCustomer(string characterName, int chairIndex)
+    {
+        if (!customerDataDict.TryGetValue(characterName, out CustomerData dataToSpawn))
+        {
+            Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
+            return null;
+        }
+        if (seatedCustomers.ContainsKey(characterName))
+        {
+            Debug.Log($"{chairIndex}번 의자에는 이미 손님이 있습니다.");
+            return null;
+        }
+
+        Transform targetChair = chairTransforms[chairIndex];
+        Vector3 spawnPosition = targetChair.position;
+        GameObject customerObject = Instantiate(customerPrefab, spawnPosition, Quaternion.identity);
+        Customer customer = customerObject.GetComponent<Customer>();
+        customerObject.name = characterName;
+
+        if (customer != null)
+        {
+            customer.Initialize(dataToSpawn);
+            customer.PlaceAt(targetChair);
+            seatedCustomers[characterName] = customer;
+            OrderManager.Instance.seatedCustomerInfo.Add(chairIndex, characterName); // static 변수에 저장
+            return customer;
+        }
+        return null;
+    }
+
     // 손님의 포즈를 변경할 때 이 함수.
     public void ChangeCustomerPose(string characterName, string poseName)
     {
