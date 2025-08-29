@@ -74,7 +74,7 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
     IEnumerator EnterAndSit(string npcName, int seatIndex)
     {
         SoundManager.Instance.PlaySfx("bell");
-        yield return new WaitForSecondsRealtime(1f);
+        yield return new WaitForSeconds(1f);
         CustomerManager.Instance.SpawnCustomer(npcName, seatIndex);
     }
 

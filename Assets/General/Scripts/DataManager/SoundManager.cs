@@ -52,6 +52,7 @@ public class SoundManager : Singleton<SoundManager>
             return clip;
 
         clip = Resources.Load<AudioClip>($"Sounds/{clipName}");
+        Debug.Log($"Load Sound: {clipName}, {(clip != null ? "Success" : "Fail")}");
         if (clip != null)
             _audioClips.Add(clipName, clip);
 
