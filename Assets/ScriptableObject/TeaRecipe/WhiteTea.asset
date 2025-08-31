@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teaName: 7
   ingredients: 08000000
-  temperature: 90
-  brewTime: 7
+  temperature: 70
+  brewTime: 5
