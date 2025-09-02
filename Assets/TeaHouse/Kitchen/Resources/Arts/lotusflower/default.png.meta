@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 3e96f2acce1b67c4399632fea29713ff
+guid: ccd507e13177aad4aa97f9effde85a4f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,91 +108,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: Cabinet_0
-      rect:
-        serializedVersion: 2
-        x: 146
-        y: 1291
-        width: 1186
-        height: 70
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f24d2bc383dcab84eac3ab754cf2dbcc
-      internalID: 1758206009
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cabinet_2
-      rect:
-        serializedVersion: 2
-        x: 147
-        y: 1099
-        width: 1184
-        height: 72
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b7b1640525d1e24aa5685ce4ffd8b17
-      internalID: -1860089900
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cabinet_6
-      rect:
-        serializedVersion: 2
-        x: 147
-        y: 934
-        width: 1184
-        height: 51
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 95afb8fbe9355f14bbb793f9fab7e0e3
-      internalID: 194171451
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cabinet_11
-      rect:
-        serializedVersion: 2
-        x: 147
-        y: 754
-        width: 1184
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 97688be264a46a84c987f400851438a6
-      internalID: -37199353
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -203,19 +119,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      Cabinet_0: 1758206009
-      Cabinet_1: 410951665
-      Cabinet_10: 547122357
-      Cabinet_11: -37199353
-      Cabinet_2: -1860089900
-      Cabinet_3: -1250306222
-      Cabinet_4: 2129279446
-      Cabinet_5: -32393019
-      Cabinet_6: 194171451
-      Cabinet_7: 1250429279
-      Cabinet_8: -1335068844
-      Cabinet_9: 921366322
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,9 +1,9 @@
 fileFormatVersion: 2
-guid: 3e96f2acce1b67c4399632fea29713ff
+guid: 0578ebf23a6d24f46a7e2c3eb07e3d00
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 13
+  serializedVersion: 12
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -81,6 +81,19 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -94,7 +107,33 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
-    buildTarget: WebGL
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Windows Store Apps
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -110,13 +149,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Cabinet_0
+      name: rose_single_0
       rect:
         serializedVersion: 2
-        x: 146
-        y: 1291
-        width: 1186
-        height: 70
+        x: 0
+        y: 6
+        width: 85
+        height: 67
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +163,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f24d2bc383dcab84eac3ab754cf2dbcc
-      internalID: 1758206009
+      spriteID: f50dcbe1122df754682d05f394de6c60
+      internalID: 1344292245
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cabinet_2
+      name: rose_single_1
       rect:
         serializedVersion: 2
-        x: 147
-        y: 1099
-        width: 1184
-        height: 72
+        x: 100
+        y: 4
+        width: 83
+        height: 73
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +184,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3b7b1640525d1e24aa5685ce4ffd8b17
-      internalID: -1860089900
+      spriteID: 94a1da39a718b5d4ca33e71595283715
+      internalID: -40435270
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cabinet_6
+      name: rose_single_2
       rect:
         serializedVersion: 2
-        x: 147
-        y: 934
-        width: 1184
-        height: 51
+        x: 212
+        y: 0
+        width: 85
+        height: 78
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,29 +205,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 95afb8fbe9355f14bbb793f9fab7e0e3
-      internalID: 194171451
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Cabinet_11
-      rect:
-        serializedVersion: 2
-        x: 147
-        y: 754
-        width: 1184
-        height: 50
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 97688be264a46a84c987f400851438a6
-      internalID: -37199353
+      spriteID: e845abee0f20b2940bb9a0ab4293d14c
+      internalID: -1461183102
       vertices: []
       indices: 
       edges: []
@@ -204,18 +222,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Cabinet_0: 1758206009
-      Cabinet_1: 410951665
-      Cabinet_10: 547122357
-      Cabinet_11: -37199353
-      Cabinet_2: -1860089900
-      Cabinet_3: -1250306222
-      Cabinet_4: 2129279446
-      Cabinet_5: -32393019
-      Cabinet_6: 194171451
-      Cabinet_7: 1250429279
-      Cabinet_8: -1335068844
-      Cabinet_9: 921366322
+      rose_single_0: 1344292245
+      rose_single_1: -40435270
+      rose_single_2: -1461183102
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

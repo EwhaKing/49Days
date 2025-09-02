@@ -369,9 +369,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5391559154159196975}
+  - component: {fileID: 7344266533109817892}
   - component: {fileID: 1569916022983309600}
   - component: {fileID: 4810954587647863201}
-  - component: {fileID: 7344266533109817892}
   m_Layer: 0
   m_Name: Bottle
   m_TagString: Untagged
@@ -397,6 +397,22 @@ Transform:
   - {fileID: 5179291379730734960}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7344266533109817892
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1811765859066229206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 414bcf2022152da44809a1d388d9df08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ingredientName: 0
+  ingredientType: 0
+  ingredientPrefab: {fileID: 649630825315781049, guid: 91ca9ff850a75614d8475eea06a07f9a, type: 3}
+  highlight: {fileID: 8086839050930534258}
 --- !u!212 &1569916022983309600
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -494,22 +510,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.01, y: 1.46}
   m_EdgeRadius: 0
---- !u!114 &7344266533109817892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1811765859066229206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 414bcf2022152da44809a1d388d9df08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ingredientName: 0
-  ingredientType: 0
-  ingredientPrefab: {fileID: 649630825315781049, guid: 91ca9ff850a75614d8475eea06a07f9a, type: 3}
-  highlight: {fileID: 8086839050930534258}
 --- !u!1 &5539418682166057898
 GameObject:
   m_ObjectHideFlags: 0

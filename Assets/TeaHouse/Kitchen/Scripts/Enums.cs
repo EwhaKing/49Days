@@ -28,6 +28,13 @@ public enum IngredientName  // 무조건 끝에 추가하기!!
     TeaLeaf_Green,
     TeaLeaf_White,
 
+    Mint,
+    LotusLeaf,
+    LotusFlower,
+    Peach,
+    Sugar,
+    Jasmine,
+
 }
 
 public static class IngredientNameExtensions
@@ -40,7 +47,16 @@ public static class IngredientNameExtensions
             case IngredientName.Rose: return "장미";
             case IngredientName.SolomonsSeal: return "둥굴레";
             case IngredientName.Honey: return "꿀";
-            default: return ingredient.ToString();
+            case IngredientName.Mint: return "민트";
+            case IngredientName.LotusLeaf: return "연잎";
+            case IngredientName.LotusFlower: return "연꽃";
+            case IngredientName.Peach: return "복숭아";
+            case IngredientName.Sugar: return "설탕";
+            case IngredientName.Jasmine: return "자스민";
+
+            default:
+                Debug.LogWarning("한글 이름이 없습니다: " + ingredient.ToString()); 
+                return ingredient.ToString();
         }
     }
 }

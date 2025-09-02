@@ -150,7 +150,7 @@ public class TeaIngredient : MonoBehaviour
 
         foreach (SpriteStatus status in Utills.GetValues<SpriteStatus>())
         {
-            string spriteName = $"{ingredientName.ToLowerString()}_{status.ToLowerString()}";
+            string spriteName = $"{ingredientName.ToLowerString()}/{status.ToLowerString()}";
             Sprite sprite = Resources.Load<Sprite>($"Arts/{spriteName}");
             if (sprite != null)
             {
