@@ -73,7 +73,7 @@ public class OrderManager : SceneSingleton<OrderManager>
             failCount++;
         }
 
-        if (makedTea.brewTimeGap != 0)
+        if (makedTea.teaName != TeaName.HotWater && makedTea.brewTimeGap != 0) // HotWater는 우린 시간 상관없음
         {
             Debug.Log($"차를 우린 시간이 레시피와 다릅니다. 차이: {makedTea.brewTimeGap}초");
             failCount++;
