@@ -32,12 +32,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6fce9576ffbb947498e6891b8d79d7f7
-    m_Address: recipedescription
+  - m_GUID: 5ca25a830ee12cd4198b1fd119252069
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/New Tea.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 75db0e8ba5333684187b3651c71d900d
+  - m_GUID: 6fce9576ffbb947498e6891b8d79d7f7
     m_Address: recipedescription
     m_ReadOnly: 0
     m_SerializedLabels: []
@@ -50,7 +51,8 @@ MonoBehaviour:
   - m_GUID: d0e9eef39ee9ee242a67977bcada700f
     m_Address: recipedescription
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e2ae25bc531573943bc7523d5bb75264, type: 2}
