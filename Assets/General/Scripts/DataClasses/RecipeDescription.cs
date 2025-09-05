@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NewRecipeDiscription", menuName = "RecipeDiscription")]
-public class RecipeDiscription : ScriptableObject
+[CreateAssetMenu(fileName = "NewRecipeDescription", menuName = "RecipeDescription")]
+public class RecipeDescription : ScriptableObject
 {
     public string recipeName; // 레시피 이름
 
