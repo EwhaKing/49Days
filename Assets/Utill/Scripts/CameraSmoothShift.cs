@@ -14,10 +14,25 @@ public class CameraSmoothShift : MonoBehaviour
     private Vector3 defaultOffset;
     private Coroutine currentTransition;
 
+    [SerializeField] private GameInputHandler gameInputHandler;
+
     void Start()
     {
         // 기본 Offset 저장
         defaultOffset = virtualCam.GetCinemachineComponent<CinemachineFramingTransposer>().m_TrackedObjectOffset;
+
+    }
+
+    void OnEnable()
+    {
+        if (gameInputHandler != null)
+            gameInputHandler.OnMoveCameraRequested += OnMoveCamera;
+    }
+
+    void OnDestroy()
+    {
+        if (gameInputHandler != null)
+            gameInputHandler.OnMoveCameraRequested -= OnMoveCamera;
     }
 
     void OnMoveCamera()

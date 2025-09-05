@@ -269,6 +269,7 @@ MonoBehaviour:
   virtualCam: {fileID: 8514016175580446308}
   offsetAmount: 25.6
   transitionDuration: 0.5
+  gameInputHandler: {fileID: 0}
 --- !u!114 &6453463112316812449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -282,7 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: b2800eb361aa3bf469114d40ade00c09, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:

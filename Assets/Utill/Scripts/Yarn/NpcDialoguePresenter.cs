@@ -24,6 +24,21 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     private enum Phase { Typing, AwaitingNext }
     private Phase phase = Phase.AwaitingNext;
     public FollowingUI? followingUI;
+
+    [SerializeField] private DialogueInputHandler? dialogueInputHandler;
+
+    void OnEnable()
+    {
+        if (dialogueInputHandler != null)
+            dialogueInputHandler.OnDialogueContinueRequested += OnDialogueContinue;
+    }
+
+    void OnDestroy()
+    {
+        if (dialogueInputHandler != null)
+            dialogueInputHandler.OnDialogueContinueRequested -= OnDialogueContinue;
+    }
+
     public void OnPanelClicked()
     {
         // Ŭ���� �ǹ̸� ���� �ܰ� �������� ����
@@ -107,6 +122,7 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         if (dialogueText == null) throw new System.InvalidOperationException("dialogueText�� �Ҵ���� �ʾҽ��ϴ�.");
         if (nameText == null) throw new System.InvalidOperationException("nameText�� �Ҵ���� �ʾҽ��ϴ�.");
         if (npcTransform == null) throw new System.InvalidOperationException("npcTransform�� �Ҵ���� �ʾҽ��ϴ�.");
+        if (dialogueInputHandler == null) throw new System.InvalidOperationException("dialogueInputHandler가 할당되지 않았습니다.");
 
         mainCamera = Camera.main ?? throw new System.InvalidOperationException("Main Camera�� ã�� �� �����ϴ�.");
         if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox�� ������ Canvas�� �����ϴ�.");

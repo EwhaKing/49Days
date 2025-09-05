@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System.Threading;
 using UnityEngine;
 using TMPro;
@@ -21,6 +21,20 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private enum Phase { Typing, AwaitingNext }
     private Phase phase = Phase.AwaitingNext;
+
+    [SerializeField] private DialogueInputHandler? dialogueInputHandler;
+
+    void OnEnable()
+    {
+        if (dialogueInputHandler != null)
+            dialogueInputHandler.OnDialogueContinueRequested += OnDialogueContinue;
+    }
+
+    void OnDestroy()
+    {
+        if (dialogueInputHandler != null)
+            dialogueInputHandler.OnDialogueContinueRequested -= OnDialogueContinue;
+    }
 
     public void OnPanelClicked()
     {
@@ -104,8 +118,9 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         if (nameBox == null) throw new System.InvalidOperationException("nameBox�� �Ҵ���� �ʾҽ��ϴ�.");
         if (dialogueText == null) throw new System.InvalidOperationException("dialogueText�� �Ҵ���� �ʾҽ��ϴ�.");
         if (nameText == null) throw new System.InvalidOperationException("nameText�� �Ҵ���� �ʾҽ��ϴ�.");
-
-        mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Camera�� ã�� �� �����ϴ�.");
+        if (dialogueInputHandler == null) throw new System.InvalidOperationException("dialogueInputHandler가 할당되지 않았습니다.");
+    
+            mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Camera�� ã�� �� �����ϴ�.");
         if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox�� ������ Canvas�� �����ϴ�.");
     }
 

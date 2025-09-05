@@ -480,6 +480,7 @@ MonoBehaviour:
   npcTransform: {fileID: 0}
   nameBoxOffset: {x: -10, y: 20}
   followingUI: {fileID: 4949398800113878974}
+  dialogueInputHandler: {fileID: 0}
 --- !u!1 &5126451592111372906
 GameObject:
   m_ObjectHideFlags: 0
@@ -1156,6 +1157,7 @@ MonoBehaviour:
   dialogueText: {fileID: 4187458528577839586}
   nameText: {fileID: 327730831231455926}
   optionPanelController: {fileID: 9131979216664668562}
+  dialogueInputHandler: {fileID: 0}
 --- !u!1 &8794523716250202358
 GameObject:
   m_ObjectHideFlags: 0
@@ -1420,15 +1422,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -812.85516
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1031.9304
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 18.118355
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1436,15 +1438,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7985477256237130417, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1505,7 +1507,7 @@ PrefabInstance:
     - target: {fileID: 8309902628685535410, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: yarnProject
       value: 
-      objectReference: {fileID: 7545569452688597077, guid: 419f006dbe8f1e341955a39c3bf6af93, type: 3}
+      objectReference: {fileID: 7545569452688597077, guid: 2569261e5c97b3e4ca21d7e1ceafb377, type: 3}
     - target: {fileID: 8309902628685535410, guid: 52571f68872914e24837210513edea1d, type: 3}
       propertyPath: dialoguePresenters.Array.size
       value: 1
