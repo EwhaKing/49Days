@@ -1172,7 +1172,6 @@ GameObject:
   - component: {fileID: 3016265999150347105}
   - component: {fileID: 5216877035370209921}
   - component: {fileID: 4844000277388992670}
-  - component: {fileID: 5714380757113912466}
   m_Layer: 5
   m_Name: TabCanvas
   m_TagString: Untagged
@@ -1221,7 +1220,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!114 &3016265999150347105
 MonoBehaviour:
@@ -1277,36 +1276,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commonPanel: {fileID: 38420750502142850}
   uiInputHandler: {fileID: 0}
---- !u!114 &5714380757113912466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4473046191151046441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: b2800eb361aa3bf469114d40ade00c09, type: 3}
-  m_NotificationBehavior: 3
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: SystemActions
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
 --- !u!1 &4487819221210316657
 GameObject:
   m_ObjectHideFlags: 0
