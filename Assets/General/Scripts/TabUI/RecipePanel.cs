@@ -41,8 +41,10 @@ void Start()
     
     rightPanel.SetActive(false);
 
+    if (SceneManager.GetActiveScene().name != "Kitchen") return;  // 주방에서만 코르크보드 찾음
+
     // "Recipes" 라는 이름의 GameObject를 Scene에서 찾습니다.
-        GameObject recipeObject = GameObject.Find("Recipes");
+    GameObject recipeObject = GameObject.Find("Recipes");
 
     // recipeObject를 성공적으로 찾았는지 확인합니다.
     if (recipeObject != null)
@@ -68,7 +70,6 @@ void Start()
 }
     void OnEnable()
     {
-        RecipeDescriptionManager.OnRecipesLoaded += RefreshPanel;
         if (RecipeDescriptionManager.Instance != null && RecipeDescriptionManager.Instance.IsLoaded)
         {
             RefreshPanel();
@@ -80,8 +81,6 @@ void Start()
 
     void OnDisable()
     {
-        RecipeDescriptionManager.OnRecipesLoaded -= RefreshPanel;
-
         if (nextButton) nextButton.onClick.RemoveListener(NextPage);
         if (prevButton) prevButton.onClick.RemoveListener(PrevPage);
     }

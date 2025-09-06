@@ -8,7 +8,20 @@ using UnityEngine.SceneManagement;
 public class TeaResultYarnManager : SceneSingleton<TeaResultYarnManager>
 {
     [SerializeField] DialogueRunner runner;
+    [SerializeField] LineAdvancer lineAdvancer;
     [SerializeField] Image fadeImage;
+
+    [SerializeField] private DialogueInputHandler dialogueInputHandler;
+
+    void OnEnable()
+    {
+        dialogueInputHandler.OnDialogueContinueRequested += lineAdvancer.RequestLineHurryUp;
+    }
+
+    void OnDestroy()
+    {
+        dialogueInputHandler.OnDialogueContinueRequested -= lineAdvancer.RequestLineHurryUp;
+    }
     
     void Start()
     {

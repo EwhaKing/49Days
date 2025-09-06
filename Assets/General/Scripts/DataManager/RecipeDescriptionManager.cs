@@ -6,7 +6,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
 {
-    public static event Action OnRecipesLoaded;
     private HashSet<string> unlockedRecipeNames = new HashSet<string>();
     private List<RecipeDescription> recipeDescriptions;
     private Dictionary<string, RecipeDescription> recipeDescriptionDict;
@@ -49,8 +48,6 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
             }
             
             IsLoaded = true;
-            OnRecipesLoaded?.Invoke();
-            Debug.Log("[매니저] 레시피 로딩 성공 및 신호 발송 완료!");
         }
         else
         {

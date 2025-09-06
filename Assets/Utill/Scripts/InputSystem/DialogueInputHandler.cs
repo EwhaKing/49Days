@@ -35,23 +35,17 @@ public class DialogueInputHandler : MonoBehaviour, IInputHandler
     /// </summary>
     public bool HandleInput(InputAction action, InputAction.CallbackContext context)
     {
-        if (playerDialogueBox.activeSelf && action.name != "DialogueContinue")
+        if (!(playerDialogueBox.activeSelf || npcDialogueBox.activeSelf))
         {
-            return true;
-        }
-
-        if (npcDialogueBox.activeSelf && action.name != "DialogueContinue")
-        {
-            return true;
+            return false;
         }
 
         if (action.name == "DialogueContinue")
         {
             OnDialogueContinueRequested?.Invoke();
-            return true;
         }
 
-        return false;
+        return true;
     }
 
 }
