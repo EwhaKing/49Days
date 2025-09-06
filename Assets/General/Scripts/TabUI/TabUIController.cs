@@ -7,6 +7,25 @@ public class TabUIController : MonoBehaviour
 {
     [Tooltip("인벤토리, 레시피 등 모든 탭 UI를 포함하는 최상위 패널")]
     [SerializeField] private GameObject commonPanel;
+    [SerializeField] private UIInputHandler uiInputHandler;
+
+    void OnEnable()
+    {
+        if (uiInputHandler != null)
+        {
+            uiInputHandler.OnToggleUIRequested += OnToggleUI;
+            uiInputHandler.OnCloseUIRequested += OnCloseUI;
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (uiInputHandler != null)
+        {
+            uiInputHandler.OnToggleUIRequested -= OnToggleUI;
+            uiInputHandler.OnCloseUIRequested -= OnCloseUI;
+        }
+    }
 
     /// <summary>
     /// Player Input의 ToggleUI 액션에 의해 호출

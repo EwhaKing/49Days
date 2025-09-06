@@ -32,30 +32,41 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
     [SerializeField] private Sprite rollingLeavesRight;
     [SerializeField] private Sprite rollingLeavesUp;
 
+    [SerializeField] private GameInputHandler gameInputHandler;
 
     private KeyPanel currentKeyPanel;
     private GameObject currentIngredient;
     RollingState state = RollingState.Idle;
 
     private GameObject rollingLeavesVisual;
-    private systemActions wasdControl;
+    // private systemActions wasdControl;
 
     private void OnEnable()
     {
+        /*
         if (wasdControl == null)
             wasdControl = new systemActions();
 
         wasdControl.Enable();
         wasdControl.SystemActions.WASD.performed += OnWASDInput;
+        */
+
+        if (gameInputHandler != null)
+            gameInputHandler.OnWASDRequested += OnWASD;
     }
 
     private void OnDisable()
     {
+        /*
         wasdControl.SystemActions.WASD.performed -= OnWASDInput;
         wasdControl.Disable();
+        */
+
+        if (gameInputHandler != null)
+            gameInputHandler.OnWASDRequested += OnWASD;
     }
 
-    private void OnWASDInput(InputAction.CallbackContext context)
+    private void OnWASD(InputAction.CallbackContext context)
     {
         if (currentKeyPanel == null || !currentKeyPanel.gameObject.activeInHierarchy)
             return;
@@ -72,6 +83,7 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
             currentKeyPanel.ReceiveInput(input);
             ShowRollingMotion(input);
         }
+
     }
     
     private void SetCanvas()
