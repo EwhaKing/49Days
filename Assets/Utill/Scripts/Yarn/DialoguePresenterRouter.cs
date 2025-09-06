@@ -17,11 +17,9 @@ public class DialoguePresenterRouter : DialoguePresenterBase
 
     public void SetSpeaker(string? speaker)
     {
-        currentSpeaker = speaker ?? string.Empty;
-    }
+        if (currentSpeaker == speaker) return;
 
-    void Update()
-    {
+        currentSpeaker = speaker ?? string.Empty;
         if (npcPresenter != null && !string.IsNullOrEmpty(currentSpeaker) && currentSpeaker != "Player")
         {
             var foundNpcObj = GameObject.Find(currentSpeaker);
@@ -35,7 +33,6 @@ public class DialoguePresenterRouter : DialoguePresenterBase
 
     public override YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken cancellationToken)
     {
-        SetSpeaker(line.CharacterName);
         DialoguePresenterBase? targetPresenter = null;
 
         if (line.CharacterName == "Player")
@@ -45,33 +42,22 @@ public class DialoguePresenterRouter : DialoguePresenterBase
         else
         {
             targetPresenter = npcPresenter;
-            if (npcPresenter != null)
-            {
-                var foundNpcObj = GameObject.Find(line.CharacterName);
-                if (foundNpcObj != null)
-                {
-                    npcPresenter.SetTargetTransform(foundNpcObj.transform);
-                }
-                else
-                {
-                    Debug.LogWarning($"NPC ¿ÀºêÁ§Æ® '{line.CharacterName}'¸¦ ¾À¿¡¼­ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
-                }
-            }
+            SetSpeaker(line.CharacterName);
         }
 
         if (targetPresenter == null)
-            throw new System.InvalidOperationException($"'{line.CharacterName}'¿¡ ÇØ´çÇÏ´Â DialoguePresenter°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            throw new System.InvalidOperationException($"'{line.CharacterName}'ï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ DialoguePresenterï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
 
         return targetPresenter.RunLineAsync(line, cancellationToken);
     }
 
     public override YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, CancellationToken cancellationToken)
     {
-        // ÇÃ·¹ÀÌ¾î¸¸ ¿É¼Ç Ã³¸® °¡´É
+        // ï¿½Ã·ï¿½ï¿½Ì¾î¸¸ ï¿½É¼ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (playerPresenter != null)
             return playerPresenter.RunOptionsAsync(dialogueOptions, cancellationToken);
 
-        throw new System.InvalidOperationException("¿É¼ÇÀ» Ã³¸®ÇÒ Presenter°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+        throw new System.InvalidOperationException("ï¿½É¼ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½ Presenterï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
     }
 
     public override YarnTask OnDialogueStartedAsync() => YarnTask.CompletedTask;
