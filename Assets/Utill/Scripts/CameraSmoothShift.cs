@@ -35,7 +35,7 @@ public class CameraSmoothShift : MonoBehaviour
             gameInputHandler.OnMoveCameraRequested -= OnMoveCamera;
     }
 
-    void OnMoveCamera()
+    public void OnMoveCamera()
     {
         // 이미 진행 중이면 중단
         if (currentTransition != null)
