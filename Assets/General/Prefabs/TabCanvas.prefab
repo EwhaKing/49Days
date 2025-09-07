@@ -2994,6 +2994,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2263673902469696341, guid: 7a532f50c2cade94c98cb843d8be011c, type: 3}
+      propertyPath: tabUIController
+      value: 
+      objectReference: {fileID: 4844000277388992670}
     - target: {fileID: 2693040312279662477, guid: 7a532f50c2cade94c98cb843d8be011c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

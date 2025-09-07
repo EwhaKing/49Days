@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 public class RecipePanel : MonoBehaviour
 {
     [SerializeField] GameObject recipePanel;
+    [SerializeField] TabUIController tabUIController;
+
     [Header("Left Side")]
     [SerializeField] GameObject recipeSlotPrefab;
     [SerializeField] Button nextButton;
@@ -187,6 +189,7 @@ void Start()
         {
             // 이 스크립트 안에 있는 이미지 변경 함수를 직접 호출
             ChangeTargetSprite(currentSelectedRecipe.simpleRecipeImage);
+            tabUIController.OnCloseUI();
         }
         else
         {
