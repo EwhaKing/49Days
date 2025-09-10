@@ -23,17 +23,17 @@ public class Customer : MonoBehaviour
     [SerializeField] private float blinkDuration = 0.1f;
 
     public int ChairIndex { get; set; }
-    
-    private CustomerData customerData;
+
+    private CharacterData characterData;
     private CharacterPose currentPose;
     private Coroutine blinkCoroutine;
     private Coroutine currentActionCoroutine;
     private Color originalColor = Color.white;
 
-    public void Initialize(CustomerData data)
+    public void Initialize(CharacterData data)
     {
-        customerData = data;
-        ChangePose("무표정");  // 디폴트는 무표정?
+        characterData = data;
+        ChangePose("무표정");
     }
 
     public void GoToTarget(Transform target)
@@ -49,20 +49,20 @@ public class Customer : MonoBehaviour
 
         transform.position = target.position;
         SetRenderersColor(originalColor);
-        
+
         // 눈 깜빡임 시작
         if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
         blinkCoroutine = StartCoroutine(BlinkRoutine());
     }
 
-    
+
     // 스프라이트 변경할 때 이거 사용.
     public void ChangePose(string poseName)
     {
-        if (customerData == null) return;
+        if (characterData == null) return;
 
         // 이름에 맞는 감정 포즈를 찾아오기
-        CharacterPose newPose = customerData.poses.Find(p => p.poseName == poseName);
+        CharacterPose newPose = characterData.poses.Find(p => p.poseName == poseName);
         if (newPose != null)
         {
             currentPose = newPose;
@@ -71,7 +71,7 @@ public class Customer : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"'{customerData.characterName}'에게 '{poseName}' 포즈가 없습니다.");
+            Debug.LogWarning($"'{characterData.characterName}'에게 '{poseName}' 포즈가 없습니다.");
         }
     }
 
@@ -80,7 +80,7 @@ public class Customer : MonoBehaviour
         // 등장 연출: 이동하는 동안 검은색에서 원래 색으로 점차 변경
         Vector3 startPosition = transform.position;
         float totalDistance = Vector3.Distance(startPosition, targetPosition);
-        
+
         SetRenderersColor(Color.black); // 검은 실루엣으로 시작
 
         while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
@@ -100,7 +100,7 @@ public class Customer : MonoBehaviour
 
         transform.position = targetPosition;
         SetRenderersColor(originalColor); // 최종적으로 원래 색상으로 고정
-        
+
         // 눈 깜빡임 시작
         if (blinkCoroutine != null) StopCoroutine(blinkCoroutine);
         blinkCoroutine = StartCoroutine(BlinkRoutine());
@@ -127,7 +127,7 @@ public class Customer : MonoBehaviour
         if (bodyRenderer != null) bodyRenderer.color = color;
         if (eyesRenderer != null) eyesRenderer.color = color;
     }
-    
+
     // CustomerManager가 퇴장시킬 때 호출
     public void Exit()
     {
@@ -153,7 +153,7 @@ public class Customer : MonoBehaviour
             // 위치 및 색상 보간
             transform.position = Vector3.Lerp(startPosition, endPosition, progress);
             SetRenderersColor(Color.Lerp(startColor, endColor, progress));
-            
+
             yield return null;
         }
 

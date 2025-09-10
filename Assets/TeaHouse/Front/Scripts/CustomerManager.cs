@@ -27,11 +27,11 @@ public class CustomerManager : SceneSingleton<CustomerManager>
 
     [Header("캐릭터 데이터베이스")]
     [Tooltip("게임에 등장할 모든 CustomerData 파일을 여기에 등록.")]
-    [SerializeField] private List<CustomerData> customerDatabase;
+    [SerializeField] private List<CharacterData> customerDatabase;
 
     // 현재 씬에 존재하는 손님 인스턴스 관리 (Key: 캐릭터 이름, Value: Customer 컴포넌트)
     private Dictionary<string, Customer> seatedCustomers = new Dictionary<string, Customer>();
-    private Dictionary<string, CustomerData> customerDataDict;
+    private Dictionary<string, CharacterData> customerDataDict;
 
 
     protected override void Awake()
@@ -63,7 +63,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     // 캐릭터 스폰 시에는 이 함수를 사용합니다.
     public Customer SpawnCustomer(string characterName, int chairIndex)
     {
-        if (!customerDataDict.TryGetValue(characterName, out CustomerData dataToSpawn))
+        if (!customerDataDict.TryGetValue(characterName, out CharacterData dataToSpawn))
         {
             Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
             return null;
@@ -95,7 +95,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
 
     public Customer SpawnSatCustomer(string characterName, int chairIndex)
     {
-        if (!customerDataDict.TryGetValue(characterName, out CustomerData dataToSpawn))
+        if (!customerDataDict.TryGetValue(characterName, out CharacterData dataToSpawn))
         {
             Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
             return null;
@@ -179,8 +179,8 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             Debug.LogWarning($"{characterName} 손님이 앉아있지 않아 호감도 이펙트를 표시할 수 없습니다.");
         }
     }
-    
-        private void ShowHeartEffect(Customer customer, HeartEffect.HeartType type)
+
+    private void ShowHeartEffect(Customer customer, HeartEffect.HeartType type)
     {
         if (heartEffectPrefab == null || mainCanvasRectTransform == null || customer == null)
         {
@@ -197,6 +197,6 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             heartEffect.ShowEffect(type);
         }
     }
-    
+
 
 }

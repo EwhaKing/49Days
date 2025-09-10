@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e7b987e934af584ebc1ef7ba16175d7, type: 3}
   m_Name: data5
   m_EditorClassIdentifier: 
-  fixedIndex: 3
+  fixedIndex: 4
   characterName: "\uD0A4\uB8E8\uC2A4"
   slotImage: {fileID: 0}
   profileImage: {fileID: 0}
@@ -21,3 +21,20 @@ MonoBehaviour:
   dislikes: 
   hasMet: 1
   affinity: 0
+  poses:
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}

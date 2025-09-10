@@ -13,12 +13,28 @@ MonoBehaviour:
   m_Name: data1
   m_EditorClassIdentifier: 
   fixedIndex: 0
-  characterName: "\uAC15\uD55C\uC544"
+  characterName: ch0
   slotImage: {fileID: -282425211, guid: b4a0456305edf254dab03de39b108e10, type: 3}
   profileImage: {fileID: 1054525075, guid: b4a0456305edf254dab03de39b108e10, type: 3}
-  profileText: "\uD638\uAC10\uB3C4 11, \uAC15\uD55C\uC544\uC785\uB2C8\uB2E4. \uAC1C
-    \uAC15\uD569\uB2C8\uB2E4."
+  profileText: affinity 11
   likes: "\uAC8C\uC784"
   dislikes: "\uAE00\uC384\uC694"
   hasMet: 1
   affinity: 11
+  poses:
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
