@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
-  m_Name: OolongTea
+  m_Name: "\uB179\uCC28"
   m_EditorClassIdentifier: 
-  teaName: 4
-  ingredients: 06000000
-  temperature: 80
-  brewTime: 7
+  teaName: 3
+  ingredients: 07000000
+  temperature: 60
+  brewTime: 5
+  availableAdditionalIngredients: 00000000040000000d0000000e000000

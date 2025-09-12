@@ -77,6 +77,12 @@ public class TeaMaker : SceneSingleton<TeaMaker>
         return makedTea;
     }
 
+    public static List<IngredientName> GetAvilableAdditionalIngredients(TeaName teaName)
+    {
+        TeaRecipe recipe = teaRecipes.Find(r => r.teaName == teaName);
+        Debug.Assert(recipe != null, $"{teaName}에 해당하는 레시피가 없습니다");
+        return recipe.availableAdditionalIngredients;
+    }
 
     private static bool IsIngredientProcessRight(TeaIngredient ingredient)
     {

@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
-  m_Name: SolomonsSealTea
+  m_Name: "\uB728\uAC70\uC6B4\uBB3C"
   m_EditorClassIdentifier: 
-  teaName: 6
-  ingredients: 03000000
+  teaName: 1
+  ingredients: 
   temperature: 100
-  brewTime: 10
+  brewTime: 3
+  availableAdditionalIngredients: 0000000004000000

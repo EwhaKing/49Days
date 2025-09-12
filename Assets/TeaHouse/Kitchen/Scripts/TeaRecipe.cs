@@ -13,4 +13,6 @@ public class TeaRecipe : ScriptableObject
 
     public int brewTime;  // 우려내는 시간 (초)
 
+    public List<IngredientName> availableAdditionalIngredients;  // 가능한 추가 재료 리스트
+
 }

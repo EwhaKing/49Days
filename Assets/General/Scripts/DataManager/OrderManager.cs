@@ -119,38 +119,37 @@ public class OrderManager : SceneSingleton<OrderManager>
 
         IngredientName selectedAdditionalIngredient = IngredientName.None;
 
-        if (selectedTea == TeaName.MaghrebMint)
+        float rand = UnityEngine.Random.value;
+        if (rand < 0.6f && ExceptionCheck(selectedTea) && unlockedTeaList.additionalIngredients.Contains(IngredientName.ForgetfulnessPotion))
         {
-            if (unlockedTeaList.additionalIngredients.Contains(IngredientName.Sugar))
-            {
-                selectedAdditionalIngredient = IngredientName.Sugar;
-            }
-            else
-            {
-                Debug.LogWarning("마그레브 민트는 추가 재료 설탕이 필수인데, 설탕이 잠금 해제되어 있지 않습니다. 추가 재료 없이 생성합니다.");
-            }
+            // 60% 확률로 망각제 선택
+            selectedAdditionalIngredient = IngredientName.ForgetfulnessPotion;
+        }
+        else if (rand < 0.75f || unlockedTeaList.additionalIngredients.Count == 0)
+        {
+            // 15% 확률로 추가 재료 없음, 또는 추가 재료 후보가 없으면 없음
+            selectedAdditionalIngredient = IngredientName.None;
         }
         else
         {
-            float rand = UnityEngine.Random.value;
-            if (rand < 0.2f || unlockedTeaList.additionalIngredients.Count == 0)
-            {
-                // 20% 확률로 추가 재료 없음, 또는 추가 재료 후보가 없으면 없음
-                selectedAdditionalIngredient = IngredientName.None;
-            }
-            else if (rand < 0.8f && unlockedTeaList.additionalIngredients.Contains(IngredientName.ForgetfulnessPotion))
-            {
-                // 60% 확률로 망각제 선택
-                selectedAdditionalIngredient = IngredientName.ForgetfulnessPotion;
-            }
-            else
-            {
-                // 나머지 20%는 랜덤 선택
-                selectedAdditionalIngredient = unlockedTeaList.additionalIngredients[UnityEngine.Random.Range(0, unlockedTeaList.additionalIngredients.Count)];
-            }
+            // 나머지 25%는 랜덤 선택
+            List<IngredientName> availableAdditionalIngredients = TeaMaker.GetAvilableAdditionalIngredients(selectedTea);
+            availableAdditionalIngredients = availableAdditionalIngredients.FindAll(i => unlockedTeaList.additionalIngredients.Contains(i));
+            selectedAdditionalIngredient = availableAdditionalIngredients[UnityEngine.Random.Range(0, availableAdditionalIngredients.Count)];
         }
 
         AddSuccessTea(selectedTea, selectedAdditionalIngredient);
+    }
+    
+    private bool ExceptionCheck(TeaName tea)  // 추가 재료가 정해진 차 예외처리 (망각제를 넣을 수 없는 차들)
+    {
+        switch (tea)
+        {
+            case TeaName.MaghrebMint:
+                return false;
+            default:
+                return true;
+        }
     }
 
     /// <summary>

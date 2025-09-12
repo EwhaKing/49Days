@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
-  m_Name: WhiteTea
+  m_Name: "\uB465\uAD74\uB808\uCC28"
   m_EditorClassIdentifier: 
-  teaName: 7
-  ingredients: 08000000
-  temperature: 70
-  brewTime: 5
+  teaName: 6
+  ingredients: 03000000
+  temperature: 100
+  brewTime: 10
+  availableAdditionalIngredients: 00000000040000000d000000

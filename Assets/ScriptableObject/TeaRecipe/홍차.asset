@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
-  m_Name: BlackTea
+  m_Name: "\uD64D\uCC28"
   m_EditorClassIdentifier: 
   teaName: 2
   ingredients: 05000000
   temperature: 90
   brewTime: 7
+  availableAdditionalIngredients: 000000000d0000000c00000004000000

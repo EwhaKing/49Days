@@ -10,9 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b9c51e40aa4e06e4091240acdbca2616, type: 3}
-  m_Name: GreenTea
+  m_Name: "\uB9C8\uADF8\uB808\uBE0C\uBBFC\uD2B8"
   m_EditorClassIdentifier: 
-  teaName: 3
-  ingredients: 07000000
-  temperature: 60
-  brewTime: 5
+  teaName: 8
+  ingredients: 08000000
+  temperature: 100
+  brewTime: 10
+  availableAdditionalIngredients: 00000000040000000d000000
