@@ -80,7 +80,16 @@ public class AffinityPanel : MonoBehaviour
     public void RefreshPage()
     {
         var cm = CharacterManager.Instance;
-        int total = cm?.Count ?? 0;
+        if (cm == null) return;
+
+        // 패널에 표시할 캐릭터만 세기
+        int total = 0;
+        for (int i = 0; i < cm.Count; i++)
+        {
+            var data = cm.GetStatic(i);
+            if (data.fixedIndex >= 0)
+                total++;
+        }
 
         maxPage = (total == 0) ? 0 : (total - 1) / PageSize;
         page = Mathf.Clamp(page, 0, maxPage);
