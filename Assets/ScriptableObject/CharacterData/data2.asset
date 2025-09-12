@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: data2
   m_EditorClassIdentifier: 
   fixedIndex: 1
-  characterName: ch2
+  characterName: "\uB098\uB780"
   slotImage: {fileID: 1684908597, guid: 8d9c0c64622454d439e00bb0b699344a, type: 3}
   profileImage: {fileID: 30893506, guid: 8d9c0c64622454d439e00bb0b699344a, type: 3}
   profileText: hasmet true affinity39
@@ -21,3 +21,20 @@ MonoBehaviour:
   dislikes: dislike2
   hasMet: 1
   affinity: 39
+  poses:
+  - poseName: 
+    bodySprite: {fileID: -498481022, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
+    eyesOpenSprite: {fileID: -1534276697, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
+    eyesClosedSprite: {fileID: -1534276697, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}

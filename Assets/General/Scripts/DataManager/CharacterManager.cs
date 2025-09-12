@@ -69,6 +69,8 @@ public class CharacterManager : SceneSingleton<CharacterManager>
         if (handle.Status == AsyncOperationStatus.Succeeded)
         {
             characters = new List<CharacterData>(handle.Result);
+            Debug.Log($"[CharacterManager] CharacterData {characters.Count}개 로드 성공");
+
         }
         else
         {
@@ -84,12 +86,15 @@ public class CharacterManager : SceneSingleton<CharacterManager>
 
         await LoadCharactersAsync();   // Addressables에서 로드
 
-        // CharacterData 고정 인덱스 동기화 (리스트 순서 = fixedIndex)
-        for (int i = 0; i < characters.Count; i++)
-        {
-            if (characters[i] != null)
-                characters[i].fixedIndex = i;
-        }
+        // // CharacterData 고정 인덱스 동기화 (리스트 순서 = fixedIndex)
+        // for (int i = 0; i < characters.Count; i++)
+        // {
+        //     if (characters[i] != null)
+        //         characters[i].fixedIndex = i;
+        // }
+
+        // CharacterData 고정 인덱스 유지 (에셋에 저장된 값 기준으로 정렬)
+        characters.Sort((a, b) => a.fixedIndex.CompareTo(b.fixedIndex));
 
         // 저장이 아직 로드되기 전 상황을 고려해, 일단 비어있다면 메모리 상태만 기본 생성
         if (db.list == null || db.list.Count == 0)
