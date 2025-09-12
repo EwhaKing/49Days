@@ -89,11 +89,19 @@ public class AffinityPanel : MonoBehaviour
         int count = Mathf.Clamp(total - start, 0, PageSize);
 
         EnsureSlotCount(count);
+
+
         for (int i = 0; i < count; i++)
         {
             var data = cm.GetStatic(start + i);
+
+            // AffinityPanel에서 제외할 NPC (fixedIndex < 0)
+            if (data.fixedIndex < 0)
+                continue;
+
             slots[i].Bind(data, unknownSprite, this);
         }
+
 
         if (prevButton) prevButton.interactable = page > 0;
         if (nextButton) nextButton.interactable = page < maxPage;
