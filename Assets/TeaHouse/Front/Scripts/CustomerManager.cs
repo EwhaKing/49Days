@@ -23,11 +23,8 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     [Tooltip("하트 이펙트가 생성될 부모 Canvas의 RectTransform")]
     [SerializeField] private RectTransform mainCanvasRectTransform;
 
-
-
-    [Header("캐릭터 데이터베이스")]
-    [Tooltip("게임에 등장할 모든 CustomerData 파일을 여기에 등록.")]
-    [SerializeField] private List<CharacterData> customerDatabase;
+    
+    private List<CharacterData> customerDatabase;
 
     // 현재 씬에 존재하는 손님 인스턴스 관리 (Key: 캐릭터 이름, Value: Customer 컴포넌트)
     private Dictionary<string, Customer> seatedCustomers = new Dictionary<string, Customer>();
@@ -37,10 +34,8 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     protected override void Awake()
     {
         base.Awake();
-        if (customerDatabase != null)
-        {
-            customerDataDict = customerDatabase.ToDictionary(data => data.characterName);
-        }
+        customerDatabase = CharacterManager.Instance.GetAllData;
+        customerDataDict = customerDatabase.ToDictionary(data => data.characterName);
     }
 
     void Start()
@@ -63,6 +58,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     // 캐릭터 스폰 시에는 이 함수를 사용합니다.
     public Customer SpawnCustomer(string characterName, int chairIndex)
     {
+        chairIndex -= 1;
         if (!customerDataDict.TryGetValue(characterName, out CharacterData dataToSpawn))
         {
             Debug.Log($"'{characterName}' 이름을 가진 캐릭터 데이터를 찾을 수 없습니다.");
@@ -85,7 +81,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         {
             customer.Initialize(dataToSpawn);
             customer.GoToTarget(targetChair);
-            seatedCustomers[characterName] = customer;
+            customer.ChairIndex = chairIndex;
             seatedCustomers[characterName] = customer;
             OrderManager.Instance.seatedCustomerInfo.Add(chairIndex, characterName); // static 변수에 저장
             return customer;
@@ -116,6 +112,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
         {
             customer.Initialize(dataToSpawn);
             customer.PlaceAt(targetChair);
+            customer.ChairIndex = chairIndex;
             seatedCustomers[characterName] = customer;
             return customer;
         }
@@ -145,6 +142,15 @@ public class CustomerManager : SceneSingleton<CustomerManager>
             if (OrderManager.Instance.seatedCustomerInfo.ContainsKey(chairIndex))
             {
                 OrderManager.Instance.seatedCustomerInfo.Remove(chairIndex); // static 변수에서 삭제
+                Debug.Log($"{characterName} 손님이 퇴장했습니다.");
+            }
+            else
+            {
+                foreach (var entry in OrderManager.Instance.seatedCustomerInfo)
+                {
+                    Debug.Log($"현재 앉아있는 손님 정보: {chairIndex}");
+                    Debug.Log($"Key: {entry.Key}, Value: {entry.Value}");
+                }
             }
             customerToExit.Exit();
             seatedCustomers.Remove(characterName);

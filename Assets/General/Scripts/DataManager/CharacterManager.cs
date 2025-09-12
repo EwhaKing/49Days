@@ -37,6 +37,7 @@ public class CharacterManager : SceneSingleton<CharacterManager>
 
     // ===== 외부 API (UI/게임 로직에서 사용) =====
     public int Count => characters?.Count ?? 0;
+    public List<CharacterData> GetAllData => characters;
     public CharacterData GetStatic(int fixedIndex) => characters[fixedIndex];
 
     public bool HasMet(string name) => GetProgress(name).hasMet;
