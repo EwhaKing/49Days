@@ -55,7 +55,6 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
             UIManager.Instance.BlockingUIOn(manufacturingCompletedUI);
             PauseGame();
             makedTea = TeaMaker.MakeTea(tea);
-            OrderManager.Instance.SetMakedTea(makedTea);  // 만든 차 OrderManager에 저장
             StartCoroutine(LatePlayCutScene());
             image.sprite = originSprite;
         } 
@@ -84,7 +83,19 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
         if (makedTea.additionalIngredient != IngredientName.None)
             teaString += "_" + makedTea.additionalIngredient;
 
-        Debug.Log(teaString);
+        // 만약 얀스피너에 해당 노드가 없으면 알 수 없는 차로 처리
+        if (!TeaResultYarnManager.Instance.HasNode(teaString))
+        {
+            makedTea.teaName = TeaName.Unknown;
+            teaString = "unknown";
+        }
+
+        // 탭 레시피 해금
+        if (makedTea.teaName != TeaName.Unknown)
+            RecipeDescriptionManager.Instance.UnlockRecipeDescription(makedTea.teaName);
+
+        // 만든 차 OrderManager에 저장
+        OrderManager.Instance.SetMakedTea(makedTea);
 
         // 얀스피너로 makedTea이름 및 추가재료로 설명과 이미지 띄우기
         TeaResultYarnManager.Instance.RunDialogue(teaString);

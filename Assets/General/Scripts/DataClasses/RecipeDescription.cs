@@ -12,4 +12,6 @@ public class RecipeDescription : ScriptableObject
     public Sprite simpleRecipeImage;  // 차 간단 레시피 이미지 (UI에 표시)
 
     public string description;  // 차 설명 (UI에 표시)
+    
+    public TeaName teaName; // 차 이름 (차 종류)
 }

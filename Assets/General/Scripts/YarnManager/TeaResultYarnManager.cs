@@ -38,6 +38,11 @@ public class TeaResultYarnManager : SceneSingleton<TeaResultYarnManager>
         runner.StartDialogue(nodeTitle);
     }
 
+    public bool HasNode(string nodeTitle)
+    {
+        return runner.Dialogue.NodeExists(nodeTitle);
+    }
+
     IEnumerator FadeIn(string spriteName)
     {
         Sprite sprite = Resources.Load<Sprite>($"Arts/{spriteName}");

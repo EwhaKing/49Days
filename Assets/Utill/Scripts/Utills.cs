@@ -15,31 +15,25 @@ public static class Utills
 
 }
 
-public class CoroutineUtil : MonoBehaviour
+public class CoroutineUtil : Singleton<CoroutineUtil>
 {
-    private static CoroutineUtil _instance;
-    public static CoroutineUtil Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                var go = new GameObject("CoroutineUtil");
-                _instance = go.AddComponent<CoroutineUtil>();
-                DontDestroyOnLoad(go);
-            }
-            return _instance;
-        }
-    }
-
     public void RunAfterFirstFrame(Action action)
     {
         StartCoroutine(AfterFirstFrame(action));
     }
-
     private IEnumerator AfterFirstFrame(Action action)
     {
         yield return null; // 한 프레임 대기
+        action?.Invoke();
+    }
+
+    public void RunAfterSeconds(Action action, float seconds)
+    {
+        StartCoroutine(AfterSeconds(seconds, action));
+    }
+    private IEnumerator AfterSeconds(float seconds, Action action)
+    {
+        yield return new WaitForSeconds(seconds);
         action?.Invoke();
     }
 }

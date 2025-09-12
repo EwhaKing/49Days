@@ -18,6 +18,11 @@ public class GameFlowManager : SceneSingleton<GameFlowManager>
                 sceneName = "TeaHouseFront";
                 OrderManager.Instance.SetAfterNodeTitle("일차0_밤");
                 break;
+            case TestMode.낮_스타트_모드:
+                sceneName = "TeaHouseFront";
+                GameManager.Instance.TutorialComplete();
+                OrderManager.Instance.SetAfterNodeTitle("낮_주문");
+                break;
         }
 
         CoroutineUtil.Instance.RunAfterFirstFrame(() => 
@@ -57,7 +62,6 @@ public class GameFlowManager : SceneSingleton<GameFlowManager>
 
     public void LoadScene(string sceneName)
     {
-        UIManager.Instance.ClearAllBlockingUI();
         SceneManager.LoadScene(sceneName);
     }
 }

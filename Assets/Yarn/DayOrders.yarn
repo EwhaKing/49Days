@@ -1,0 +1,109 @@
+﻿title: SetUp
+---
+// 변수 선언을 위한 노드 (실행되지 않음)
+
+<<declare $teaName = "">>
+<<declare $addtionalIngredient =  "">>
+<<declare $randomSeat = 1>>
+<<declare $randomNum = 0>>
+===
+
+title: 낮_주문
+---
+<<increment_day_order_count>>
+
+<<set $randomSeat = dice(4)>>  // 앉을 자리 랜덤 생성
+<<if $randomSeat == 1>>
+    <<enter_and_sit 손님 1>>  // 손님 입장
+    <<zoom 1>>  // 앉은 자리에 줌
+<<elseif $randomSeat == 2>>
+    <<enter_and_sit 손님 2>>
+    <<zoom 2>>
+<<elseif $randomSeat == 3>>
+    <<enter_and_sit 손님 3>>
+    <<zoom 3>>
+<<else>>
+    <<enter_and_sit 손님 4>>
+    <<zoom 4>>
+<<endif>>
+
+<<add_random_success_tea>>  // 랜덤 성공 차 생성하여 추가
+<<set $teaName = get_ordered_tea()>>  // 성공 차 이름 가져오기 
+<<set $addtionalIngredient = get_ordered_additional_ingredient()>>  // 성공 차 추가재료 가져오기
+
+<<set $randomNum = random()>>  // 0 ~ 1 사이의 랜덤 실수 생성
+
+<<if is_recent_unlocked_tea() && $teaName != "녹차">>  // 생성된 성공 차가 최근 해금된 차인지 확인
+    <<jump 최근_해금된_차를_주문했을_경우>>
+<<endif>>
+
+<<if $addtionalIngredient == "없음">>
+    <<if $randomNum < 0.2>>
+    손님: ...
+    손님: {$teaName}로 부탁해.
+    <<elseif $randomNum < 0.5>>
+    손님: 안녕~
+    손님: 오늘은 {$teaName}가 좋겠어.
+    <<else>>
+    손님: 흠... {$teaName} 주문할게요.
+    <<endif>>
+<<else>>
+    <<if $randomNum < 0.2>>
+    손님: ...
+    손님: {$teaName}에 {$addtionalIngredient}을 넣어서 줘.
+    <<elseif $randomNum < 0.5>>
+    손님: 안녕, 사장님.
+    손님: {$addtionalIngredient} 가득 넣어서 {$teaName}! 알지?
+    <<else>>
+    손님: 메뉴가 별로 없네요.
+    손님: {$teaName}에 {$addtionalIngredient} 주문할게요.
+    <<endif>>
+<<endif>>
+
+<<order 낮_결과>>
+===
+
+title: 최근_해금된_차를_주문했을_경우
+---
+<<if $addtionalIngredient == "없음">>
+    <<if $randomNum < 0.2>>
+    손님: ... 새로운 메뉴가 생겼네?
+    손님: {$teaName}로 부탁해.
+    <<elseif $randomNum < 0.5>>
+    손님: 안녕~
+    손님: {$teaName}? 이제 이런 것도 팔아?
+    손님: 맛있을 것 같은데! {$teaName}로 부탁해.
+    <<else>>
+    손님: 오... 이제야 이걸 파는군요. {$teaName} 주문할게요.
+    <<endif>>
+<<else>>
+    <<if $randomNum < 0.2>>
+    손님: ... 새로운 메뉴가 생겼네?
+    손님: {$teaName}에 {$addtionalIngredient} 넣은 걸로 부탁해.
+    <<elseif $randomNum < 0.5>>
+    손님: 안녕, 사장님.
+    손님: 오! 이건 처음 보는 메뉴 같은데?
+    손님: {$addtionalIngredient} 가득 넣은 {$teaName}로 부탁해!
+    <<else>>
+    손님: 드디어 새로운 게 생겼네요.
+    손님: {$teaName}에 {$addtionalIngredient} 주문할게요.
+    <<endif>>
+<<endif>>
+
+<<order 낮_결과>>
+===
+
+title: 낮_결과
+---
+손님: (반응)
+손님: 평가: {get_evaluation_result()}, 만든 차: {get_tea_name()}, 추가 재료:{get_additional_ingredient()}, 온도 차: {get_temperature_gap()}, 우린 시간 차: {get_brew_time_gap()}
+<<exit 손님>>
+
+<<if get_day_order_count() == 2>>
+    <<reset_day_order_count>>
+    <<make_night>>
+<<else>>
+    <<wait 1>>
+    <<jump 낮_주문>>
+<<endif>>
+===

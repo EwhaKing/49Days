@@ -12,13 +12,29 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
     public bool IsLoaded { get; private set; }
     public int Count => recipeDescriptions?.Count ?? 0;
     public List<RecipeDescription> GetAllRecipeDescriptions() => recipeDescriptions;
+    public Action<string> onRecipeUnlocked;
 
     void Start()
     {
         LoadRecipeDescriptions();
             //테스트용. 삭제하세요
-            unlockedRecipeNames.Add("New Tea"); 
+            unlockedRecipeNames.Add("New Tea");
             Debug.Log("[테스트] 'New Tea' 레시피가 강제로 해금되었습니다.");
+    }
+
+    public void UnlockRecipeDescription(TeaName teaName)
+    {
+        if (OrderManager.Instance.IsTeaUnlocked(teaName)) return;
+        OrderManager.Instance.UnlockDayOrderTea(teaName);  // 낮 주문 차 해금
+        List<RecipeDescription> recipes = recipeDescriptions.FindAll(x => x.teaName == teaName);
+        foreach (RecipeDescription recipe in recipes)
+        {
+            if (unlockedRecipeNames.Add(recipe.recipeName))
+            {
+                Debug.Log($"탭 레시피 해금: {recipe.recipeName}");
+            }
+            onRecipeUnlocked?.Invoke(recipe.recipeName);
+        }
     }
 
     async void LoadRecipeDescriptions()
@@ -48,6 +64,10 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
             }
             
             IsLoaded = true;
+
+            // TODO: 테스트용. 삭제하세요
+            UnlockRecipeDescription(TeaName.GreenTea);
+            UnlockRecipeDescription(TeaName.BlackTea);
         }
         else
         {

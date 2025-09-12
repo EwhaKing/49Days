@@ -17,7 +17,7 @@ public class DialoguePresenterRouter : DialoguePresenterBase
 
     public void SetSpeaker(string? speaker)
     {
-        if (currentSpeaker == speaker) return;
+        if (currentSpeaker == speaker && npcObj != null) return;
 
         currentSpeaker = speaker ?? string.Empty;
         if (npcPresenter != null && !string.IsNullOrEmpty(currentSpeaker) && currentSpeaker != "Player")

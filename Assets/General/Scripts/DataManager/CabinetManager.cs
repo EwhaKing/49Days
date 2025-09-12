@@ -11,6 +11,7 @@ public class Cabinet
 public class CabinetManager : SceneSingleton<CabinetManager>
 {
     Cabinet cabinet = new Cabinet();
+    public Action<IngredientName> onIngredientUnlocked;
 
     public bool isUnlocked(IngredientName ingredient)
     {
@@ -39,6 +40,7 @@ public class CabinetManager : SceneSingleton<CabinetManager>
         else
         {
             cabinet.ingredients[ingredient] = count;
+            onIngredientUnlocked?.Invoke(ingredient);
         }
     }
 
@@ -56,9 +58,10 @@ public class CabinetManager : SceneSingleton<CabinetManager>
 
     void Start()
     {
+        // 테스트
         foreach (IngredientName ingredientName in Utills.GetValues<IngredientName>())
         {
-            cabinet.ingredients[ingredientName] = 5;
+            AddIngredient(ingredientName, 5);
         }
 
         Debug.Log("Cabinet 초기화");

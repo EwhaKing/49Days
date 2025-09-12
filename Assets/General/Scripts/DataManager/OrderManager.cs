@@ -10,6 +10,13 @@ public class SuccessTea
     public IngredientName additionalIngredient;
 }
 
+public class unlockedTeaList
+{
+    public List<TeaName> past = new List<TeaName>();
+    public List<TeaName> recent = new List<TeaName>();
+    public List<IngredientName> additionalIngredients = new List<IngredientName>();
+}
+
 public enum EvaluationResult
 {
     Excellent,
@@ -31,6 +38,171 @@ public class OrderManager : SceneSingleton<OrderManager>
     private MakedTea makedTea;
     private int price = 0;  // 주방에서 차 설명 띄울 때 설정
     private EvaluationResult evaluationResult;
+
+    // 낮 시간대 주문 관련
+    private unlockedTeaList unlockedTeaList = new unlockedTeaList();
+    private int dayOrderCount = 0;
+
+    void Start()
+    {
+        GameManager.Instance.onWeekChanged += () => { ClearRecentUnlockedTea(); };
+        CabinetManager.Instance.onIngredientUnlocked += (ingredient) => 
+        {
+            if(ingredient.IsAdditionalIngredient())
+                UnlockDayOrderAdditionalIngredient(ingredient);
+        };
+    }
+
+    public void UnlockDayOrderTea(TeaName tea)
+    {
+        Debug.Log($"낮 주문 가능 차 잠금 해제: {tea}");
+        unlockedTeaList.recent.Add(tea);
+    }
+
+    public void UnlockDayOrderAdditionalIngredient(IngredientName ingredient)
+    {
+        Debug.Assert(ingredient.IsAdditionalIngredient(), $"{ingredient}는 추가 재료가 아닙니다.");
+        Debug.Log($"낮 주문 가능 추가 재료 잠금 해제: {ingredient}");
+        unlockedTeaList.additionalIngredients.Add(ingredient);
+    }
+
+    /// <summary>
+    /// 조합을 하나 무작위로 생성하여 SuccessTea에 추가 <br/>
+    /// 예외: 마그레브 민트는 추가재료 설탕이 필수
+    /// </summary>
+    public void GenerateRandomSuccessTea()
+    {        
+        if (unlockedTeaList.recent.Count == 0 && unlockedTeaList.past.Count == 0)
+        {
+            Debug.LogWarning("성공 차를 생성할 수 없습니다. 잠금 해제된 차가 없습니다.");
+            return;
+        }
+
+        List<TeaName> probabilityUp = null;
+        List<TeaName> probabilityDown = null;
+
+        switch (GameManager.Instance.GetDay())
+        {
+            case 1:
+            case 2:
+            case 3:
+                probabilityUp = unlockedTeaList.recent;  // 1~3일차는 최근 해금된 차의 비중을 높임
+                probabilityDown = unlockedTeaList.past;
+                break;
+            case 4:
+            case 5:
+                probabilityUp = unlockedTeaList.past;    // 4~5일차는 과거 해금된 차의 비중을 높임
+                probabilityDown = unlockedTeaList.recent;
+                break;
+            case 6:
+            case 7:
+                // 기본 비중
+                break;
+        }
+        
+        TeaName selectedTea;
+
+        if (probabilityUp == null)
+        {
+            if (UnityEngine.Random.Range(0, 2) == 0 || unlockedTeaList.past.Count == 0)
+                selectedTea = unlockedTeaList.recent[UnityEngine.Random.Range(0, unlockedTeaList.recent.Count)];
+            else
+                selectedTea = unlockedTeaList.past[UnityEngine.Random.Range(0, unlockedTeaList.past.Count)];
+        }
+        else
+        {
+            if (UnityEngine.Random.Range(0, 3) > 0 || probabilityDown.Count == 0)
+                selectedTea = probabilityUp[UnityEngine.Random.Range(0, probabilityUp.Count)];
+            else
+                selectedTea = probabilityDown[UnityEngine.Random.Range(0, probabilityDown.Count)];
+        } 
+
+        IngredientName selectedAdditionalIngredient = IngredientName.None;
+
+        if (selectedTea == TeaName.MaghrebMint)
+        {
+            if (unlockedTeaList.additionalIngredients.Contains(IngredientName.Sugar))
+            {
+                selectedAdditionalIngredient = IngredientName.Sugar;
+            }
+            else
+            {
+                Debug.LogWarning("마그레브 민트는 추가 재료 설탕이 필수인데, 설탕이 잠금 해제되어 있지 않습니다. 추가 재료 없이 생성합니다.");
+            }
+        }
+        else
+        {
+            float rand = UnityEngine.Random.value;
+            if (rand < 0.2f || unlockedTeaList.additionalIngredients.Count == 0)
+            {
+                // 20% 확률로 추가 재료 없음, 또는 추가 재료 후보가 없으면 없음
+                selectedAdditionalIngredient = IngredientName.None;
+            }
+            else if (rand < 0.8f && unlockedTeaList.additionalIngredients.Contains(IngredientName.ForgetfulnessPotion))
+            {
+                // 60% 확률로 망각제 선택
+                selectedAdditionalIngredient = IngredientName.ForgetfulnessPotion;
+            }
+            else
+            {
+                // 나머지 20%는 랜덤 선택
+                selectedAdditionalIngredient = unlockedTeaList.additionalIngredients[UnityEngine.Random.Range(0, unlockedTeaList.additionalIngredients.Count)];
+            }
+        }
+
+        AddSuccessTea(selectedTea, selectedAdditionalIngredient);
+    }
+
+    /// <summary>
+    /// 낮 한정 사용 권장, 첫 SuccessTea의 이름 반환
+    /// </summary>
+    /// <returns></returns>
+    public TeaName GetOrderedTea()
+    {
+        return successTeaList[0].teaName;
+    }
+
+    /// <summary>
+    /// 낮 한정 사용 권장, 첫 SuccessTea의 추가 재료 반환
+    /// </summary>
+    /// <returns></returns>
+    public IngredientName GetOrderedAdditionalIngredient()
+    {
+        return successTeaList[0].additionalIngredient;
+    }
+
+    /// <summary>
+    /// 첫 SuccessTea가 최근 해금된 차인지 확인
+    /// </summary>
+    /// <returns></returns>
+    public bool IsRecentUnlockedTea()
+    {
+        return unlockedTeaList.recent.Contains(successTeaList[0].teaName);
+    }
+
+    public bool IsTeaUnlocked(TeaName teaName)
+    {
+        return unlockedTeaList.past.Contains(teaName) || unlockedTeaList.recent.Contains(teaName);
+    }
+
+    public int GetDayOrderCount()
+    {
+        return dayOrderCount;
+    }
+    public void IncrementDayOrderCount()
+    {
+        dayOrderCount++;
+    }
+    public void ResetDayOrderCount()
+    {
+        dayOrderCount = 0;
+    }
+
+    private void ClearRecentUnlockedTea()
+    {
+        unlockedTeaList.past.AddRange(unlockedTeaList.recent);
+        unlockedTeaList.recent.Clear();
+    }
 
     public void AddSuccessTea(TeaName successTea, IngredientName additionalIngredient = IngredientName.None)
     {
@@ -172,5 +344,16 @@ public class OrderManager : SceneSingleton<OrderManager>
     public void SetPrice(int price)
     {
         this.price = price;
+    }
+
+    void OnEnable()
+    {
+        SaveLoadManager.Instance.onLoad += () => { unlockedTeaList = SaveLoadManager.Instance.Load<unlockedTeaList>(); };
+        SaveLoadManager.Instance.onSave += () => SaveLoadManager.Instance.Save<unlockedTeaList>(unlockedTeaList);
+    }
+    void OnDisable()
+    {
+        SaveLoadManager.Instance.onLoad -= () => { unlockedTeaList = SaveLoadManager.Instance.Load<unlockedTeaList>(); };
+        SaveLoadManager.Instance.onSave -= () => SaveLoadManager.Instance.Save<unlockedTeaList>(unlockedTeaList);
     }
 }

@@ -37,18 +37,91 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
         runner.AddCommandHandler<string, string>("add_success_tea", AddSuccessTea);
         runner.AddCommandHandler("pay", Pay);
         runner.AddFunction<string>("get_evaluation_result", GetEvaluationResult);
-        runner.AddFunction<string>("get_tea_name", GetTeaNameInLowerCase);
-        runner.AddFunction<string>("get_additional_ingredient", GetAdditionalIngredientInLowerCase);
+        runner.AddFunction<string>("get_tea_name", GetTeaNameInKor);
+        runner.AddFunction<string>("get_additional_ingredient", GetAdditionalIngredientInKor);
         runner.AddFunction<int>("get_brew_time_gap", GetBrewTimeGap);
         runner.AddFunction<int>("get_temperature_gap", GetTemperatureGap);
         runner.AddCommandHandler<string>("show_image", FadeIn);
         runner.AddCommandHandler<string>("play_sfx", PlaySfx);
         runner.AddCommandHandler<string>("change_bgm", ChangeBgm);
         runner.AddCommandHandler("skip_tutorial", SkipTutorial);
+        runner.AddFunction<int>("get_day", GetDay);
+        runner.AddFunction<int>("get_week", GetWeek);
+        runner.AddFunction<int>("get_money", GetMoney);
+        runner.AddFunction<string>("get_ordered_tea", GetOrderedTeaInKorean);
+        runner.AddFunction<string>("get_ordered_additional_ingredient", GetOrderedAdditionalIngredientInKorean);
+        runner.AddCommandHandler("add_random_success_tea", OrderManager.Instance.GenerateRandomSuccessTea);
+        runner.AddFunction<bool>("is_recent_unlocked_tea", IsRecentUnlockedTea);
+        runner.AddCommandHandler("make_night", MakeNight);
+        runner.AddFunction<int>("get_day_order_count", GetDayOrderCount);
+        runner.AddCommandHandler("increment_day_order_count", IncrementDayOrderCount);
+        runner.AddCommandHandler("reset_day_order_count", ResetDayOrderCount);
 
         runner.gameObject.SetActive(false);
         
         GameFlowManager.Instance.StartTeaHouseFront();
+    }
+
+    public void MakeNight()
+    {
+        // 밤 전환 연출 넣기
+        Action startNightDialogue = () => RunDialogue($"일차0_밤");
+        CoroutineUtil.Instance.RunAfterSeconds(startNightDialogue, 1.0f);
+    }
+
+    public int GetDayOrderCount()
+    {
+        return OrderManager.Instance.GetDayOrderCount();
+    }
+    public void IncrementDayOrderCount()
+    {
+        OrderManager.Instance.IncrementDayOrderCount();
+    }
+    public void ResetDayOrderCount()
+    {
+        OrderManager.Instance.ResetDayOrderCount();
+    }
+
+    public int GetDay()
+    {
+        return GameManager.Instance.GetDay();
+    }
+
+    public int GetWeek()
+    {
+        return GameManager.Instance.GetWeek();
+    }
+
+    public int GetMoney()
+    {
+        return GameManager.Instance.GetMoney();
+    }
+
+    /// <summary>
+    /// 주문받은 차의 한글 이름 반환
+    /// </summary>
+    /// <returns></returns>
+    public string GetOrderedTeaInKorean()
+    {
+        return OrderManager.Instance.GetOrderedTea().ToKorean();
+    }
+
+    /// <summary>
+    /// 주문받은 추가 재료의 한글 이름 반환
+    /// </summary>
+    /// <returns></returns>
+    public string GetOrderedAdditionalIngredientInKorean()
+    {
+        return OrderManager.Instance.GetOrderedAdditionalIngredient().ToKorean();
+    }
+
+    /// <summary>
+    /// 주문받은 차가 최근 해금된 차인지 확인
+    /// </summary>
+    /// <returns></returns>
+    public bool IsRecentUnlockedTea()
+    {
+        return OrderManager.Instance.IsRecentUnlockedTea();
     }
 
     void Update() // TODO: 최적화
@@ -61,14 +134,15 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
 
     public void RunDialogue(string nodeTitle)
     {
-        UIManager.Instance.BlockingUIOn(runner.gameObject);
+        runner.gameObject.SetActive(true);
+        Debug.Log($"TeaHouseYarnManager: RunDialogue {nodeTitle}");
         runner.StartDialogue(nodeTitle);
     }
 
     void EndDialogue()
     {
-        UIManager.Instance.BlockingUIOff(runner.gameObject);
-        UIManager.Instance.BlockingUIOff(fadeImage.transform.parent.gameObject);  // TODO: 리팩토링
+        runner.gameObject.SetActive(false);
+        fadeImage.transform.parent.gameObject.SetActive(false);  // TODO: 리팩토링
     }
 
     IEnumerator EnterAndSit(string npcName, int seatIndex)
@@ -108,6 +182,8 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
 
         mainCamera.rect = new Rect(0, 0, 1, 1);
         subCamera.enabled = false;
+
+        Debug.Log($"카메라 줌: {zoomPreset}");
     }
 
     public void CameraSplitZoom(string left, string right)
@@ -172,15 +248,15 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
         }
     }
 
-    public string GetTeaNameInLowerCase()
+    public string GetTeaNameInKor()
     {
-        string teaName = OrderManager.Instance.GetMakedTeaName().ToLowerString();
+        string teaName = OrderManager.Instance.GetMakedTeaName().ToKorean();
         return teaName;
     }
 
-    public string GetAdditionalIngredientInLowerCase()
+    public string GetAdditionalIngredientInKor()
     {
-        string ingredientName = OrderManager.Instance.GetMakedAdditionalIngredient().ToLowerString();
+        string ingredientName = OrderManager.Instance.GetMakedAdditionalIngredient().ToKorean();
         return ingredientName;
     }
 

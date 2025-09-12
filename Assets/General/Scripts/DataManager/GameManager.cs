@@ -9,6 +9,8 @@ public class GeneralData
 {
     public bool tutorialCompleted = false;
     public int money = 0;
+    public int week = 1; // 1 ~ 7 주차
+    public int day = 1;  // 1 ~ 7 각 주의 일차
 }
 
 public class GameManager : Singleton<GameManager>
@@ -16,10 +18,7 @@ public class GameManager : Singleton<GameManager>
     private GeneralData generalData = new GeneralData();
 
     public Action<int> onMoneyChanged;
-    public int GetMoney() 
-    { 
-        return generalData.money; 
-    }
+    public int GetMoney() { return generalData.money; }
     public void SetMoney(int value)
     { 
         generalData.money = Math.Clamp(value, 0, 9999999);
@@ -36,8 +35,39 @@ public class GameManager : Singleton<GameManager>
     }
     public void TutorialComplete() 
     {
-        generalData.tutorialCompleted = true; 
+        generalData.tutorialCompleted = true;
     }
+
+    public Action onWeekChanged;
+    public Action onDayChanged;
+    public int GetWeek() { return generalData.week; }
+    private void NextWeek()
+    {
+        generalData.week++;
+        onWeekChanged?.Invoke();
+    }
+    public int GetDay() { return generalData.day; }
+    public void NextDay()
+    {
+        generalData.day++;
+        if (generalData.day > 7)
+        {
+            generalData.day = 1;
+            NextWeek();
+        }
+        onDayChanged?.Invoke();
+    }
+    // private string timeOfDay = "낮"; // "낮" or "밤"
+    // public string GetTimeOfDay() { return timeOfDay; }
+    // public void SetTimeOfDay(string timeOfDay)
+    // {
+    //     if (timeOfDay != "낮" && timeOfDay != "밤") 
+    //     {
+    //         Debug.LogError("SetTimeOfDay: '낮' 또는 '밤'만 설정 가능");
+    //         return;
+    //     }
+    //     this.timeOfDay = timeOfDay;
+    // }
 
 
     void OnEnable() {
@@ -71,5 +101,6 @@ public class GameManager : Singleton<GameManager>
 public enum TestMode
 {
     무한_주방_모드,
-    일차0_밤_스타트_모드
+    일차0_밤_스타트_모드,
+    낮_스타트_모드
 }
