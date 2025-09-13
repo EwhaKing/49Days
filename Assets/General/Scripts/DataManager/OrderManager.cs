@@ -14,7 +14,7 @@ public class unlockedTeaList
 {
     public List<TeaName> past = new List<TeaName>();
     public List<TeaName> recent = new List<TeaName>();
-    public List<IngredientName> additionalIngredients = new List<IngredientName>();
+    public List<IngredientName> additionalIngredients = new List<IngredientName>{IngredientName.None};
 }
 
 public enum EvaluationResult
@@ -120,35 +120,35 @@ public class OrderManager : SceneSingleton<OrderManager>
         IngredientName selectedAdditionalIngredient = IngredientName.None;
 
         float rand = UnityEngine.Random.value;
-        if (rand < 0.6f && ExceptionCheck(selectedTea) && unlockedTeaList.additionalIngredients.Contains(IngredientName.ForgetfulnessPotion))
+        if (rand < 0.25f || ExceptionCheck(selectedTea))
+        {
+            // 25% 확률로 랜덤 선택 (None 포함)
+            List<IngredientName> availableAdditionalIngredients = TeaMaker.GetAvilableAdditionalIngredients(selectedTea);
+            availableAdditionalIngredients = availableAdditionalIngredients.FindAll(i => unlockedTeaList.additionalIngredients.Contains(i));
+            selectedAdditionalIngredient = availableAdditionalIngredients[UnityEngine.Random.Range(0, availableAdditionalIngredients.Count)];
+        }
+        else if (rand < 0.85f && unlockedTeaList.additionalIngredients.Contains(IngredientName.ForgetfulnessPotion))
         {
             // 60% 확률로 망각제 선택
             selectedAdditionalIngredient = IngredientName.ForgetfulnessPotion;
         }
-        else if (rand < 0.75f || unlockedTeaList.additionalIngredients.Count == 0)
-        {
-            // 15% 확률로 추가 재료 없음, 또는 추가 재료 후보가 없으면 없음
-            selectedAdditionalIngredient = IngredientName.None;
-        }
         else
         {
-            // 나머지 25%는 랜덤 선택
-            List<IngredientName> availableAdditionalIngredients = TeaMaker.GetAvilableAdditionalIngredients(selectedTea);
-            availableAdditionalIngredients = availableAdditionalIngredients.FindAll(i => unlockedTeaList.additionalIngredients.Contains(i));
-            selectedAdditionalIngredient = availableAdditionalIngredients[UnityEngine.Random.Range(0, availableAdditionalIngredients.Count)];
+            // 15% 확률로 추가 재료 없음
+            selectedAdditionalIngredient = IngredientName.None;
         }
 
         AddSuccessTea(selectedTea, selectedAdditionalIngredient);
     }
     
-    private bool ExceptionCheck(TeaName tea)  // 추가 재료가 정해진 차 예외처리 (망각제를 넣을 수 없는 차들)
+    private bool ExceptionCheck(TeaName tea)  // 추가 재료가 정해진 차 예외처리
     {
         switch (tea)
         {
             case TeaName.MaghrebMint:
-                return false;
-            default:
                 return true;
+            default:
+                return false;
         }
     }
 
