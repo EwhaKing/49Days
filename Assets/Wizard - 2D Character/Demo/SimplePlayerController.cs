@@ -13,8 +13,19 @@ namespace ClearSky
         private int direction = 1;
 
         Vector3 moveDirection;
+        GameInputHandler gameInputHandler;
 
-        // Start is called before the first frame update
+        void OnEnable()
+        {
+            gameInputHandler = FindObjectOfType<GameInputHandler>();
+            Debug.Assert(gameInputHandler != null, "GameInputHandler not found in the scene.");
+            gameInputHandler.OnPlayerMoveRequested += OnPlayerMove;
+        }
+        void OnDisable()
+        {
+            gameInputHandler.OnPlayerMoveRequested -= OnPlayerMove;
+        }
+
         void Start()
         {
             characterController = GetComponent<CharacterController>();
@@ -31,9 +42,8 @@ namespace ClearSky
             Run();
         }
 
-        public void OnPlayerMove(InputValue value)
+        public void OnPlayerMove(Vector2 move)
         {
-            Vector2 move = value.Get<Vector2>();
             moveDirection.x = move.x;
             moveDirection.z = move.y;
         }

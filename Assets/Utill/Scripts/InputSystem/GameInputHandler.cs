@@ -18,6 +18,7 @@ public class GameInputHandler : MonoBehaviour, IInputHandler
     // 액션 동작의 구현부 메서드를 이벤트에 연결해 HandleInput에서 Invoke
     public event System.Action OnMoveCameraRequested;
     public event System.Action<InputAction.CallbackContext> OnWASDRequested;
+    public event System.Action<Vector2> OnPlayerMoveRequested;
 
     void OnEnable()
     {
@@ -37,7 +38,7 @@ public class GameInputHandler : MonoBehaviour, IInputHandler
     /// </summary>
     public bool HandleInput(InputAction action, InputAction.CallbackContext context)
     {
-        if (action.name != "WASD" && action.name != "MoveCamera")
+        if (action.name != "WASD" && action.name != "MoveCamera" && action.name != "PlayerMove")
         {
             return true;
         }
@@ -45,6 +46,12 @@ public class GameInputHandler : MonoBehaviour, IInputHandler
         if (action.name == "WASD")
         {
             OnWASDRequested?.Invoke(context);
+            return true;
+        }
+        
+        if (action.name == "PlayerMove")
+        {
+            OnPlayerMoveRequested?.Invoke(context.ReadValue<Vector2>());
             return true;
         }
 
