@@ -10,6 +10,7 @@
 
 title: 낮_주문
 ---
+<<change_bgm day_1>>
 <<increment_day_order_count>>
 
 <<set $randomSeat = dice(4)>>  // 앉을 자리 랜덤 생성

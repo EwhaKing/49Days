@@ -17,20 +17,35 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 1b9b846df9f486c478cdc10d63cb4624
   m_SerializeEntries:
-  - m_GUID: 030874e343b9d06478673496b31459fd
-    m_Address: recipedescription
+  - m_GUID: 0c2b2b0771feb394e8c2427052e8997e
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/Hot Water 2.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 237978e6a789ccd4f93bd9916dc303b1
-    m_Address: recipedescription
+  - m_GUID: 2ffe69d7f81bb1447b278f6b63c39a6e
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/Oolong Tea 1.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5a577b828816c0d4380defc85bafa07c
-    m_Address: recipedescription
+  - m_GUID: 4111dd8019c5ed348b774635af17e364
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/Black Tea.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - recipeDescription
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4a72428bfb6881048b52154700808ea9
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/Solomon's Seal Tea.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - recipeDescription
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ae948803b5d811479dc7d0351a089e5
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/White Tea.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ca25a830ee12cd4198b1fd119252069
     m_Address: Assets/ScriptableObject/RecipeDescriptions/New Tea.asset
@@ -38,18 +53,14 @@ MonoBehaviour:
     m_SerializedLabels:
     - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6fce9576ffbb947498e6891b8d79d7f7
-    m_Address: recipedescription
+  - m_GUID: 60672284a9e1d9e45acea5a03e2756d2
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/Hot Water 1.asset
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b290f11ba3bb18e4ab36be1c05f70909
-    m_Address: recipedescription
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d0e9eef39ee9ee242a67977bcada700f
-    m_Address: recipedescription
+  - m_GUID: 9db62ccae18252546b82f47b0cc9039a
+    m_Address: Assets/ScriptableObject/RecipeDescriptions/White Tea 2.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - recipeDescription

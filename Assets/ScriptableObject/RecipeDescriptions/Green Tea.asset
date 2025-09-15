@@ -9,14 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 618a5f946b70e1746ac20297239e1adf, type: 3}
+  m_Script: {fileID: 11500000, guid: 487d29d1bce9313478074e3b41b1c916, type: 3}
   m_Name: Green Tea
   m_EditorClassIdentifier: 
   recipeName: "\uB179\uCC28"
-  teaImage: {fileID: 21300000, guid: 108a34edd55b6f145a5b6a88313acbce, type: 3}
-  simpleRecipeImage: {fileID: -1671600655, guid: 7a71695a909af774eb4d4caaaf94c74a, type: 3}
-  description: "1. \uCC3B\uC78E\uC744 \uC900\uBE44\uD55C\uB2E4. 2. \uCC3B\uC78E\uC744
-    \uC1A5\uC5D0\uC11C \uB356\uB294\uB2E4. 3. \uCC3B\uC78E\uC744 \uAD11\uC8FC\uB9AC\uC5D0
-    \uB123\uACE0 \uC720\uB150\uD55C\uB2E4. 4. \uCC3B\uC78E\uC744 \uB2E4\uBCD1\uC5D0
-    \uB123\uB294\uB2E4. 5. 60\xB0C\uC758 \uBB3C\uC744 \uB2E4\uBCD1\uC5D0 \uBD93\uB294\uB2E4.
-    6. 5\uCD08\uAC04 \uC6B0\uB9B0\uB2E4. 7. \uCC28\uB97C \uB0B8\uB2E4."
+  teaImage: {fileID: -399889401, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  simpleRecipeImage: {fileID: 1481713296, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  description: "1. \uCC3B\uC78E\uC744 \uC900\uBE44\uD55C\uB2E4.<br>2. \uCC3B\uC78E\uC744
+    \uC1A5\uC5D0\uC11C \uB356\uB294\uB2E4.<br>3. \uCC3B\uC78E\uC744 \uAD11\uC8FC\uB9AC\uC5D0
+    \uB123\uACE0 \uC720\uB150\uD55C\uB2E4.<br>4. \uCC3B\uC78E\uC744 \uB2E4\uBCD1\uC5D0
+    \uB123\uB294\uB2E4.<br>5. 60\xB0C\uC758 \uBB3C\uC744 \uB2E4\uBCD1\uC5D0 \uBD93\uB294\uB2E4.<br>6.
+    5\uCD08\uAC04 \uC6B0\uB9B0\uB2E4.<br>7. \uCC28\uB97C \uB0B8\uB2E4."
+  teaName: 3

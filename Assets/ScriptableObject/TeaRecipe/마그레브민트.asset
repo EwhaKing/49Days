@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: "\uB9C8\uADF8\uB808\uBE0C\uBBFC\uD2B8"
   m_EditorClassIdentifier: 
   teaName: 8
-  ingredients: 08000000
+  ingredients: 0700000009000000
   temperature: 100
   brewTime: 10
-  availableAdditionalIngredients: 00000000040000000d000000
+  availableAdditionalIngredients: 0d000000

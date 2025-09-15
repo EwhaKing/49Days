@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 618a5f946b70e1746ac20297239e1adf, type: 3}
+  m_Script: {fileID: 11500000, guid: 487d29d1bce9313478074e3b41b1c916, type: 3}
   m_Name: Hot Water
   m_EditorClassIdentifier: 
   recipeName: "\uB728\uAC70\uC6B4 \uBB3C"
-  teaImage: {fileID: 21300000, guid: 9d6b90a680db4bc4fa9a18fcefba0141, type: 3}
-  simpleRecipeImage: {fileID: -1671600655, guid: 7a71695a909af774eb4d4caaaf94c74a, type: 3}
-  description: "1. 100\xB0C\uC758 \uBB3C\uC744 \uB2E4\uBCD1\uC5D0 \uBD93\uB294\uB2E4.
-    2. \uCC28\uB97C \uB0B8\uB2E4."
+  teaImage: {fileID: -399889401, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  simpleRecipeImage: {fileID: 1481713296, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  description: "1. 100\xB0C\uC758 \uBB3C\uC744 \uB2E4\uBCD1\uC5D0 \uBD93\uB294\uB2E4.<br>2.
+    \uCC28\uB97C \uB0B8\uB2E4."
+  teaName: 1

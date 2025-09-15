@@ -1,7 +1,9 @@
 title: 일차0_밤
 ---
+<<change_bgm night_1>>
 <<enter_and_sit 키루스 1 >>
-<<zoom 2>>
+<<zoom 1>>
+<<wait 2>>
 키루스: 자, 여기가 바로 네가 오늘부터 일할 찻집이야.
 키루스: 그나저나 그 가면... 낯이 익은데.
 키루스: 네가 윤회를 거부당했다던 자인가?
@@ -68,6 +70,7 @@ title: 튜토리얼_주방
 
 title: 일차0_밤1
 ---
+<<change_bgm night_3>>
 <<if get_evaluation_result() == "완벽">>
 <<affinity_change 키루스 3>>
 키루스: ...!
