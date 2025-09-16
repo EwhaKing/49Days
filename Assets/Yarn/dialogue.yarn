@@ -70,19 +70,18 @@ title: 튜토리얼_주방
 
 title: 일차0_밤1
 ---
-<<change_bgm night_3>>
 <<if get_evaluation_result() == "완벽">>
 <<affinity_change 키루스 3>>
 키루스: ...!
 키루스: 크흠, 나쁘지 않아.
 키루스: 녹차는 기본 중의 기본이니까.
-<<elseif get_tea_name() == "greentea">>
+<<elseif get_tea_name() == "녹차">>
 <<affinity_change 키루스 2>>
 키루스: ...
 키루스: 적어도 녹차는 만들었네.
 키루스: 나쁘진 않지만...
 키루스: 연습은 더 필요해 보이는군.
-<<elseif get_tea_name() != "greentea" and get_tea_name() != "unknown">>
+<<elseif get_tea_name() != "녹차" and get_tea_name() != "알수없는차">>
 <<affinity_change 키루스 2>>
 키루스: ...!
 키루스: 나쁘지 않아.
@@ -95,7 +94,7 @@ title: 일차0_밤1
 키루스: 갈 길이 멀군...
 <<endif>>
 키루스: 좋은 차를 내주면, 손님은 알아서 돈을 낼 거야.
-<<if get_tea_name() == "greentea">>
+<<if get_tea_name() == "녹차">>
 <<pay>>
 키루스: 이렇게 말이지.
 <<endif>>
@@ -147,4 +146,77 @@ title: 일차0_밤1
 키루스: 망각제를 주는 거 잊지 말고.
 키루스: 주방에 있는 병 말이야. 알지?
 <<exit 키루스>>
+<<wait 2>>
+<<enter_and_sit 나란 4>>
+<<zoom 4>>
+<<wait 2>>
+나란: 안녕하세요!
+나란: 음… 찻집 주인이 벌써 온 줄은 몰랐어요.
+Player: 너도 
+나란: 나란이에요. 편하게 불러주세요!
+-> 특이한 이름이네.
+	<<affinity_change 나란 1>>
+	나란: 그런가요? 좋은 의미겠죠? 고마워요!
+-> 그래.
+나란: 실례가 아니라면 이름을 물어도 될까요?
+-> 내 이름은…
+나란: 반가워요, 플레이어.
+나란: 한 잔을 우선 주문해도 될까요?
+-> 그럼.
+-> …
+나란: 밖이 꽤 추워서…
+나란: 우선 물 한 잔을 마시고 싶어요.
+나란: 앗,
+나란: 따뜻한 걸로요!
+<<add_success_tea 뜨거운물>>
+<<order 일차1_밤1>>
+===
+
+title: 일차1_밤1
+---
+<<if get_tea_name() == "뜨거운물">>
+<<affinity_change 나란 2>>
+나란: 고마워요.
+<<wait 1>>
+나란: 정말 따뜻하네요!
+<<elseif get_tea_name() != "뜨거운물" and get_tea_name() != "알수없는차">>
+<<affinity_change 나란 -2>>
+나란: 음…
+나란: 따뜻한 물은 아니지만, 괜찮아요.
+나란: 잘 마실게요.
+<<else>>
+<<affinity_change 나란 -2>>
+나란:...이건 뭔가요?
+-> 미안.
+	나란: 괜찮아요! 처음이라면 누구나 실수할 수 있죠.
+	나란: 실수…
+	Player: 무슨 일 있어?
+	나란: 아, 하하. 아무것도 아니에요!
+-> 그냥 마시도록 해.
+    나란: 그래도 이건...
+    나란: 좀 힘들 것 같아요.
+나란: 한번 더 만들어 주실래요?
+-> 그래.
+<<add_success_tea 뜨거운물>>
+<<order 일차1_밤_다시>>
+<<endif>>
+===
+
+title: 일차1_밤_다시
+---
+<<if get_tea_name() == "뜨거운물">>
+<<affinity_change 나란 2>>
+나란: 고마워요.
+<<wait 1>>
+나란: 정말 따뜻하네요!
+<<elseif get_tea_name() != "뜨거운물" and get_tea_name() != "알수없는차">>
+<<affinity_change 나란 -2>>
+나란: 음…
+나란: 따뜻한 물은 아니지만, 괜찮아요.
+나란: 잘 마실게요.
+<<else>>
+<<affinity_change 나란 -2>>
+나란: 제가 어려운 주문을 했다고 생각하진 않았는데...
+나란: 괜찮아요, 그럴 수 있죠.
+<<endif>>
 ===
