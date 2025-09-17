@@ -81,7 +81,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
         string teaString = makedTea.teaName.ToLowerString();
         if (makedTea.additionalIngredient != IngredientName.None)
-            teaString += "_" + makedTea.additionalIngredient;
+            teaString += "_" + makedTea.additionalIngredient.ToLowerString();
 
         // 만약 얀스피너에 해당 노드가 없으면 알 수 없는 차로 처리
         if (!TeaResultYarnManager.Instance.HasNode(teaString))
