@@ -35,7 +35,7 @@ public class InputManager : Singleton<InputManager>
     {
         if (!handlers.Contains(handler))
             handlers.Add(handler);
-            handlers = handlers.OrderByDescending(h => h.Priority).ToList();
+        handlers = handlers.OrderByDescending(h => h.Priority).ToList();
     }
 
     public void UnregisterHandler(IInputHandler handler)

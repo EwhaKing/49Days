@@ -22,14 +22,14 @@ public abstract class Interactable : MonoBehaviour
     protected virtual void Awake()
     {
         sr = GetComponent<SpriteRenderer>();
-        if (sr != null) originalSprite = sr.sprite; // 시작 시 프리팹이 가진 원래 스프라이트 저장
+        Debug.Assert(sr != null, "SpriteRenderer not found on Interactable: " + gameObject.name);
+        originalSprite = sr.sprite; // 시작 시 프리팹이 가진 원래 스프라이트 저장
     }
 
     // 채집 모드 on/off 시 하이라이트 ↔ 원래 스프라이트 교체
     public void SetHighlight(bool on)
     {
-        if (sr != null)
-            sr.sprite = on ? highlightSprite : originalSprite;
+        sr.sprite = on ? highlightSprite : originalSprite;
     }
 
     // 구체 행동은 파생 클래스가 구현

@@ -16,6 +16,8 @@ public class PlayerHarvestController : MonoBehaviour
 
     void OnEnable()
     {
+        interactableInputHandler = FindObjectOfType<InteractableInputHandler>();
+        gameInputHandler = FindObjectOfType<GameInputHandler>();
         Debug.Assert(interactableInputHandler != null && gameInputHandler, "InputHandler not assigned in PlayerHarvestController");
         interactableInputHandler.OnHarvestRequested += OnWASD;
         interactableInputHandler.OnHarvestCancelRequested += OnCancel;
@@ -164,7 +166,7 @@ public class PlayerHarvestController : MonoBehaviour
 
     private Interactable FindClosestInteractable()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, interactDistance);
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactDistance);
 
         Interactable closest = null;
         float minDist = float.MaxValue;

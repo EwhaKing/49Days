@@ -21,6 +21,8 @@ public class InteractableInputHandler : MonoBehaviour, IInputHandler
 
     void OnEnable()
     {
+        playerHarvestController = FindObjectOfType<PlayerHarvestController>();
+        Debug.Assert(playerHarvestController != null, "PlayerHarvestController not assigned in InteractableInputHandler");
         InputManager.Instance.RegisterHandler(this);
     }
 
