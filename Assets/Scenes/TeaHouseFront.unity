@@ -352,6 +352,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4303778982276513416, guid: 77a8956c47874644a8c7bdcf5c4ac156, type: 3}
+      propertyPath: offset.y
+      value: -2.5
+      objectReference: {fileID: 0}
     - target: {fileID: 8156122224765095444, guid: 77a8956c47874644a8c7bdcf5c4ac156, type: 3}
       propertyPath: dialogueInputHandler
       value: 
