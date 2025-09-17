@@ -22,12 +22,68 @@ position: -201,-266
 녹차: 쌉싸름한 맛이 나는 연두빛 차.<br>진정에 도움이 됩니다.
 ===
 
+title: greentea_honey
+position: -201,-266
+---
+<<price 12>>
+<<fade_in greentea>>
+꿀녹차: 꿀이 첨가된 연두빛 차.<br>달달한 맛이 진정에 도움이 됩니다.
+===
+
+title: greentea_sugar
+position: -201,-266
+---
+<<price 12>>
+<<fade_in greentea>>
+달달한 녹차: 설탕이 첨가된 연두빛 차.<br>달달한 맛이 진정에 도움이 됩니다.
+===
+
+title: greentea_jasmine
+position: -201,-266
+---
+<<price 12>>
+<<fade_in greentea>>
+재스민차: 재스민 꽃을 올린 연두빛 차.<br>꽃향기가 진정에 도움이 됩니다.
+===
+
+title: magherbmint
+position: -201,-266
+---
+<<price 16>>
+<<fade_in greentea>>
+마그레브 민트 : 어느 이방인에 따르면 첫 잔은 삶처럼 부드럽고,<br>두번째 잔은 사랑처럼 강인하고,<br>마지막 잔은 죽음처럼 씁쓸합니다.
+===
+
 title: blacktea
 position: 29,-269
 ---
 <<price 12>>
 <<fade_in blacktea>>
 홍차: 그 씁쓸함으로 유명한 붉은 차.<br>우유와 함께 마셔도 좋습니다.
+===
+
+title: blacktea_honey
+position: 29,-269
+---
+<<price 14>>
+<<fade_in blacktea>>
+홍차: 그 씁쓸함으로 유명한 붉은 차이지만,<br>꿀이 첨가되어 단 맛이 납니다.
+===
+
+title: blacktea_sugar
+position: 29,-269
+---
+<<price 14>>
+<<fade_in blacktea>>
+달달한 홍차: 그 씁쓸함으로 유명한 붉은 차이지만,<br>설탕이 첨가되어 단 맛이 납니다.
+===
+
+title: blacktea_peach
+position: 29,-269
+---
+<<price 14>>
+<<fade_in blacktea>>
+복숭아 홍차: 홍차에 복숭아 조각을 넣은 가향차.<br>왜인지 차게 마시고 싶은 느낌입니다.
 ===
 
 title: oolongtea
@@ -38,11 +94,20 @@ position: -198,-116
 우롱차: 적당히 산화시킨 찻잎을 우린 차.<br>차를 우리는 사람에 따라 그 색과 맛이 달라집니다.
 ===
 
-title: greentea_honey
-position: -201,-416
+title: oolongtea_honey
+position: -198,-116
 ---
-<<price 12>>
-꿀녹차: 이것은 꿀넣은 녹차입니다. 달달~하다.
+<<price 14>>
+<<fade_in oolongtea>>
+꿀우롱차: 적당히 산화시킨 찻잎을 우린 차.<br>꿀을 넣으니 무척이나 달게 느껴집니다.
+===
+
+title: oolongtea_sugar
+position: -198,-116
+---
+<<price 14>>
+<<fade_in oolongtea>>
+달달한 우롱차: 적당히 산화시킨 찻잎을 우린 차.<br>설탕을 넣으니 무척이나 달게 느껴집니다.
 ===
 
 title: unknown
@@ -61,6 +126,22 @@ position: -198,31
 백차: 가공을 거치지 않아 부드러운 단맛을 지닌 차.<br>은은한 과일향이 오래 남습니다.
 ===
 
+title: whitetea_honey
+position: -198,31
+---
+<<price 12>>
+<<fade_in whitetea>>
+꿀백차: 가공을 거치지 않아 부드러운 단맛을 지닌 차.<br>달달한 꿀 향이 납니다.
+===
+
+title: whitetea_sugar
+position: -198,31
+---
+<<price 12>>
+<<fade_in whitetea>>
+달달한 백차: 가공을 거치지 않아 부드러운 단맛을 지닌 차.<br>은은한 과일향과 함께 단 향이 납니다.
+===
+
 title: solomonssealtea
 position: -198,31
 ---
@@ -68,9 +149,37 @@ position: -198,31
 둥굴레차: 둥굴레의 뿌리줄기를 썰어 우려낸 대용차.<br>구수한 맛이 납니다.
 ===
 
+title: solomonssealtea_honey
+position: -198,31
+---
+<<fade_in solomonssealtea>>
+꿀둥굴레차: 둥굴레의 뿌리줄기를 썰어 우려낸 대용차.<br>달달한 꿀 향이 납니다.
+===
+
+title: solomonssealtea_sugar
+position: -198,31
+---
+<<fade_in solomonssealtea>>
+달달한 둥굴레차: 둥굴레의 뿌리줄기를 썰어 우려낸 대용차.<br>설탕을 첨가해서 단 향이 납니다.
+===
+
 title: rosetea
 position: -198,31
 ---
 <<fade_in rosetea>>
 장미차: 장미잎을 덖어 우려낸 대용차.<br>달달한 꽃 향기와 함께 은은한 쓴맛도 느껴집니다.
+===
+
+title: rosetea_honey
+position: -198,31
+---
+<<fade_in rosetea>>
+꿀장미차: 장미잎을 덖어 우려낸 대용차.<br>달달한 꽃 향기와 함께 은은한 쓴맛도 느껴집니다.
+===
+
+title: rosetea_sugar
+position: -198,31
+---
+<<fade_in rosetea>>
+달달한 장미차: 장미잎을 덖어 우려낸 대용차.<br>달달한 꽃 향기와 함께 은은한 쓴맛도 느껴집니다.
 ===

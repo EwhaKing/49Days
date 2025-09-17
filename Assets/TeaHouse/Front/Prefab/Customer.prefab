@@ -112,7 +112,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.653, y: -3.6092, z: -0.04233208}
-  m_LocalScale: {x: 4.602154, y: 4.4703174, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2421376803684884099}
@@ -188,10 +188,9 @@ MonoBehaviour:
   moveSpeed: 5
   fadeDuration: 0.5
   exitOffset: {x: -0.5, y: 0, z: 0}
-  minBlinkInterval: 3
-  maxBlinkInterval: 7
-  blinkDuration: 0.1
-  chairIndex: 0
+  minBlinkInterval: 2
+  maxBlinkInterval: 5
+  blinkDuration: 0.12
 --- !u!1 &6164964107076355746
 GameObject:
   m_ObjectHideFlags: 0
