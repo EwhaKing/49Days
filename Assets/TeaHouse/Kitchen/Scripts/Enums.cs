@@ -44,15 +44,15 @@ public static class NameExtensions
     {
         switch (tea)
         {
-            case TeaName.Unknown: return "알 수 없는 차";
-            case TeaName.HotWater: return "뜨거운 물";
+            case TeaName.Unknown: return "알수없는차";
+            case TeaName.HotWater: return "뜨거운물";
             case TeaName.BlackTea: return "홍차";
             case TeaName.GreenTea: return "녹차";
             case TeaName.OolongTea: return "우롱차";
             case TeaName.RoseTea: return "장미차";
             case TeaName.SolomonsSealTea: return "둥굴레차";
             case TeaName.WhiteTea: return "백차";
-            case TeaName.MaghrebMint: return "마그레브 민트";
+            case TeaName.MaghrebMint: return "마그레브민트";
 
             default:
                 Debug.LogWarning("한글 이름이 없습니다: " + tea.ToString()); 

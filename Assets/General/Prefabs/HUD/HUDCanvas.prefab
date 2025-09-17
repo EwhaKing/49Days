@@ -330,10 +330,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: LogIconUI
       objectReference: {fileID: 0}
-    - target: {fileID: 4448932327464655027, guid: c96da0524d4e7cb4bb66b1b49f6a2760, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4765464113227951962, guid: c96da0524d4e7cb4bb66b1b49f6a2760, type: 3}
       propertyPath: m_Pivot.x
       value: 1

@@ -127,6 +127,15 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToggleLog"",
+                    ""type"": ""Button"",
+                    ""id"": ""ef7b2e79-3491-4c9d-be16-c89476a6d4ab"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -204,6 +213,17 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";PC"",
                     ""action"": ""CloseUI"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f55118f6-fe6d-4a54-8172-d47724f63f67"",
+                    ""path"": ""<Keyboard>/l"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""ToggleLog"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -429,6 +449,7 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         m_SystemActions_WASD = m_SystemActions.FindAction("WASD", throwIfNotFound: true);
         m_SystemActions_ToggleUI = m_SystemActions.FindAction("ToggleUI", throwIfNotFound: true);
         m_SystemActions_CloseUI = m_SystemActions.FindAction("CloseUI", throwIfNotFound: true);
+        m_SystemActions_ToggleLog = m_SystemActions.FindAction("ToggleLog", throwIfNotFound: true);
         // PlayerActions
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_PlayerMove = m_PlayerActions.FindAction("PlayerMove", throwIfNotFound: true);
@@ -525,6 +546,7 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_SystemActions_WASD;
     private readonly InputAction m_SystemActions_ToggleUI;
     private readonly InputAction m_SystemActions_CloseUI;
+    private readonly InputAction m_SystemActions_ToggleLog;
     /// <summary>
     /// Provides access to input actions defined in input action map "SystemActions".
     /// </summary>
@@ -552,6 +574,10 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "SystemActions/CloseUI".
         /// </summary>
         public InputAction @CloseUI => m_Wrapper.m_SystemActions_CloseUI;
+        /// <summary>
+        /// Provides access to the underlying input action "SystemActions/ToggleLog".
+        /// </summary>
+        public InputAction @ToggleLog => m_Wrapper.m_SystemActions_ToggleLog;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -590,6 +616,9 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @CloseUI.started += instance.OnCloseUI;
             @CloseUI.performed += instance.OnCloseUI;
             @CloseUI.canceled += instance.OnCloseUI;
+            @ToggleLog.started += instance.OnToggleLog;
+            @ToggleLog.performed += instance.OnToggleLog;
+            @ToggleLog.canceled += instance.OnToggleLog;
         }
 
         /// <summary>
@@ -613,6 +642,9 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @CloseUI.started -= instance.OnCloseUI;
             @CloseUI.performed -= instance.OnCloseUI;
             @CloseUI.canceled -= instance.OnCloseUI;
+            @ToggleLog.started -= instance.OnToggleLog;
+            @ToggleLog.performed -= instance.OnToggleLog;
+            @ToggleLog.canceled -= instance.OnToggleLog;
         }
 
         /// <summary>
@@ -982,6 +1014,13 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCloseUI(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ToggleLog" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnToggleLog(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "PlayerActions" which allows adding and removing callbacks.

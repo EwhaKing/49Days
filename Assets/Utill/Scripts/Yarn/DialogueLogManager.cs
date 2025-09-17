@@ -4,36 +4,48 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class DialogueLogManager : Singleton<DialogueLogManager>
+public class DialogueLogManager : SceneSingleton<DialogueLogManager>
 {
-    private readonly List<DialogueLogEntry> dialogueLogs = new();
+    private static List<DialogueLogEntry> dialogueLogs = new();
     [SerializeField] private TextMeshProUGUI logTextUI;
     [SerializeField] private LogScrollController logScrollController;
     [SerializeField] private GameObject logPanel;
+    private UIInputHandler uiInputHandler;
 
-    public void AddLog(string characterName, string text)
-    {
-        dialogueLogs.Add(new DialogueLogEntry(characterName, text));
-        UpdateLogUI();
-
-        // LogText°¡ È°¼ºÈ­µÈ °æ¿ì¿¡¸¸ ÄÚ·çÆ¾ ½ÇÇà
-        if (logScrollController != null && logTextUI != null && logTextUI.gameObject.activeInHierarchy)
-            StartCoroutine(ScrollAndUpdate());
+    private void OnEnable() {
+        uiInputHandler = FindObjectOfType<UIInputHandler>();
+        Debug.Assert(uiInputHandler != null, "DialogueLogManager: UIInputHandler not found.");
+        uiInputHandler.OnCloseUIRequested += CloseLog;
+    }
+    private void OnDisable() {
+        uiInputHandler.OnCloseUIRequested -= CloseLog;
     }
 
-    private void UpdateLogUI()
+    private void Start()
     {
-        if (logTextUI == null) return;
+        Debug.Assert(logPanel != null, "ë¡œê·¸íŒ¨ë„ ì—†ìŒ");
+        Debug.Assert(logTextUI != null, "ë¡œê·¸í…ìŠ¤íŠ¸UI ì—†ìŒ");
+        logPanel.SetActive(false);
         logTextUI.text = "";
         foreach (var log in dialogueLogs)
         {
             logTextUI.text += $"{log.CharacterName}: {log.Text}\n";
-        }
+        } 
+    }
+
+    public void AddLog(string characterName, string text)
+    {
+        dialogueLogs.Add(new DialogueLogEntry(characterName, text));
+        logTextUI.text += $"{characterName}: {text}\n";
+
+        // LogTextï¿½ï¿½ È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾ ï¿½ï¿½ï¿½ï¿½
+        if (logTextUI.gameObject.activeInHierarchy)
+            StartCoroutine(ScrollAndUpdate());
     }
 
     private IEnumerator ScrollAndUpdate()
     {
-        yield return null; // ÇÑ ÇÁ·¹ÀÓ ´ë±â(·¹ÀÌ¾Æ¿ô °»½Å ÈÄ)
+        yield return null; // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Ì¾Æ¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½)
         logScrollController.UpdateScrollInteractable();
         logScrollController.ScrollToBottom();
     }
@@ -42,6 +54,16 @@ public class DialogueLogManager : Singleton<DialogueLogManager>
 
     public bool IsLogPanelOpen()
     {
-        return logPanel != null && logPanel.activeSelf;
+        return logPanel.activeSelf;
+    }
+
+    public void ToggleLog()
+    {
+        logPanel.SetActive(!logPanel.activeSelf);
+    }
+
+    public void CloseLog()
+    {
+        logPanel.SetActive(false);
     }
 }

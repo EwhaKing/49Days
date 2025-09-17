@@ -583,6 +583,22 @@ PrefabInstance:
       propertyPath: testMode
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 5020139985666706383, guid: 3d15e0975cbebb64183ca5b3a54c5aa4, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5020139985666706383, guid: 3d15e0975cbebb64183ca5b3a54c5aa4, type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5020139985666706383, guid: 3d15e0975cbebb64183ca5b3a54c5aa4, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 2560
+      objectReference: {fileID: 0}
+    - target: {fileID: 5020139985666706383, guid: 3d15e0975cbebb64183ca5b3a54c5aa4, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1440
+      objectReference: {fileID: 0}
     - target: {fileID: 6322562448439905614, guid: 3d15e0975cbebb64183ca5b3a54c5aa4, type: 3}
       propertyPath: m_Name
       value: GameManager
@@ -640,11 +656,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
-  m_ScreenMatchMode: 0
+  m_ReferenceResolution: {x: 2560, y: 1440}
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96

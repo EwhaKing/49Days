@@ -11,13 +11,22 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
 {
     public int Priority => 100;
 
-    [Header("관리 오브젝트 목록")]
-    [SerializeField] public GameObject commonPanel;
+    // [Header("관리 오브젝트 목록")]
+    [SerializeField] private TabUIController tabUIController;
+    [SerializeField] private DialogueLogManager dialogueLogManager;
     // [SerializeField] public GameObject pauseMenu;
 
     // 액션 동작의 구현부 메서드를 이벤트에 연결해 HandleInput에서 Invoke
     public event System.Action OnToggleUIRequested;
     public event System.Action OnCloseUIRequested;
+
+    void Start()
+    {
+        tabUIController = TabUIController.Instance;
+        dialogueLogManager = DialogueLogManager.Instance;
+        Debug.Assert(tabUIController != null, "TabUIController instance is missing in the scene.");
+        Debug.Assert(dialogueLogManager != null, "DialogueLogManager instance is missing in the scene.");
+    }
 
     void OnEnable()
     {
@@ -37,7 +46,8 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
     /// </summary>
     public bool HandleInput(InputAction action, InputAction.CallbackContext context)
     {
-        if (commonPanel.activeSelf && action.name != "ToggleUI" && action.name != "CloseUI")
+        if (tabUIController.IsUIOpen() && dialogueLogManager.IsLogPanelOpen()
+        && action.name != "ToggleUI" && action.name != "CloseUI" && action.name != "ToggleLog")
         {
             return true;
         }
@@ -49,8 +59,13 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
             return true;
         }
         */
+        if (!tabUIController.IsUIOpen() && action.name == "ToggleLog")
+        {
+            DialogueLogManager.Instance.ToggleLog();
+            return true;
+        }
 
-        if (action.name == "ToggleUI")
+        if (!dialogueLogManager.IsLogPanelOpen() && action.name == "ToggleUI")
         {
             OnToggleUIRequested?.Invoke();
             return true;
