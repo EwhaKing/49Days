@@ -115,7 +115,7 @@ public class Harvestable : Interactable
         {
             ItemData itemData = InventoryManager.Instance.GetItemDataByName(itemName);
 
-            GameObject drop = Instantiate(dropItemPrefab, transform.position, Quaternion.identity);
+            GameObject drop = Instantiate(dropItemPrefab, transform.position + Vector3.up, Quaternion.identity);
             drop.GetComponent<DroppedItem>().Initialize(itemData);
         }
 

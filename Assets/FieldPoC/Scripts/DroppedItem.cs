@@ -11,6 +11,9 @@ public class DroppedItem : Interactable
         itemData = data;
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = data.itemIcon;
+        originalSprite = data.itemIcon;
+        highlightSprite = data.itemIcon;
+        type = InteractableType.DroppedItem;
         // TODO: 드랍 애니메이션
     }
 
