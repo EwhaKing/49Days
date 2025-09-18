@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8432696442442149189
+--- !u!1 &1544790354499579934
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,53 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8935218822516050459}
-  - component: {fileID: 6959655704224361583}
-  - component: {fileID: 6031746002658383512}
-  - component: {fileID: 4137754222393591988}
+  - component: {fileID: 3822765233349201336}
+  - component: {fileID: 4976442549436370398}
+  - component: {fileID: 4080016168372267120}
+  - component: {fileID: 2565113950383542684}
   m_Layer: 0
-  m_Name: bushplant
+  m_Name: DroppedItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8935218822516050459
+--- !u!4 &3822765233349201336
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8432696442442149189}
+  m_GameObject: {fileID: 1544790354499579934}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 7}
+  m_LocalPosition: {x: 3.7763116, y: 2.4185991, z: -3.8123536}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &6959655704224361583
+--- !u!114 &4976442549436370398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544790354499579934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb4734b3fa532e049b44e26b97a636ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  highlightSprite: {fileID: 0}
+--- !u!212 &4080016168372267120
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8432696442442149189}
+  m_GameObject: {fileID: 1544790354499579934}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -75,44 +89,24 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: e1ea81c0b4f216d4fa445029fb0ba5f6, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.28, y: 1.6}
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6031746002658383512
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8432696442442149189}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ec2b1a06f5f0854ca04419e2119cc4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
-  highlightSprite: {fileID: -1530920363, guid: 07a87a2158dceac44ae602a99410c0b4, type: 3}
-  dropTable:
-  - itemName: "\uC7A5\uBBF8"
-    amount: 1
-  withoutFruitSprite: {fileID: 0}
-  cooldownDays: 1
-  available: 1
---- !u!135 &4137754222393591988
+--- !u!135 &2565113950383542684
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8432696442442149189}
+  m_GameObject: {fileID: 1544790354499579934}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -125,5 +119,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.79999995
-  m_Center: {x: 0, y: 0.60800004, z: 0}
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}

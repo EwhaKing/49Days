@@ -23,6 +23,18 @@ MonoBehaviour:
     m_SerializedLabels:
     - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c6ea963d9a4a1f46b11d4b06b2ad883
+    m_Address: Assets/ScriptableObject/ItemDescriptions/ingredient_tealeaf.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 28e31d3fb5118eb42866581dd2620a3d
+    m_Address: Assets/ScriptableObject/ItemDescriptions/tool_teacup.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2ffe69d7f81bb1447b278f6b63c39a6e
     m_Address: Assets/ScriptableObject/RecipeDescriptions/Oolong Tea 1.asset
     m_ReadOnly: 0
@@ -47,6 +59,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57e5496998c8f074cb1b826cb7d57ad0
+    m_Address: Assets/ScriptableObject/ItemDescriptions/topping_honey.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5ca25a830ee12cd4198b1fd119252069
     m_Address: Assets/ScriptableObject/RecipeDescriptions/New Tea.asset
     m_ReadOnly: 0
@@ -59,11 +77,41 @@ MonoBehaviour:
     m_SerializedLabels:
     - recipeDescription
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 638af799fd79b41429cb88543183c108
+    m_Address: Assets/ScriptableObject/ItemDescriptions/tool_rose.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c967943d4dbfd64e950ae9068b3318c
+    m_Address: Assets/ScriptableObject/ItemDescriptions/ingredient_rose.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9449869db883ff54ba4e1dc55862d2c9
+    m_Address: Assets/ScriptableObject/ItemDescriptions/quest_tear.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9db62ccae18252546b82f47b0cc9039a
     m_Address: Assets/ScriptableObject/RecipeDescriptions/White Tea 2.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - recipeDescription
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1270762eb205f24981a8d7b08c54b55
+    m_Address: Assets/ScriptableObject/ItemDescriptions/ingredient_peach.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c2676d3299a2e674cba077170342f1bb
+    m_Address: Assets/ScriptableObject/ItemDescriptions/ingredient_solomon.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - itemdata
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e2ae25bc531573943bc7523d5bb75264, type: 2}

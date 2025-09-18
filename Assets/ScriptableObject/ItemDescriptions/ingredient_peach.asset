@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e72e409e5bf0124dbd732a3c971c34f, type: 3}
+  m_Name: ingredient_peach
+  m_EditorClassIdentifier: 
+  itemName: peach
+  itemDescription: boksungah
+  itemIcon: {fileID: 1789229109, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  itemType: 0
+  maxStack: 99

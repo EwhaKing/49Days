@@ -19,6 +19,7 @@ public class GameInputHandler : MonoBehaviour, IInputHandler
     public event System.Action OnMoveCameraRequested;
     public event System.Action<InputAction.CallbackContext> OnWASDRequested;
     public event System.Action<Vector2> OnPlayerMoveRequested;
+    public event System.Action OnPlayerInteractRequested;
 
     void OnEnable()
     {
@@ -38,7 +39,7 @@ public class GameInputHandler : MonoBehaviour, IInputHandler
     /// </summary>
     public bool HandleInput(InputAction action, InputAction.CallbackContext context)
     {
-        if (action.name != "WASD" && action.name != "MoveCamera" && action.name != "PlayerMove")
+        if (action.name != "WASD" && action.name != "MoveCamera" && action.name != "PlayerMove" && action.name != "PlayerInteract")
         {
             return true;
         }
@@ -48,7 +49,7 @@ public class GameInputHandler : MonoBehaviour, IInputHandler
             OnWASDRequested?.Invoke(context);
             return true;
         }
-        
+
         if (action.name == "PlayerMove")
         {
             OnPlayerMoveRequested?.Invoke(context.ReadValue<Vector2>());
@@ -58,6 +59,12 @@ public class GameInputHandler : MonoBehaviour, IInputHandler
         if (action.name == "MoveCamera")
         {
             OnMoveCameraRequested?.Invoke();
+            return true;
+        }
+
+        if (action.name == "PlayerInteract")
+        {
+            OnPlayerInteractRequested?.Invoke();
             return true;
         }
 

@@ -241,6 +241,33 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PlayerInteract"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f85e68a-3334-49c9-9459-5eb3bd162b93"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Harvest"",
+                    ""type"": ""Button"",
+                    ""id"": ""b610dc1b-980a-40aa-936a-dcb386eb28cf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HarvestCancel"",
+                    ""type"": ""Button"",
+                    ""id"": ""2efde03a-88af-4833-919c-04ce2433ed17"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -353,6 +380,61 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""action"": ""PlayerMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7f01d53f-4e4b-4ce0-b9be-3905655b17ca"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""PlayerInteract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""28f2a135-e007-4297-b34a-b2d2cd33ed12"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Harvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f922e7a7-a14c-45b7-9ba3-b5af11269fc3"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Harvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ee5e0cc4-15f8-47cc-a1fa-76c8b625244d"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Harvest"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""abb69803-42c1-408c-bc1a-673c341a7d0c"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HarvestCancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -453,6 +535,9 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         // PlayerActions
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_PlayerMove = m_PlayerActions.FindAction("PlayerMove", throwIfNotFound: true);
+        m_PlayerActions_PlayerInteract = m_PlayerActions.FindAction("PlayerInteract", throwIfNotFound: true);
+        m_PlayerActions_Harvest = m_PlayerActions.FindAction("Harvest", throwIfNotFound: true);
+        m_PlayerActions_HarvestCancel = m_PlayerActions.FindAction("HarvestCancel", throwIfNotFound: true);
         // DialogueContinue
         m_DialogueContinue = asset.FindActionMap("DialogueContinue", throwIfNotFound: true);
         m_DialogueContinue_DialogueContinue = m_DialogueContinue.FindAction("DialogueContinue", throwIfNotFound: true);
@@ -683,6 +768,9 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_PlayerActions;
     private List<IPlayerActionsActions> m_PlayerActionsActionsCallbackInterfaces = new List<IPlayerActionsActions>();
     private readonly InputAction m_PlayerActions_PlayerMove;
+    private readonly InputAction m_PlayerActions_PlayerInteract;
+    private readonly InputAction m_PlayerActions_Harvest;
+    private readonly InputAction m_PlayerActions_HarvestCancel;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerActions".
     /// </summary>
@@ -698,6 +786,18 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActions/PlayerMove".
         /// </summary>
         public InputAction @PlayerMove => m_Wrapper.m_PlayerActions_PlayerMove;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/PlayerInteract".
+        /// </summary>
+        public InputAction @PlayerInteract => m_Wrapper.m_PlayerActions_PlayerInteract;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/Harvest".
+        /// </summary>
+        public InputAction @Harvest => m_Wrapper.m_PlayerActions_Harvest;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/HarvestCancel".
+        /// </summary>
+        public InputAction @HarvestCancel => m_Wrapper.m_PlayerActions_HarvestCancel;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -727,6 +827,15 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @PlayerMove.started += instance.OnPlayerMove;
             @PlayerMove.performed += instance.OnPlayerMove;
             @PlayerMove.canceled += instance.OnPlayerMove;
+            @PlayerInteract.started += instance.OnPlayerInteract;
+            @PlayerInteract.performed += instance.OnPlayerInteract;
+            @PlayerInteract.canceled += instance.OnPlayerInteract;
+            @Harvest.started += instance.OnHarvest;
+            @Harvest.performed += instance.OnHarvest;
+            @Harvest.canceled += instance.OnHarvest;
+            @HarvestCancel.started += instance.OnHarvestCancel;
+            @HarvestCancel.performed += instance.OnHarvestCancel;
+            @HarvestCancel.canceled += instance.OnHarvestCancel;
         }
 
         /// <summary>
@@ -741,6 +850,15 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @PlayerMove.started -= instance.OnPlayerMove;
             @PlayerMove.performed -= instance.OnPlayerMove;
             @PlayerMove.canceled -= instance.OnPlayerMove;
+            @PlayerInteract.started -= instance.OnPlayerInteract;
+            @PlayerInteract.performed -= instance.OnPlayerInteract;
+            @PlayerInteract.canceled -= instance.OnPlayerInteract;
+            @Harvest.started -= instance.OnHarvest;
+            @Harvest.performed -= instance.OnHarvest;
+            @Harvest.canceled -= instance.OnHarvest;
+            @HarvestCancel.started -= instance.OnHarvestCancel;
+            @HarvestCancel.performed -= instance.OnHarvestCancel;
+            @HarvestCancel.canceled -= instance.OnHarvestCancel;
         }
 
         /// <summary>
@@ -1036,6 +1154,27 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPlayerMove(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "PlayerInteract" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnPlayerInteract(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Harvest" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHarvest(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HarvestCancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHarvestCancel(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "DialogueContinue" which allows adding and removing callbacks.

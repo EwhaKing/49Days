@@ -15,12 +15,12 @@ public enum ItemType    // 아이템 분류 Enum
 public class ItemData : ScriptableObject
 {
     [Header("기본 정보")]
-    public string itemID;           // 아이템을 구분할 고유 ID - 세이브 로드할 때 사용함.
-    public string itemName;         // 정보 표시에 사용 - 아이템 이름
+    //public string itemID;           // 아이템을 구분할 고유 ID - 세이브 로드할 때 사용함.
+    public string itemName;           // 정보 표시에 사용 - 아이템 이름
     [TextArea]
-    public string itemDescription;  // 정보 표시에 사용 - 아이템 설명
-    public Sprite itemIcon;         // 정보 표시에 사용 - 아이템 아이콘
-    public ItemType itemType;       // 아이템 분류 - 인벤토리 카테고리 토글 용.
+    public string itemDescription;    // 정보 표시에 사용 - 아이템 설명
+    public Sprite itemIcon;           // 정보 표시에 사용 - 아이템 아이콘
+    public ItemType itemType;         // 아이템 분류 - 인벤토리 카테고리 토글 용.
 
     [Header("기타 정보")]
     public int maxStack = 99;       // 한 슬롯에 최대로 겹칠 수 있는 수량 (99개까지 가능)
