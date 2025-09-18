@@ -46,7 +46,7 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
     /// </summary>
     public bool HandleInput(InputAction action, InputAction.CallbackContext context)
     {
-        if (tabUIController.IsUIOpen() && dialogueLogManager.IsLogPanelOpen()
+        if ((tabUIController.IsUIOpen() || dialogueLogManager.IsLogPanelOpen())
         && action.name != "ToggleUI" && action.name != "CloseUI" && action.name != "ToggleLog")
         {
             return true;
