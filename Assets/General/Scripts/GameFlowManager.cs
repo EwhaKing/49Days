@@ -23,6 +23,9 @@ public class GameFlowManager : SceneSingleton<GameFlowManager>
                 GameManager.Instance.TutorialComplete();
                 OrderManager.Instance.SetAfterNodeTitle("낮_주문");
                 break;
+            case TestMode.필드_스타트_모드:
+                sceneName = "FieldPoC";
+                break;
         }
 
         CoroutineUtil.Instance.RunAfterFirstFrame(() => 

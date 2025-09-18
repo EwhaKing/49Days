@@ -40,13 +40,33 @@ public class GameManager : Singleton<GameManager>
 
     public Action onWeekChanged;
     public Action onDayChanged;
+
+    /// <summary>
+    /// 49일 중 몇 일째인지를 반환합니다. (1 ~ 49)
+    /// </summary>
+    /// <returns></returns>
+    public int GetDate() { return (generalData.week - 1) * 7 + generalData.day; }
+
+    /// <summary>
+    /// 7주차 중 몇 주차인지를 반환합니다. (1 ~ 7)
+    /// </summary>
+    /// <returns></returns>
     public int GetWeek() { return generalData.week; }
     private void NextWeek()
     {
         generalData.week++;
         onWeekChanged?.Invoke();
     }
+
+    /// <summary>
+    /// 각 주의 몇 일차인지를 반환합니다. (1 ~ 7)
+    /// </summary>
+    /// <returns></returns>
     public int GetDay() { return generalData.day; }
+
+    /// <summary>
+    /// 다음 날로 넘기는 함수입니다.
+    /// </summary>
     public void NextDay()
     {
         generalData.day++;
@@ -102,5 +122,6 @@ public enum TestMode
 {
     무한_주방_모드,
     일차0_밤_스타트_모드,
-    낮_스타트_모드
+    낮_스타트_모드,
+    필드_스타트_모드
 }
