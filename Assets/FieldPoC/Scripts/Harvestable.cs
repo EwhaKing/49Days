@@ -10,6 +10,7 @@ public class DropItem
 
 public class Harvestable : Interactable
 {
+    private GameObject dropItemPrefab;
 
     [Header("드랍될 아이템 설정")]
     [SerializeField] private List<DropItem> dropTable; //아이템 이름과 개수
@@ -22,6 +23,11 @@ public class Harvestable : Interactable
     public bool available = true;
     public bool IsAvailable => available;
     private int respawnDay;
+
+    void Start()
+    {
+        dropItemPrefab = Resources.Load<GameObject>("DroppedItem");
+    }
 
     /// <summary>
     /// 실제로 플레이어가 채집했을 때 호출.
@@ -109,12 +115,8 @@ public class Harvestable : Interactable
         {
             ItemData itemData = InventoryManager.Instance.GetItemDataByName(itemName);
 
-            GameObject drop = new GameObject(itemName);
-            drop.transform.position = transform.position;
-            drop.transform.rotation = Quaternion.identity;
-            drop.AddComponent<SpriteRenderer>().sprite = itemData.itemIcon;
-            drop.AddComponent<SphereCollider>().isTrigger = true;
-            drop.AddComponent<DroppedItem>().Initialize(itemData);
+            GameObject drop = Instantiate(dropItemPrefab, transform.position, Quaternion.identity);
+            drop.GetComponent<DroppedItem>().Initialize(itemData);
         }
 
         Debug.Log($"Dropped: {itemName} x{amount}");

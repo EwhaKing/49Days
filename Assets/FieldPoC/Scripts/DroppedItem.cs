@@ -3,12 +3,14 @@ using UnityEngine;
 public class DroppedItem : Interactable
 {
     private ItemData itemData;
+    private SpriteRenderer spriteRenderer;
     // public int amount;
 
     public void Initialize(ItemData data)
     {
         itemData = data;
-        GetComponent<SpriteRenderer>().sprite = data.itemIcon;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = data.itemIcon;
         // TODO: 드랍 애니메이션
     }
 
