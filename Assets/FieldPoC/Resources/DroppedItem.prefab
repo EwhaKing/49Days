@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4976442549436370398}
   - component: {fileID: 4080016168372267120}
   - component: {fileID: 2565113950383542684}
+  - component: {fileID: 8258729907567050284}
   m_Layer: 0
   m_Name: DroppedItem
   m_TagString: Untagged
@@ -48,6 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   highlightSprite: {fileID: 0}
+  floatingHeight: 0.1
+  floatingSpeed: 2
+  rotationSpeed: 50
 --- !u!212 &4080016168372267120
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -115,9 +119,30 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &8258729907567050284
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544790354499579934}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 0.099597216, z: 1}
+  m_Center: {x: 0, y: -0.5100535, z: 0}
