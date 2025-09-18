@@ -100,9 +100,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   highlightSprite: {fileID: -1530920363, guid: 07a87a2158dceac44ae602a99410c0b4, type: 3}
-  itemData: {fileID: 11400000, guid: 6c967943d4dbfd64e950ae9068b3318c, type: 2}
-  amount: 1
-  dropPrefab: {fileID: 0}
+  dropTable:
+  - itemName: "\uC7A5\uBBF8"
+    amount: 1
+  withoutFruitSprite: {fileID: 0}
+  cooldownDays: 1
+  available: 1
 --- !u!135 &4137754222393591988
 SphereCollider:
   m_ObjectHideFlags: 0

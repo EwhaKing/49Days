@@ -30,6 +30,7 @@ public abstract class Interactable : MonoBehaviour
     public void SetHighlight(bool on)
     {
         sr.sprite = on ? highlightSprite : originalSprite;
+        //
     }
 
     // 구체 행동은 파생 클래스가 구현

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 /// <summary>
@@ -10,6 +12,13 @@ using System.Linq;
 /// </summary>
 public class InventoryManager : SceneSingleton<InventoryManager>
 {
+    private List<ItemData> allItemData; // 모든 아이템 데이터를 에셋에서 불러와 저장하는 리스트
+
+    public ItemData GetItemDataByName(string itemName)
+    {
+        return allItemData.Find(item => item.itemName == itemName);
+    }
+
     /// <summary>
     /// 인벤토리 한 칸(슬롯)에 해당하는 저장 데이터.
     /// </summary>
@@ -79,10 +88,13 @@ public class InventoryManager : SceneSingleton<InventoryManager>
 
     private void Start()
     {
+        // Addressables를 통해 모든 ItemData 에셋을 비동기적으로 불러옴.
+        LoadAllItemData();
+
         // 만약 OnEnable에서 데이터를 성공적으로 불러왔다면, 테스트 아이템을 추가하지 않음
         if (hasLoadedData) return;
 
-        // 저장된 데이터가 없을 경우, 인스펙터에서 테스트 아이템을 불러와서 인벤토리에 추가
+        // 저장된 데이터가 없을 경우, 인스펙터에서 테스s트 아이템을 불러와서 인벤토리에 추가
         if (testInventoriesSetup != null)
         {
             foreach (var setup in testInventoriesSetup)
@@ -100,6 +112,23 @@ public class InventoryManager : SceneSingleton<InventoryManager>
             }
         }
         OnInventoryChanged?.Invoke();   // UI 업데이트
+    }
+
+    async void LoadAllItemData()
+    {
+        AsyncOperationHandle<IList<ItemData>> handle =
+            Addressables.LoadAssetsAsync<ItemData>("itemdata", null); // label 기반 로드
+
+        await handle.Task;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            allItemData = new List<ItemData>(handle.Result);
+        }
+        else
+        {
+            Debug.LogError("itemdata 그룹 로드 실패");
+        }
     }
 
     private void OnEnable()

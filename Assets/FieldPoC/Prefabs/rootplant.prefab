@@ -98,11 +98,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec2b1a06f5f0854ca04419e2119cc4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
+  type: 1
   highlightSprite: {fileID: -1530920363, guid: 07a87a2158dceac44ae602a99410c0b4, type: 3}
   itemData: {fileID: 11400000, guid: c2676d3299a2e674cba077170342f1bb, type: 2}
   amount: 1
   dropPrefab: {fileID: 0}
+  withoutFruitSprite: {fileID: 0}
+  cooldownDays: 1
 --- !u!135 &5958985256010407935
 SphereCollider:
   m_ObjectHideFlags: 0

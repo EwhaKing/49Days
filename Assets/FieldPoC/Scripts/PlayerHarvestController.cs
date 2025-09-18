@@ -81,7 +81,7 @@ public class PlayerHarvestController : MonoBehaviour
         // ==
 
         if (harvestable.Type == InteractableType.Tree)
-        {
+        { //수정하기. 왜 안 되는 거임? A/D 분리 해야 됨.....
             int dir = 0;
             if (input == 'A') dir = -1; //A
             else if (input == 'D') dir = 1; //D
@@ -94,7 +94,7 @@ public class PlayerHarvestController : MonoBehaviour
 
                 if (pressCount >= 8) // A-D-A-D 4쌍
                 {
-                    DropItem(harvestable);
+                    harvestable.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함. 
                     ResetHarvest();
                 }
             }
@@ -108,7 +108,7 @@ public class PlayerHarvestController : MonoBehaviour
 
                 if (pressCount >= 5)
                 {
-                    DropItem(harvestable);
+                    harvestable.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함. 
                     ResetHarvest();
                 }
             }
@@ -130,7 +130,7 @@ public class PlayerHarvestController : MonoBehaviour
 
         if (h.Type == InteractableType.Flower)
         {
-            DropItem(h);
+            h.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함.
             ResetHarvest();
         }
     }
@@ -176,6 +176,10 @@ public class PlayerHarvestController : MonoBehaviour
             var interactable = h.GetComponent<Interactable>();
             if (interactable == null) continue;
 
+            //수확 불가능한 Harvestable은 후보에서 제외
+            if (interactable is Harvestable harvestable && !harvestable.IsAvailable)
+                continue;
+
             float d = Vector2.Distance(transform.position, h.transform.position);
             if (d < minDist)
             {
@@ -186,21 +190,6 @@ public class PlayerHarvestController : MonoBehaviour
         return closest;
     }
 
-    private void DropItem(Harvestable h)
-    {
-        if (h.DropPrefab != null)
-        {
-            GameObject drop = Instantiate(h.DropPrefab, h.transform.position, Quaternion.identity);
-            DroppedItem di = drop.GetComponent<DroppedItem>();
-            if (di != null)
-            {
-                di.itemData = h.ItemData;
-                di.amount = h.Amount;
-            }
-        }
-        Destroy(h.gameObject);
-        Debug.Log("Dropped: " + h.ItemData.name);
-    }
 
 
 
