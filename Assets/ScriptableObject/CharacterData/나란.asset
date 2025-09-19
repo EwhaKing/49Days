@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e7b987e934af584ebc1ef7ba16175d7, type: 3}
-  m_Name: data2
+  m_Name: "\uB098\uB780"
   m_EditorClassIdentifier: 
   fixedIndex: 1
   characterName: "\uB098\uB780"
@@ -20,9 +20,9 @@ MonoBehaviour:
   likes: like2
   dislikes: dislike2
   hasMet: 1
-  affinity: 39
+  affinity: 24
   poses:
-  - poseName: 
+  - poseName: "\uAE30\uBCF8"
     bodySprite: {fileID: -498481022, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
     eyesOpenSprite: {fileID: -1534276697, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
     eyesClosedSprite: {fileID: -1534276697, guid: 496c88be514989e4dad3a53a83b61990, type: 3}

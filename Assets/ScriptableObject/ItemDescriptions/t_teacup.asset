@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e72e409e5bf0124dbd732a3c971c34f, type: 3}
-  m_Name: tool_teacup
+  m_Name: t_teacup
   m_EditorClassIdentifier: 
   itemID: tool_teacup
   itemName: "\uCC3B\uC794"

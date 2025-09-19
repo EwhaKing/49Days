@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e72e409e5bf0124dbd732a3c971c34f, type: 3}
-  m_Name: ingredient_tealeaf
+  m_Name: i_lotusflower
   m_EditorClassIdentifier: 
-  itemID: ingredient_tealeaf
-  itemName: "\uCC3B\uC78E"
-  itemDescription: "\uAE30\uBCF8\uC801\uC778 \uCC3B\uC78E\uC774\uB2E4. \uC0B0\uD654\uB3C4\uC5D0
-    \uB530\uB77C \uB179\uCC28, \uBC31\uCC28, \uD64D\uCC28, \uD751\uCC28\uB97C \uB9CC\uB4E4
-    \uC218 \uC788\uB2E4."
-  itemIcon: {fileID: -498481022, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
+  itemID: ingredient_lotusflower
+  itemName: "\uC5F0\uAF43"
+  itemDescription: "\uC6FB\uC719\uC719 (\uB2EC\uB2E4)"
+  itemIcon: {fileID: -1967894621, guid: a6dc8dc8f68b5234a89b682a3438d530, type: 3}
   itemType: 0
   maxStack: 99

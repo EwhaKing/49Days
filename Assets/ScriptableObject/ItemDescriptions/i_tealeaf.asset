@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e72e409e5bf0124dbd732a3c971c34f, type: 3}
+  m_Name: i_tealeaf
+  m_EditorClassIdentifier: 
+  itemID: ingredient_tealeaf
+  itemName: "\uCC3B\uC78E"
+  itemDescription: "\uAE30\uBCF8\uC801\uC778 \uCC3B\uC78E\uC774\uB2E4. \uC0B0\uD654\uB3C4\uC5D0
+    \uB530\uB77C \uB179\uCC28, \uBC31\uCC28, \uD64D\uCC28, \uD751\uCC28\uB97C \uB9CC\uB4E4
+    \uC218 \uC788\uB2E4."
+  itemIcon: {fileID: 21300000, guid: f5755578350686640a2a267313a68c5a, type: 3}
+  itemType: 0
+  maxStack: 99

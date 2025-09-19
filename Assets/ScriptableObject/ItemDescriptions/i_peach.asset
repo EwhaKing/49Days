@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e72e409e5bf0124dbd732a3c971c34f, type: 3}
+  m_Name: i_peach
+  m_EditorClassIdentifier: 
+  itemID: ingredient_peach
+  itemName: "\uBCF5\uC22D\uC544"
+  itemDescription: "\uC6FB\uC719\uC719 (\uB2EC\uB2E4)"
+  itemIcon: {fileID: -1967894621, guid: a6dc8dc8f68b5234a89b682a3438d530, type: 3}
+  itemType: 0
+  maxStack: 99

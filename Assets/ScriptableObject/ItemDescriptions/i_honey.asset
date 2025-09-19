@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1e72e409e5bf0124dbd732a3c971c34f, type: 3}
-  m_Name: quest_tear
+  m_Name: i_honey
   m_EditorClassIdentifier: 
-  itemID: quest_tear
-  itemName: "\uACF5\uBB34\uC6D0\uC758 \uB208\uBB3C"
-  itemDescription: "\uACF5\uBB34\uC6D0\uC740 \uB208\uBB3C\uC744 \uD758\uB9B0\uB2E4.
-    \uC544\uC8FC \uB728\uAC70\uC6B4 \uB208\uBB3C\uC744...."
-  itemIcon: {fileID: 21300000, guid: ee4b46d49c784f64ba50c35f26ad31ed, type: 3}
-  itemType: 2
-  maxStack: 1
+  itemID: ingredient_honey
+  itemName: "\uAFC0"
+  itemDescription: "\uC6FB\uC719\uC719 (\uB2EC\uB2E4)"
+  itemIcon: {fileID: -1967894621, guid: a6dc8dc8f68b5234a89b682a3438d530, type: 3}
+  itemType: 0
+  maxStack: 99
