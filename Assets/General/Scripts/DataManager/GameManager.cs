@@ -17,20 +17,19 @@ public class GameManager : Singleton<GameManager>
 {
     private GeneralData generalData = new GeneralData();
 
-    public Action<int> onMoneyChanged;
+    /// <summary>
+    ///  변동된 금액, 현재 잔액 순서
+    /// </summary>
+    public Action<int, int> onMoneyChanged;
     public Action onWeekChanged;
     public Action onDayChanged;
     public Action onUIOn;
 
     public int GetMoney() { return generalData.money; }
-    public void SetMoney(int value)
-    { 
-        generalData.money = Math.Clamp(value, 0, 9999999);
-        onMoneyChanged?.Invoke(value);
-    }
     public void AddMoney(int amount) 
     {
-        SetMoney(generalData.money + amount);
+        generalData.money = Math.Clamp(amount + generalData.money, 0, 9999999);
+        onMoneyChanged?.Invoke(amount, generalData.money);
     }
 
     public bool IsTutorialCompleted()
@@ -124,5 +123,5 @@ public enum TestMode
     무한_주방_모드,
     일차0_밤_스타트_모드,
     낮_스타트_모드,
-    필드_스타트_모드
+    필드_스타트_모드,
 }
