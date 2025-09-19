@@ -37,12 +37,11 @@ public class DroppedItem : Interactable
     //     Debug.Log($"Picked up {itemData.itemName} x{amount}");
     // }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.collider.CompareTag("Ground"))
+        if (other.CompareTag("Ground"))
         {
             hasLanded = true;
-            StopFalling();
         }
     }
 
@@ -62,7 +61,7 @@ public class DroppedItem : Interactable
         float flightDuration = Mathf.Abs((2 * initialVelocity.y) / gravity);
 
         Vector3 position = startPosition;
-        while (timeElapsed < flightDuration && !hasLanded)
+        while (!hasLanded)
         {
             timeElapsed += Time.deltaTime;
             float t = timeElapsed / flightDuration;
@@ -78,18 +77,13 @@ public class DroppedItem : Interactable
         StartCoroutine(FloatingAndRotating());
     }
 
-    private void StopFalling()
-    {
-        hasLanded = true;
-        StartCoroutine(FloatingAndRotating());
-    }
-
     private IEnumerator FloatingAndRotating()
     {
+        float y = transform.position.y;
         while (true)
         {
             float newYPosition = Mathf.Sin(Time.time * floatingSpeed) * floatingHeight;
-            transform.position = new Vector3(transform.position.x, newYPosition, transform.position.z);
+            transform.position = new Vector3(transform.position.x, y + newYPosition, transform.position.z);
             transform.Rotate(Vector3.up, rotationSpeed * Time.deltaTime);
             yield return null;
         }
