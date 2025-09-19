@@ -232,7 +232,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
         if (tea != null)
         {
-            tea.timeBrewed = (int)timer;
+            tea.timeBrewed = Mathf.RoundToInt(timer); // ⬅ 반올림 처리
         }
 
         // 평가 및 처리 책임은 외부 시스템에서 담당
