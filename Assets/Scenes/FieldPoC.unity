@@ -1493,7 +1493,7 @@ MonoBehaviour:
   m_Priority: 10
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 0}
+  m_Follow: {fileID: 1720502751}
   m_Lens:
     FieldOfView: 53
     OrthographicSize: 5
@@ -1732,15 +1732,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2830756491775970711, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2830756491775970711, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2830756491775970711, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1067.3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2882359714309018507, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_Name
@@ -7513,6 +7513,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 904d0b8c28276a64c8101ddedd894d57, type: 3}
+--- !u!4 &1720502751 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8853461538655865707, guid: 904d0b8c28276a64c8101ddedd894d57, type: 3}
+  m_PrefabInstance: {fileID: 1720502750}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1755958025
 GameObject:
   m_ObjectHideFlags: 0
