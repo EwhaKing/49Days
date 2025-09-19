@@ -82,25 +82,40 @@ public class PlayerHarvestController : MonoBehaviour
         else if (keyPath.Contains("/d")) input = 'D';
         // ==
 
-        if (harvestable.Type == InteractableType.Tree)
-        { //수정하기. 왜 안 되는 거임? A/D 분리 해야 됨.....
+        if (harvestable.Type == InteractableType.Tree) //AD 교차 입력, 키 분리 완료
+        {
             int dir = 0;
-            if (input == 'A') dir = -1; //A
-            else if (input == 'D') dir = 1; //D
+            if (input == 'A') dir = -1; // A
+            else if (input == 'D') dir = 1; // D
 
+            // ✅ 교차 입력만 카운트 (같은 키 연속은 무시)
             if (dir != 0 && dir != lastDir)
             {
                 pressCount++;
                 lastDir = dir;
-                Debug.Log("Tree press count: " + pressCount);
 
-                if (pressCount >= 8) // A-D-A-D 4쌍
+                if (dir == -1)
                 {
-                    harvestable.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함. 
+                    Debug.Log("Tree press A count: " + pressCount);
+                }
+                else if (dir == 1)
+                {
+                    Debug.Log("Tree press D count: " + pressCount);
+                }
+
+                if (pressCount >= 8) // A-D 4쌍
+                {
+                    harvestable.Harvest(1);
                     ResetHarvest();
                 }
             }
+            else if (dir == lastDir)
+            {
+                // 같은 방향 키가 연속으로 들어올 때 로그 확인용
+                Debug.Log("Ignored same key input: " + input);
+            }
         }
+
         else if (harvestable.Type == InteractableType.Root)
         {
             if (input == 'W') //W
