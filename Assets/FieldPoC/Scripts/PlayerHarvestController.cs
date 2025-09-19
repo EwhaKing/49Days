@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System;
 
 public class PlayerHarvestController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class PlayerHarvestController : MonoBehaviour
 
     private Interactable target;
     public bool inHarvestMode = false;
+    public Action onEnterHarvestMode;
     private float harvestTimer = 0f;
     private int pressCount = 0;
     private int lastDir = 0; // A/D 교대 입력 체크용
@@ -119,6 +121,8 @@ public class PlayerHarvestController : MonoBehaviour
     public void EnterHarvestMode(Harvestable h)
     {
         if (inHarvestMode) return;
+
+        onEnterHarvestMode?.Invoke();
 
         inHarvestMode = true;
         harvestTimer = 0f;

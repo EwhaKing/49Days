@@ -60,6 +60,8 @@ public class DialogueLogManager : SceneSingleton<DialogueLogManager>
     public void ToggleLog()
     {
         logPanel.SetActive(!logPanel.activeSelf);
+        if (logPanel.activeSelf)
+            GameManager.Instance.onUIOn.Invoke();
     }
 
     public void CloseLog()

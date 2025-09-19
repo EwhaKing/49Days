@@ -18,6 +18,10 @@ public class GameManager : Singleton<GameManager>
     private GeneralData generalData = new GeneralData();
 
     public Action<int> onMoneyChanged;
+    public Action onWeekChanged;
+    public Action onDayChanged;
+    public Action onUIOn;
+
     public int GetMoney() { return generalData.money; }
     public void SetMoney(int value)
     { 
@@ -37,9 +41,6 @@ public class GameManager : Singleton<GameManager>
     {
         generalData.tutorialCompleted = true;
     }
-
-    public Action onWeekChanged;
-    public Action onDayChanged;
 
     /// <summary>
     /// 49일 중 몇 일째인지를 반환합니다. (1 ~ 49)

@@ -14,6 +14,7 @@ namespace ClearSky
 
         Vector3 moveDirection;
         GameInputHandler gameInputHandler;
+        PlayerHarvestController playerHarvestController;
 
         void OnEnable()
         {
@@ -28,8 +29,17 @@ namespace ClearSky
 
         void Start()
         {
+            playerHarvestController = GetComponent<PlayerHarvestController>();
             characterController = GetComponent<CharacterController>();
             anim = GetComponent<Animator>();
+
+            // UI 켜지면 멈춤
+            GameManager.Instance.onUIOn += StopMove;
+
+            // 수확 모드 들어가면 멈춤
+            playerHarvestController.onEnterHarvestMode += StopMove;
+            playerHarvestController.onEnterHarvestMode += Attack;
+
         }
 
         private void Update()
@@ -79,6 +89,12 @@ namespace ClearSky
             characterController.Move(moveDirection * movePower * Time.deltaTime);
            
         }
+
+        void StopMove()
+        {
+            moveDirection = Vector3.zero;
+            anim.SetBool("isRun", false);
+        }
         // void Jump()
         // {
         //     if (moveVelocity.y > 0
@@ -101,10 +117,7 @@ namespace ClearSky
         // }
         void Attack()
         {
-            if (moveDirection.y < 0)
-            {
-                anim.SetTrigger("attack");
-            }
+            anim.SetTrigger("attack");
         }
     }
 }
