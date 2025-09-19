@@ -16,7 +16,11 @@ public class InteractableInputHandler : MonoBehaviour, IInputHandler
     // [SerializeField] public GameObject pauseMenu;
 
     // 액션 동작의 구현부 메서드를 이벤트에 연결해 HandleInput에서 Invoke
-    public event System.Action<InputAction.CallbackContext> OnHarvestRequested;
+    // 액션 이벤트 분리  // 변경됨
+    public event System.Action<InputAction.CallbackContext> OnHarvestUpRequested;     // 변경됨(분리 때문에..)
+    public event System.Action<InputAction.CallbackContext> OnHarvestLeftRequested;   // 변경됨
+    public event System.Action<InputAction.CallbackContext> OnHarvestRightRequested;  // 변경됨
+
     public event System.Action OnHarvestCancelRequested;
 
     void OnEnable()
@@ -39,17 +43,30 @@ public class InteractableInputHandler : MonoBehaviour, IInputHandler
     /// </summary>
     public bool HandleInput(InputAction action, InputAction.CallbackContext context)
     {
-        if (playerHarvestController.inHarvestMode && action.name != "Harvest" && action.name != "HarvestCancel")
+        if (playerHarvestController.inHarvestMode
+            && action.name != "HarvestUp"
+            && action.name != "HarvestLeft"
+            && action.name != "HarvestRight"
+            && action.name != "HarvestCancel")
         {
             return true;
         }
-
-        if (action.name == "Harvest")
+        //연타 문제
+        if (action.name == "HarvestUp")
         {
-            OnHarvestRequested?.Invoke(context);
+            OnHarvestUpRequested?.Invoke(context);
             return true;
         }
-
+        if (action.name == "HarvestLeft")
+        {
+            OnHarvestLeftRequested?.Invoke(context);
+            return true;
+        }
+        if (action.name == "HarvestRight")
+        {
+            OnHarvestRightRequested?.Invoke(context);
+            return true;
+        }
         if (action.name == "HarvestCancel")
         {
             OnHarvestCancelRequested?.Invoke();

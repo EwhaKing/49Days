@@ -252,18 +252,36 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Harvest"",
+                    ""name"": ""HarvestCancel"",
                     ""type"": ""Button"",
-                    ""id"": ""b610dc1b-980a-40aa-936a-dcb386eb28cf"",
+                    ""id"": ""2efde03a-88af-4833-919c-04ce2433ed17"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""HarvestCancel"",
+                    ""name"": ""HarvestUp"",
                     ""type"": ""Button"",
-                    ""id"": ""2efde03a-88af-4833-919c-04ce2433ed17"",
+                    ""id"": ""5ec2c074-ce0e-4756-b42e-02d9a8464f4d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HarvestLeft"",
+                    ""type"": ""Button"",
+                    ""id"": ""b6e756f8-3d6c-4ce1-bdb2-c9c0472dc396"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HarvestRight"",
+                    ""type"": ""Button"",
+                    ""id"": ""54a5bc10-8eef-46d5-b26b-86ea28c4c9ae"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -394,45 +412,45 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""28f2a135-e007-4297-b34a-b2d2cd33ed12"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Harvest"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""f922e7a7-a14c-45b7-9ba3-b5af11269fc3"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Harvest"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""ee5e0cc4-15f8-47cc-a1fa-76c8b625244d"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Harvest"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""abb69803-42c1-408c-bc1a-673c341a7d0c"",
                     ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""HarvestCancel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2807115e-677c-49c7-b1cd-42f349fae0c3"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HarvestUp"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58532038-d246-48fd-9c76-2019a4b74d24"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HarvestLeft"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21f59ea5-48ab-4184-be60-17d50fb877f5"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HarvestRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -536,8 +554,10 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_PlayerMove = m_PlayerActions.FindAction("PlayerMove", throwIfNotFound: true);
         m_PlayerActions_PlayerInteract = m_PlayerActions.FindAction("PlayerInteract", throwIfNotFound: true);
-        m_PlayerActions_Harvest = m_PlayerActions.FindAction("Harvest", throwIfNotFound: true);
         m_PlayerActions_HarvestCancel = m_PlayerActions.FindAction("HarvestCancel", throwIfNotFound: true);
+        m_PlayerActions_HarvestUp = m_PlayerActions.FindAction("HarvestUp", throwIfNotFound: true);
+        m_PlayerActions_HarvestLeft = m_PlayerActions.FindAction("HarvestLeft", throwIfNotFound: true);
+        m_PlayerActions_HarvestRight = m_PlayerActions.FindAction("HarvestRight", throwIfNotFound: true);
         // DialogueContinue
         m_DialogueContinue = asset.FindActionMap("DialogueContinue", throwIfNotFound: true);
         m_DialogueContinue_DialogueContinue = m_DialogueContinue.FindAction("DialogueContinue", throwIfNotFound: true);
@@ -769,8 +789,10 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
     private List<IPlayerActionsActions> m_PlayerActionsActionsCallbackInterfaces = new List<IPlayerActionsActions>();
     private readonly InputAction m_PlayerActions_PlayerMove;
     private readonly InputAction m_PlayerActions_PlayerInteract;
-    private readonly InputAction m_PlayerActions_Harvest;
     private readonly InputAction m_PlayerActions_HarvestCancel;
+    private readonly InputAction m_PlayerActions_HarvestUp;
+    private readonly InputAction m_PlayerActions_HarvestLeft;
+    private readonly InputAction m_PlayerActions_HarvestRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerActions".
     /// </summary>
@@ -791,13 +813,21 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @PlayerInteract => m_Wrapper.m_PlayerActions_PlayerInteract;
         /// <summary>
-        /// Provides access to the underlying input action "PlayerActions/Harvest".
-        /// </summary>
-        public InputAction @Harvest => m_Wrapper.m_PlayerActions_Harvest;
-        /// <summary>
         /// Provides access to the underlying input action "PlayerActions/HarvestCancel".
         /// </summary>
         public InputAction @HarvestCancel => m_Wrapper.m_PlayerActions_HarvestCancel;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/HarvestUp".
+        /// </summary>
+        public InputAction @HarvestUp => m_Wrapper.m_PlayerActions_HarvestUp;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/HarvestLeft".
+        /// </summary>
+        public InputAction @HarvestLeft => m_Wrapper.m_PlayerActions_HarvestLeft;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/HarvestRight".
+        /// </summary>
+        public InputAction @HarvestRight => m_Wrapper.m_PlayerActions_HarvestRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -830,12 +860,18 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @PlayerInteract.started += instance.OnPlayerInteract;
             @PlayerInteract.performed += instance.OnPlayerInteract;
             @PlayerInteract.canceled += instance.OnPlayerInteract;
-            @Harvest.started += instance.OnHarvest;
-            @Harvest.performed += instance.OnHarvest;
-            @Harvest.canceled += instance.OnHarvest;
             @HarvestCancel.started += instance.OnHarvestCancel;
             @HarvestCancel.performed += instance.OnHarvestCancel;
             @HarvestCancel.canceled += instance.OnHarvestCancel;
+            @HarvestUp.started += instance.OnHarvestUp;
+            @HarvestUp.performed += instance.OnHarvestUp;
+            @HarvestUp.canceled += instance.OnHarvestUp;
+            @HarvestLeft.started += instance.OnHarvestLeft;
+            @HarvestLeft.performed += instance.OnHarvestLeft;
+            @HarvestLeft.canceled += instance.OnHarvestLeft;
+            @HarvestRight.started += instance.OnHarvestRight;
+            @HarvestRight.performed += instance.OnHarvestRight;
+            @HarvestRight.canceled += instance.OnHarvestRight;
         }
 
         /// <summary>
@@ -853,12 +889,18 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
             @PlayerInteract.started -= instance.OnPlayerInteract;
             @PlayerInteract.performed -= instance.OnPlayerInteract;
             @PlayerInteract.canceled -= instance.OnPlayerInteract;
-            @Harvest.started -= instance.OnHarvest;
-            @Harvest.performed -= instance.OnHarvest;
-            @Harvest.canceled -= instance.OnHarvest;
             @HarvestCancel.started -= instance.OnHarvestCancel;
             @HarvestCancel.performed -= instance.OnHarvestCancel;
             @HarvestCancel.canceled -= instance.OnHarvestCancel;
+            @HarvestUp.started -= instance.OnHarvestUp;
+            @HarvestUp.performed -= instance.OnHarvestUp;
+            @HarvestUp.canceled -= instance.OnHarvestUp;
+            @HarvestLeft.started -= instance.OnHarvestLeft;
+            @HarvestLeft.performed -= instance.OnHarvestLeft;
+            @HarvestLeft.canceled -= instance.OnHarvestLeft;
+            @HarvestRight.started -= instance.OnHarvestRight;
+            @HarvestRight.performed -= instance.OnHarvestRight;
+            @HarvestRight.canceled -= instance.OnHarvestRight;
         }
 
         /// <summary>
@@ -1162,19 +1204,33 @@ public partial class @systemActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPlayerInteract(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Harvest" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnHarvest(InputAction.CallbackContext context);
-        /// <summary>
         /// Method invoked when associated input action "HarvestCancel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnHarvestCancel(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HarvestUp" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHarvestUp(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HarvestLeft" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHarvestLeft(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "HarvestRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHarvestRight(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "DialogueContinue" which allows adding and removing callbacks.

@@ -21,13 +21,22 @@ public class PlayerHarvestController : MonoBehaviour
         interactableInputHandler = FindObjectOfType<InteractableInputHandler>();
         gameInputHandler = FindObjectOfType<GameInputHandler>();
         Debug.Assert(interactableInputHandler != null && gameInputHandler, "InputHandler not assigned in PlayerHarvestController");
-        interactableInputHandler.OnHarvestRequested += OnWASD;
+
+        // 기존 OnHarvestRequested → 분리된 이벤트로 교체 // 변경됨
+        interactableInputHandler.OnHarvestUpRequested += OnW;
+        interactableInputHandler.OnHarvestLeftRequested += OnA;
+        interactableInputHandler.OnHarvestRightRequested += OnD;
+
         interactableInputHandler.OnHarvestCancelRequested += OnCancel;
         gameInputHandler.OnPlayerInteractRequested += OnInteract;
     }
     void OnDisable()
     {
-        interactableInputHandler.OnHarvestRequested -= OnWASD;
+        // 분리된 이벤트 해제 // 변경됨
+        interactableInputHandler.OnHarvestUpRequested -= OnW;
+        interactableInputHandler.OnHarvestLeftRequested -= OnA;
+        interactableInputHandler.OnHarvestRightRequested -= OnD;
+
         interactableInputHandler.OnHarvestCancelRequested -= OnCancel;
         gameInputHandler.OnPlayerInteractRequested -= OnInteract;
     }
@@ -68,69 +77,129 @@ public class PlayerHarvestController : MonoBehaviour
         ResetHarvest();
     }
 
-    public void OnWASD(InputAction.CallbackContext context)
+    private void OnW(InputAction.CallbackContext ctx)
     {
-        if (!inHarvestMode || target == null) return;
-        if (!(target is Harvestable harvestable)) return;
+        if (!inHarvestMode || !(target is Harvestable h)) return;
+        if (h.Type != InteractableType.Root) return;
 
-        // ==== InputSystem에서 key path 가져오기 ====
-        string keyPath = context.control.path;
-        char input = '\0';
-        if (keyPath.Contains("/w")) input = 'W';
-        else if (keyPath.Contains("/a")) input = 'A';
-        else if (keyPath.Contains("/s")) input = 'S';
-        else if (keyPath.Contains("/d")) input = 'D';
-        // ==
+        pressCount++;
+        Debug.Log("Root press count: " + pressCount);
 
-        if (harvestable.Type == InteractableType.Tree) //AD 교차 입력, 키 분리 완료
+        if (pressCount >= 5)
         {
-            int dir = 0;
-            if (input == 'A') dir = -1; // A
-            else if (input == 'D') dir = 1; // D
+            h.Harvest(1); // 상태 갱신 // 실제로는 나중에 인게임 날짜를 받아와야 함
+            ResetHarvest();
+        }
+    }
 
-            // ✅ 교차 입력만 카운트 (같은 키 연속은 무시)
-            if (dir != 0 && dir != lastDir)
+    private void OnA(InputAction.CallbackContext ctx)
+    {
+        HandleTreeInput(-1); // A = -1
+    }
+
+    private void OnD(InputAction.CallbackContext ctx)
+    {
+        HandleTreeInput(1);  // D = 1
+    }
+
+    private void HandleTreeInput(int dir)
+    {
+        if (!inHarvestMode || !(target is Harvestable h)) return;
+        if (h.Type != InteractableType.Tree) return;
+
+        if (pressCount == 0)
+        {
+            // ✅ 첫 입력은 A(-1)든 D(1)든 상관없이 허용
+            pressCount++;
+            lastDir = dir; // 기준 방향 저장
+            Debug.Log($"Tree first press {(dir == -1 ? "A" : "D")} count: {pressCount}");
+        }
+        else
+        {
+            // ✅ 이후부터는 교차 입력만 허용
+            int expected = -lastDir; // 직전 입력의 반대
+            if (dir == expected)
             {
                 pressCount++;
-                lastDir = dir;
-
-                if (dir == -1)
-                {
-                    Debug.Log("Tree press A count: " + pressCount);
-                }
-                else if (dir == 1)
-                {
-                    Debug.Log("Tree press D count: " + pressCount);
-                }
+                lastDir = dir; // 새 기준 업데이트
+                Debug.Log($"Tree press {(dir == -1 ? "A" : "D")} count: {pressCount}");
 
                 if (pressCount >= 8) // A-D 4쌍
                 {
-                    harvestable.Harvest(1);
+                    h.Harvest(1);
                     ResetHarvest();
                 }
             }
-            else if (dir == lastDir)
+            else
             {
-                // 같은 방향 키가 연속으로 들어올 때 로그 확인용
-                Debug.Log("Ignored same key input: " + input);
-            }
-        }
-
-        else if (harvestable.Type == InteractableType.Root)
-        {
-            if (input == 'W') //W
-            {
-                pressCount++;
-                Debug.Log("Root press count: " + pressCount);
-
-                if (pressCount >= 5)
-                {
-                    harvestable.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함. 
-                    ResetHarvest();
-                }
+                Debug.Log("Wrong key order, ignored");
             }
         }
     }
+
+    // public void OnWASD(InputAction.CallbackContext context)
+    // {
+    //     if (!inHarvestMode || target == null) return;
+    //     if (!(target is Harvestable harvestable)) return;
+
+    //     // ==== InputSystem에서 key path 가져오기 ====
+    //     string keyPath = context.control.path;
+    //     char input = '\0';
+    //     if (keyPath.Contains("/w")) input = 'W';
+    //     else if (keyPath.Contains("/a")) input = 'A';
+    //     else if (keyPath.Contains("/s")) input = 'S';
+    //     else if (keyPath.Contains("/d")) input = 'D';
+    //     // ==
+
+    //     if (harvestable.Type == InteractableType.Tree) //AD 교차 입력
+    //     {
+    //         int dir = 0;
+    //         if (input == 'A') dir = -1; // A
+    //         else if (input == 'D') dir = 1; // D
+
+    //         // ✅ 교차 입력만 카운트 (같은 키 연속은 무시)
+    //         if (dir != 0 && dir != lastDir)
+    //         {
+    //             pressCount++;
+    //             lastDir = dir;
+
+    //             if (dir == -1)
+    //             {
+    //                 Debug.Log("Tree press A count: " + pressCount);
+    //             }
+    //             else if (dir == 1)
+    //             {
+    //                 Debug.Log("Tree press D count: " + pressCount);
+    //             }
+
+    //             if (pressCount >= 8) // A-D 4쌍
+    //             {
+    //                 harvestable.Harvest(1);
+    //                 ResetHarvest();
+    //             }
+    //         }
+    //         else if (dir == lastDir)
+    //         {
+    //             // 같은 방향 키가 연속으로 들어올 때 로그 확인용
+    //             Debug.Log("Ignored same key input: " + input);
+    //         }
+    //     }
+
+    //     else if (harvestable.Type == InteractableType.Root)
+    //     {
+    //         if (input == 'W') //W
+    //         {
+    //             pressCount++;
+    //             Debug.Log("Root press count: " + pressCount);
+
+    //             if (pressCount >= 5)
+    //             {
+    //                 harvestable.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함. 
+    //                 ResetHarvest();
+    //             }
+    //         }
+    //     }
+    // }
 
     // ========== 모드 관리 ==========
     public void EnterHarvestMode(Harvestable h)

@@ -166,18 +166,36 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Harvest",
+                    "name": "HarvestCancel",
                     "type": "Button",
-                    "id": "b610dc1b-980a-40aa-936a-dcb386eb28cf",
+                    "id": "2efde03a-88af-4833-919c-04ce2433ed17",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "HarvestCancel",
+                    "name": "HarvestUp",
                     "type": "Button",
-                    "id": "2efde03a-88af-4833-919c-04ce2433ed17",
+                    "id": "5ec2c074-ce0e-4756-b42e-02d9a8464f4d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HarvestLeft",
+                    "type": "Button",
+                    "id": "b6e756f8-3d6c-4ce1-bdb2-c9c0472dc396",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "HarvestRight",
+                    "type": "Button",
+                    "id": "54a5bc10-8eef-46d5-b26b-86ea28c4c9ae",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -308,45 +326,45 @@
                 },
                 {
                     "name": "",
-                    "id": "28f2a135-e007-4297-b34a-b2d2cd33ed12",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Harvest",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "f922e7a7-a14c-45b7-9ba3-b5af11269fc3",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Harvest",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ee5e0cc4-15f8-47cc-a1fa-76c8b625244d",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Harvest",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "abb69803-42c1-408c-bc1a-673c341a7d0c",
                     "path": "<Keyboard>/escape",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "HarvestCancel",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2807115e-677c-49c7-b1cd-42f349fae0c3",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HarvestUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58532038-d246-48fd-9c76-2019a4b74d24",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HarvestLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21f59ea5-48ab-4184-be60-17d50fb877f5",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "HarvestRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
