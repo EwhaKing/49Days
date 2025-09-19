@@ -19,11 +19,18 @@ public class CoinUI : MonoBehaviour
 
         coinText.text = GameManager.Instance.GetMoney().ToString("N0");
         
-        GameManager.Instance.onMoneyChanged += (int diff, int current) => 
-        {
-            ShowFloatingText(diff);
-            DOTween.To(() => current - diff, x => UpdateCoinText(x), current, 0.5f).SetEase(Ease.OutQuad);
-        };
+        GameManager.Instance.onMoneyChanged += AddCoins;
+    }
+
+    void OnDestroy()
+    {
+        GameManager.Instance.onMoneyChanged -= AddCoins;
+    }
+
+    void AddCoins(int diff, int current)
+    {
+        ShowFloatingText(diff);
+        DOTween.To(() => current - diff, x => UpdateCoinText(x), current, 0.5f).SetEase(Ease.OutQuad);
     }
 
     void UpdateCoinText(int value)
