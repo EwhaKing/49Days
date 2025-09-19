@@ -221,7 +221,7 @@ Player: 주문할래?
 나란: 밖이 꽤 추워서…
 나란: 우선 물 한 잔을 마시고 싶어요.
 나란: 앗, 따뜻한 걸로요!
-<<add_success_tea 뜨거운물>>
+<<add_success_tea hotwater>>
 <<order 일차1_밤1>>
 ===
 
@@ -234,7 +234,7 @@ title: 일차1_밤1
 나란: 고마워요.
 <<wait 1>>
 나란: 정말 따뜻하네요!
-<<elseif get_tea_name() != "뜨거운물" and get_tea_name() != "알 수 없는 차">>
+<<elseif get_tea_name() != "뜨거운물" and get_tea_name() != "알수없는차">>
 <<affinity_change 나란 -2>>
 <<change_sprite 나란 무표정>>
 나란: 음…
@@ -244,16 +244,16 @@ title: 일차1_밤1
 <<affinity_change 나란 -2>>
 <<change_sprite 나란 무표정>>
 나란:...이건 뭔가요?
--> 미안.
-	나란: 괜찮아요! 처음이라면 누구나 실수할 수 있죠.
-    <<change_sprite 나란 슬픔>>
-	나란: ...
-    <<wait 3>>
-	Player: 무슨 일 있어?
-	나란: 아, 하하. 아무것도 아니에요!
--> 그냥 마시도록 해.
-    나란: 그래도 이건...
-    나란: 좀 힘들 것 같아요.
+    -> 미안.
+        나란: 괜찮아요! 처음이라면 누구나 실수할 수 있죠.
+        <<change_sprite 나란 슬픔>>
+        나란: ...
+        <<wait 3>>
+        Player: 무슨 일 있어?
+        나란: 아, 하하. 아무것도 아니에요!
+    -> 그냥 마시도록 해.
+        나란: 그래도 이건...
+        나란: 좀 힘들 것 같아요.
 <<change_sprite 나란 기본>>
 나란: 한번 더 만들어 주실래요?
 -> 그래.
@@ -264,13 +264,13 @@ title: 일차1_밤1
 
 title: 일차1_밤_다시
 ---
-<<if get_tea_name() == "뜨거운 물">>
+<<if get_tea_name() == "뜨거운물">>
 <<affinity_change 나란 2>>
 <<change_sprite 나란 기쁨>>
 나란: 고마워요.
 <<wait 1>>
 나란: 정말 따뜻하네요!
-<<elseif get_tea_name() != "뜨거운 물" and get_tea_name() != "알 수 없는 차">>
+<<elseif get_tea_name() != "뜨거운물" and get_tea_name() != "알수없는차">>
 <<affinity_change 나란 -2>>
 <<change_sprite 나란 무표정>>
 나란: 음…

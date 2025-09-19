@@ -188,8 +188,8 @@ MonoBehaviour:
   moveSpeed: 5
   fadeDuration: 0.5
   exitOffset: {x: -0.5, y: 0, z: 0}
-  minBlinkInterval: 2
-  maxBlinkInterval: 5
+  minBlinkInterval: 0.1
+  maxBlinkInterval: 4.5
   blinkDuration: 0.12
 --- !u!1 &6164964107076355746
 GameObject:
