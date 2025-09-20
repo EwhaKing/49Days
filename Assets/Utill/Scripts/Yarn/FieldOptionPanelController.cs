@@ -1,4 +1,4 @@
-#nullable enable
+ï»¿#nullable enable
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,8 +13,8 @@ public class FieldOptionPanelController : MonoBehaviour
     public GameObject? fieldOptionButtonPrefab;
     public VerticalLayoutGroup? layoutGroup;
 
-    // ¹öÆ° ½ºÅ¸ÀÏ »ó¼ö
-    private const float ButtonWidth = 1000;
+    // ë²„íŠ¼ ìŠ¤íƒ€ì¼ ìƒìˆ˜
+    private const float ButtonWidth = 1000f;
     private const float ButtonHeight = 100f;
     private const int FontSize = 42;
 
@@ -23,18 +23,18 @@ public class FieldOptionPanelController : MonoBehaviour
 
 
     /// <summary>
-    /// ÀÏ¹İÀûÀÎ ¿É¼Ç Ã³¸®ÇÒ ¶§ ºÒ·Á¿È
+    /// ì¼ë°˜ì ì¸ ì˜µì…˜ ì²˜ë¦¬í•  ë•Œ ë¶ˆë ¤ì˜´
     /// </summary>
     public async Task<int> ShowOptionsAsync(DialogueOption[] options, CancellationToken cancellationToken)
     {
-        // ±âÁ¸ ¹öÆ° Á¦°Å
+        // ê¸°ì¡´ ë²„íŠ¼ ì œê±°
         foreach (Transform child in panel!)
             Destroy(child.gameObject);
 
-        // ¿É¼Ç ¹è¿­ ÀúÀå
+        // ì˜µì…˜ ë°°ì—´ ì €ì¥
         currentOptions = options;
 
-        // spacing Á¶Àı
+        // spacing ì¡°ì ˆ
         if (layoutGroup != null)
         {
             switch (options.Length)
@@ -47,10 +47,10 @@ public class FieldOptionPanelController : MonoBehaviour
             layoutGroup.childAlignment = TextAnchor.MiddleCenter;
         }
 
-        // ÆĞ³Î À§Ä¡ Á¶Á¤ (»ó´Ü ±âÁØ)
+        // íŒ¨ë„ ìœ„ì¹˜ ì¡°ì • (ìƒë‹¨ ê¸°ì¤€)
         if (panel != null)
         {
-            panel.anchorMin = new Vector2(0.5f, 1f); // »ó´Ü Áß¾Ó anchor
+            panel.anchorMin = new Vector2(0.5f, 1f); // ìƒë‹¨ ì¤‘ì•™ anchor
             panel.anchorMax = new Vector2(0.5f, 1f);
             panel.pivot = new Vector2(0.5f, 1f);
 
@@ -65,7 +65,7 @@ public class FieldOptionPanelController : MonoBehaviour
             panel.anchoredPosition = new Vector2(0f, yOffset);
         }
 
-        // ¹öÆ° »ı¼º ¹× ½ºÅ¸ÀÏ Àû¿ë
+        // ë²„íŠ¼ ìƒì„± ë° ìŠ¤íƒ€ì¼ ì ìš©
         for (int i = 0; i < options.Length; i++)
         {
             var btnObj = Instantiate(fieldOptionButtonPrefab!, panel);
@@ -73,11 +73,11 @@ public class FieldOptionPanelController : MonoBehaviour
             var btn = btnObj.GetComponent<Button>();
             var txt = btnObj.GetComponentInChildren<TextMeshProUGUI>();
 
-            // ¹öÆ° Å©±â °íÁ¤
+            // ë²„íŠ¼ í¬ê¸° ê³ ì •
             if (btnRect != null)
                 btnRect.sizeDelta = new Vector2(ButtonWidth, ButtonHeight);
 
-            // ÅØ½ºÆ® ½ºÅ¸ÀÏ Àû¿ë
+            // í…ìŠ¤íŠ¸ ìŠ¤íƒ€ì¼ ì ìš©
             if (txt != null)
             {
                 txt.text = options[i].Line.TextWithoutCharacterName.Text;
@@ -88,17 +88,17 @@ public class FieldOptionPanelController : MonoBehaviour
 
             int idx = i;
 
-            // °¢ ¹öÆ°¿¡ Å¬¸¯ ÀÌº¥Æ® µî·Ï
+            // ê° ë²„íŠ¼ì— í´ë¦­ ì´ë²¤íŠ¸ ë“±ë¡
             btn.onClick.AddListener(() => OnOptionSelected(idx));
         }
 
-        // ¿É¼Ç ÆĞ³Î È°¼ºÈ­
+        // ì˜µì…˜ íŒ¨ë„ í™œì„±í™”
         panel!.gameObject.SetActive(true);
 
-        // ¼±ÅÃµÈ ¿É¼ÇÀ» Àü´ŞÇÏ´Â °´Ã¼ »ı¼º
+        // ì„ íƒëœ ì˜µì…˜ì„ ì „ë‹¬í•˜ëŠ” ê°ì²´ ìƒì„±
         selectionSource = new TaskCompletionSource<int>();
 
-        // Ãë¼Ò ÅäÅ« µî·Ï ¹× ´ë±â
+        // ì·¨ì†Œ í† í° ë“±ë¡ ë° ëŒ€ê¸°
         using (cancellationToken.Register(() => selectionSource.TrySetCanceled()))
         {
             int result = await selectionSource.Task;
@@ -107,10 +107,10 @@ public class FieldOptionPanelController : MonoBehaviour
         }
     }
 
-    // ¿É¼Ç ¼±ÅÃ ½Ã È£Ãâ (¼±ÅÃµÈ ÀÎµ¦½º Àü´Ş)
+    // ì˜µì…˜ ì„ íƒ ì‹œ í˜¸ì¶œ (ì„ íƒëœ ì¸ë±ìŠ¤ ì „ë‹¬)
     private void OnOptionSelected(int index)
     {
-        // ·Î±×¿¡ ÀúÀå
+        // ë¡œê·¸ì— ì €ì¥
         if (currentOptions != null && index >= 0 && index < currentOptions.Length)
         {
             var option = currentOptions[index];
@@ -121,24 +121,21 @@ public class FieldOptionPanelController : MonoBehaviour
     }
 
     /// <summary>
-    /// FieldDialoguePresenter°¡ EÅ°·Î ÃÖÃÊ È£ÃâµÉ ¶§ ºÒ·Á¿È
-    /// YarnÀÇ ±âº» ÆĞ³ÎÀÌ ¾Æ´Ñ Ä¿½ºÅÒ UI ¶ç¿ò
+    /// FieldDialoguePresenterê°€ Eí‚¤ë¡œ ìµœì´ˆ í˜¸ì¶œë  ë•Œ ë¶ˆë ¤ì˜´
+    /// Yarnì˜ ê¸°ë³¸ íŒ¨ë„ì´ ì•„ë‹Œ ì»¤ìŠ¤í…€ UI ë„ì›€
     /// </summary>
     public event Action<int>? OnEntryOptionSelected;
-    public void ShowEntryOptions(DialogueOption[] options)
+    public void ShowEntryOptions(DialogueOption[] options, bool[]? clickedStates = null)
     {
-        // ±âÁ¸ ¹öÆ° Á¦°Å
         foreach (Transform child in panel!)
             Destroy(child.gameObject);
 
-        // spacing/Á¤·Ä Á¶Á¤
         if (layoutGroup != null)
         {
             layoutGroup.spacing = 0f;
             layoutGroup.childAlignment = TextAnchor.MiddleCenter;
         }
 
-        // ÆĞ³Î À§Ä¡ Á¶Á¤
         if (panel != null)
         {
             panel.anchorMin = new Vector2(0.5f, 1f);
@@ -147,7 +144,6 @@ public class FieldOptionPanelController : MonoBehaviour
             panel.anchoredPosition = new Vector2(800f, -600f);
         }
 
-        // ¹öÆ° »ı¼º ¹× ½ºÅ¸ÀÏ Àû¿ë
         for (int i = 0; i < options.Length; i++)
         {
             var btnObj = Instantiate(fieldOptionButtonPrefab!, panel);
@@ -167,10 +163,29 @@ public class FieldOptionPanelController : MonoBehaviour
             }
 
             int idx = i;
-            btn.onClick.AddListener(() => {
-                panel!.gameObject.SetActive(false);
-                OnEntryOptionSelected?.Invoke(idx);
-            });
+
+            // í´ë¦­ ìƒíƒœì— ë”°ë¼ ë²„íŠ¼ ì²˜ë¦¬
+            if (clickedStates != null && clickedStates.Length == 3 && clickedStates[idx])
+            {
+                if (idx == 2)
+                {
+                    btn.gameObject.SetActive(false);
+                }
+                else
+                {
+                    btn.interactable = false;
+                    var colors = btn.colors;
+                    colors.normalColor = new Color(1f, 1f, 1f, 0.6f);
+                    btn.colors = colors;
+                }
+            }
+            else
+            {
+                btn.onClick.AddListener(() => {
+                    panel!.gameObject.SetActive(false);
+                    OnEntryOptionSelected?.Invoke(idx);
+                });
+            }
         }
 
         panel!.gameObject.SetActive(true);

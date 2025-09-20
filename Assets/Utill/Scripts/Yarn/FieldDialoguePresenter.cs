@@ -38,6 +38,8 @@ public class FieldDialoguePresenter : DialoguePresenterBase
 
     private int entryCount = 0;
 
+    private Dictionary<string, bool[]> entryOptionClicked = new(); // [0]:잡담, [1]:질문, [2]:선물
+
     void OnEnable()
     {
         if (dialogueInputHandler != null)
@@ -287,6 +289,7 @@ public class FieldDialoguePresenter : DialoguePresenterBase
     /// <summary>
     /// 첫 진입 시(entryCount == 0) 엔트리 옵션 패널을 커스텀 방식으로 띄움
     /// 이후에는 일반 옵션 패널을 Yarn 기본 방식으로 띄움
+    /// 캐릭터별 entryOption 클릭 상태 저장해서 FieldOptionPanelController에 넘김
     /// </summary>
     public override async YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, CancellationToken cancellationToken)
     {
@@ -296,21 +299,25 @@ public class FieldDialoguePresenter : DialoguePresenterBase
 
         FieldDialoguePresenterRouter.isOptionPanelActive = true;
 
+        string characterName = currentCharacterData?.characterName ?? "";
+
         if (entryCount == 0)
         {
-            fieldOptionPanelController.ShowEntryOptions(dialogueOptions);
+            var clickedStates = GetEntryOptionClicked(characterName);
+            fieldOptionPanelController.ShowEntryOptions(dialogueOptions, clickedStates);
 
-            Action<int> entryHandler = null!; // 1. 핸들러 변수 선언
-            var tcs = new TaskCompletionSource<int>(); // 2. 비동기 결과를 받을 객체 생성
+            Action<int> entryHandler = null!;
+            var tcs = new TaskCompletionSource<int>();
 
-            entryHandler = (selectedIdx) => { // 3. 핸들러 정의
-                tcs.TrySetResult(selectedIdx); // 4. 선택된 값을 tcs에 전달 (비동기 대기 중인 곳에 값 전달)
-                fieldOptionPanelController.OnEntryOptionSelected -= entryHandler; // 5. 이벤트에서 핸들러 제거 (한 번만 실행되게)
+            entryHandler = (selectedIdx) => {
+                SetEntryOptionClicked(characterName, selectedIdx); // 클릭 상태 저장
+                tcs.TrySetResult(selectedIdx);
+                fieldOptionPanelController.OnEntryOptionSelected -= entryHandler;
             };
 
-            fieldOptionPanelController.OnEntryOptionSelected += entryHandler; // 6. 이벤트에 핸들러 등록
+            fieldOptionPanelController.OnEntryOptionSelected += entryHandler;
 
-            int selected = await tcs.Task; // 7. 사용자가 선택할 때까지 기다림. 선택하면 selectedIdx 값이 selected에 들어감
+            int selected = await tcs.Task;
 
             FieldDialoguePresenterRouter.isOptionPanelActive = false;
             entryCount++;
@@ -321,5 +328,20 @@ public class FieldDialoguePresenter : DialoguePresenterBase
 
         FieldDialoguePresenterRouter.isOptionPanelActive = false;
         return dialogueOptions[normalSelected];
+    }
+
+    // 해당 캐릭터의 entryOption 클릭 상태 배열 Get
+    public bool[] GetEntryOptionClicked(string characterName)
+    {
+        if (!entryOptionClicked.ContainsKey(characterName))
+            entryOptionClicked[characterName] = new bool[3];
+        return entryOptionClicked[characterName];
+    }
+
+    // 해당 캐릭터의 entryOption 클릭 상태 배열 Set
+    public void SetEntryOptionClicked(string characterName, int idx)
+    {
+        var arr = GetEntryOptionClicked(characterName);
+        arr[idx] = true;
     }
 }
