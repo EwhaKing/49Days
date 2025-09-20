@@ -380,40 +380,25 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
     void ShowIngredientListUI()
     {
-
         ClearIngredientListUI();
 
-        if (ingredients.Count == 0)
+        if (ingredients.Count == 0 && tea.additionalIngredient == null)
         {
             //Debug.Log("재료가 없어서 UI 생성 안 함");
             return;
         }
 
+        // ✅ 핵심 재료 UI 추가
         foreach (TeaIngredient ing in ingredients)
         {
-            SpriteRenderer sr = ing.GetComponent<SpriteRenderer>();
-            if (sr != null && sr.sprite != null)
-            {
-                Debug.Log($"🧪 Tooltip에 들어갈 스프라이트: {sr.sprite?.name}");
-                GameObject imgObj = Instantiate(ingredientImagePrefab, ingredientListParent);
-                UnityEngine.UI.Image img = imgObj.GetComponent<UnityEngine.UI.Image>();
-                if (img != null)
-                {
-                    img.sprite = sr.sprite;
-                    img.color = sr.color;  // ✅ 색상까지 복사
+            CreateIngredientUI(ing);
+        }
 
-                    // 2️⃣ 세로 고정값 지정
-                    float fixedHeight = 100f; // 원하는 세로 크기
-                    float aspect = (float)sr.sprite.rect.width / sr.sprite.rect.height; // 스프라이트 비율
-                    float width = fixedHeight * aspect;
-
-                    // 3️⃣ RectTransform 크기 조정
-                    RectTransform rt = img.GetComponent<RectTransform>();
-                    rt.sizeDelta = new Vector2(width, fixedHeight);
-                }
-
-                Debug.Log($"🖼 UI Image에 할당된 스프라이트: {img.sprite?.name}");
-            }
+        // ✅ [수정된 부분] 추가재료도 UI에 표시
+        if (tea.additionalIngredient != null)
+        {
+            CreateIngredientUI(tea.additionalIngredient);
+            Debug.Log($"[추가재료 UI] {tea.additionalIngredient.ingredientName} 표시됨");
         }
 
         // 🟡 레이아웃 갱신 먼저
@@ -427,6 +412,30 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
             Debug.Log($"📦 Child Width: {childRect.rect.width}");
         }
     }
+
+    // ✅ 공통 UI 생성 함수로 분리
+    private void CreateIngredientUI(TeaIngredient ing)
+    {
+        SpriteRenderer sr = ing.GetComponent<SpriteRenderer>();
+        if (sr != null && sr.sprite != null)
+        {
+            GameObject imgObj = Instantiate(ingredientImagePrefab, ingredientListParent);
+            UnityEngine.UI.Image img = imgObj.GetComponent<UnityEngine.UI.Image>();
+            if (img != null)
+            {
+                img.sprite = sr.sprite;
+                img.color = sr.color;  // ✅ 색상까지 복사
+
+                float fixedHeight = 100f;
+                float aspect = (float)sr.sprite.rect.width / sr.sprite.rect.height;
+                float width = fixedHeight * aspect;
+
+                RectTransform rt = img.GetComponent<RectTransform>();
+                rt.sizeDelta = new Vector2(width, fixedHeight);
+            }
+        }
+    }
+
 
     void ClearIngredientListUI()
     {
