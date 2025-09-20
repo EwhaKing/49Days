@@ -44,7 +44,6 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
         runner.AddCommandHandler<string>("show_image", FadeIn);
         runner.AddCommandHandler<string>("play_sfx", PlaySfx);
         runner.AddCommandHandler<string>("change_bgm", ChangeBgm);
-        runner.AddCommandHandler("skip_tutorial", SkipTutorial);
         runner.AddFunction<int>("get_day", GetDay);
         runner.AddFunction<int>("get_week", GetWeek);
         runner.AddFunction<int>("get_money", GetMoney);
@@ -53,9 +52,12 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
         runner.AddCommandHandler("add_random_success_tea", OrderManager.Instance.GenerateRandomSuccessTea);
         runner.AddFunction<bool>("is_recent_unlocked_tea", IsRecentUnlockedTea);
         runner.AddCommandHandler("make_night", MakeNight);
+        runner.AddCommandHandler("finish_night", FinishNight);
         runner.AddFunction<int>("get_day_order_count", GetDayOrderCount);
         runner.AddCommandHandler("increment_day_order_count", IncrementDayOrderCount);
         runner.AddCommandHandler("reset_day_order_count", ResetDayOrderCount);
+        runner.AddCommandHandler<string>("go_to_kitchen", GoToKitchen);
+        runner.AddCommandHandler<string>("set_kitchen_node_title", SetKitchenNodeTitle);
 
         runner.gameObject.SetActive(false);
         
@@ -67,6 +69,31 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
         // 밤 전환 연출 넣기
         Action startNightDialogue = () => RunDialogue($"일차{GameManager.Instance.GetDate()}_밤");
         CoroutineUtil.Instance.RunAfterSeconds(startNightDialogue, 1.0f);
+    }
+
+    public void FinishNight()
+    {
+        // 하루가 지나는 연출 넣기
+        GameFlowManager.FinishDay();
+    }
+
+    /// <summary>
+    /// 주방으로 넘어가는 함수. 넘어가서 실행할 노드를 인자로 넘겨준다. <br/>
+    /// 후에 go_back_teahouse_front를 해주지 않으면 게임 플로우가 꼬이니 주의
+    /// </summary>
+    /// <param name="nodeTitle"></param>
+    public void GoToKitchen(string nodeTitle)
+    {
+        OrderManager.Instance.kitchenNodeTitle = nodeTitle;
+        GameFlowManager.LoadScene(GameFlowManager.KITCHEN_SCENE_NAME);
+    }
+
+    /// <summary>
+    /// 지금 당장은 아니고 order로 넘어간 주방에서 실행할 노드를 설정한다.
+    /// </summary>
+    public void SetKitchenNodeTitle(string nodeTitle)
+    {
+        OrderManager.Instance.kitchenNodeTitle = nodeTitle;
     }
 
     public int GetDayOrderCount()
@@ -288,10 +315,5 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
     public void ChangeBgm(string bgmName)
     {
         SoundManager.Instance.PlayBgm(bgmName);
-    }
-
-    public void SkipTutorial()
-    {
-        GameManager.Instance.TutorialComplete();
     }
 }

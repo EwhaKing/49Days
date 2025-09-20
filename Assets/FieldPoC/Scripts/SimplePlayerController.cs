@@ -22,10 +22,6 @@ namespace ClearSky
             Debug.Assert(gameInputHandler != null, "GameInputHandler not found in the scene.");
             gameInputHandler.OnPlayerMoveRequested += OnPlayerMove;
         }
-        void OnDisable()
-        {
-            gameInputHandler.OnPlayerMoveRequested -= OnPlayerMove;
-        }
 
         void Start()
         {
@@ -40,6 +36,14 @@ namespace ClearSky
             playerHarvestController.onEnterHarvestMode += StopMove;
             playerHarvestController.onEnterHarvestMode += Attack;
 
+        }
+        
+        void OnDisable()
+        {
+            gameInputHandler.OnPlayerMoveRequested -= OnPlayerMove;
+            GameManager.Instance.onUIOn -= StopMove;
+            playerHarvestController.onEnterHarvestMode -= StopMove;
+            playerHarvestController.onEnterHarvestMode -= Attack;
         }
 
         private void Update()

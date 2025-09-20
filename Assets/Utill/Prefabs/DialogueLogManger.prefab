@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2830756491775970711}
   - component: {fileID: 7703169495885811212}
   - component: {fileID: 522193557153516931}
+  - component: {fileID: 1643694500886015723}
   m_Layer: 5
   m_Name: LogText
   m_TagString: Untagged
@@ -34,8 +35,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1067.3}
-  m_SizeDelta: {x: 2163.3735, y: 1067.3}
+  m_AnchoredPosition: {x: 50, y: -102.43}
+  m_SizeDelta: {x: 2266.5874, y: 0}
   m_Pivot: {x: 0, y: 0}
 --- !u!222 &7703169495885811212
 CanvasRenderer:
@@ -65,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: "\uB85C\uADF8: \uC548\uB155"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3ad263d64d1f0bf45934bf42ba5aa135, type: 2}
   m_sharedMaterial: {fileID: -2118853791976562385, guid: 3ad263d64d1f0bf45934bf42ba5aa135, type: 2}
@@ -134,6 +135,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1643694500886015723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 273899516250609966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &301097173850138637
 GameObject:
   m_ObjectHideFlags: 0
@@ -195,7 +210,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 11
+  m_SortingOrder: 12
   m_TargetDisplay: 0
 --- !u!114 &4579083032131662449
 MonoBehaviour:
@@ -283,8 +298,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   logTextUI: {fileID: 522193557153516931}
-  logScrollController: {fileID: 2164807801980995569}
   logPanel: {fileID: 301097173850138637}
+  scrollRect: {fileID: 5957617965484032650}
 --- !u!1 &3169385288088757140
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +387,6 @@ GameObject:
   - component: {fileID: 5515069937282105105}
   - component: {fileID: 8641488105944448966}
   - component: {fileID: 5957617965484032650}
-  - component: {fileID: 2164807801980995569}
   m_Layer: 5
   m_Name: LogPanel
   m_TagString: Untagged
@@ -451,13 +465,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 5057053158436989280}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 0.2
   m_Viewport: {fileID: 6637928375233888525}
   m_HorizontalScrollbar: {fileID: 0}
   m_VerticalScrollbar: {fileID: 0}
@@ -468,21 +482,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2164807801980995569
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5188096899299415055}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b9cd0f8d67ff82448dfae186fc14b83, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scrollRect: {fileID: 5957617965484032650}
-  content: {fileID: 5057053158436989280}
-  viewport: {fileID: 6637928375233888525}
 --- !u!1 &6030080171364843546
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,11 +605,11 @@ RectTransform:
   - {fileID: 2830756491775970711}
   m_Father: {fileID: 6637928375233888525}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00029227944, y: 0.0002716951}
-  m_SizeDelta: {x: 2257.2, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 2368.2, y: 0}
+  m_Pivot: {x: 0, y: 1}
 --- !u!114 &3402168816180686736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,10 +623,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 50
+    m_Right: 50
+    m_Top: 50
+    m_Bottom: 50
   m_ChildAlignment: 0
   m_Spacing: 0
   m_ChildForceExpandWidth: 1

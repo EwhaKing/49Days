@@ -28,7 +28,7 @@ public class CoroutineUtil : Singleton<CoroutineUtil>
     }
     private IEnumerator AfterFirstFrame(Action action)
     {
-        yield return null; // 한 프레임 대기
+        yield return new WaitForEndOfFrame(); // 한 프레임 대기
         action?.Invoke();
     }
 

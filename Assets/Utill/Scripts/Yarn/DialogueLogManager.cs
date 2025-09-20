@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 public class DialogueLogManager : SceneSingleton<DialogueLogManager>
 {
-    private static List<DialogueLogEntry> dialogueLogs = new();
+    private static readonly List<DialogueLogEntry> dialogueLogs = new();
     [SerializeField] private TextMeshProUGUI logTextUI;
-    [SerializeField] private LogScrollController logScrollController;
     [SerializeField] private GameObject logPanel;
+    [SerializeField] private ScrollRect scrollRect;
     private UIInputHandler uiInputHandler;
 
     private void OnEnable() {
@@ -23,6 +23,7 @@ public class DialogueLogManager : SceneSingleton<DialogueLogManager>
 
     private void Start()
     {
+        Debug.Assert(scrollRect != null, "ScrollRect 없음");
         Debug.Assert(logPanel != null, "로그패널 없음");
         Debug.Assert(logTextUI != null, "로그텍스트UI 없음");
         logPanel.SetActive(false);
@@ -37,17 +38,6 @@ public class DialogueLogManager : SceneSingleton<DialogueLogManager>
     {
         dialogueLogs.Add(new DialogueLogEntry(characterName, text));
         logTextUI.text += $"{characterName}: {text}\n";
-
-        // LogText�� Ȱ��ȭ�� ��쿡�� �ڷ�ƾ ����
-        if (logTextUI.gameObject.activeInHierarchy)
-            StartCoroutine(ScrollAndUpdate());
-    }
-
-    private IEnumerator ScrollAndUpdate()
-    {
-        yield return null; // �� ������ ���(���̾ƿ� ���� ��)
-        logScrollController.UpdateScrollInteractable();
-        logScrollController.ScrollToBottom();
     }
 
     public IReadOnlyList<DialogueLogEntry> GetLogs() => dialogueLogs;
@@ -57,13 +47,18 @@ public class DialogueLogManager : SceneSingleton<DialogueLogManager>
         return logPanel.activeSelf;
     }
 
-    public void ToggleLog()
+    public void ToggleLog() 
     {
         if (GameFlowManager.IsInField()) return;
 
         logPanel.SetActive(!logPanel.activeSelf);
         if (logPanel.activeSelf)
-            GameManager.Instance.onUIOn.Invoke();
+        {
+            logTextUI.ForceMeshUpdate();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(scrollRect.content);
+            CoroutineUtil.Instance.RunAfterFirstFrame(()=>scrollRect.verticalNormalizedPosition = 0f);
+            GameManager.Instance.onUIOn?.Invoke();
+        }
     }
 
     public void CloseLog()

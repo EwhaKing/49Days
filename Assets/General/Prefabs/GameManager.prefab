@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c808a509f9aaa4ba1766ace58fa579, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMode: 2
+  testMode: 1
 --- !u!1 &8616339499851047058
 GameObject:
   m_ObjectHideFlags: 0
@@ -344,6 +344,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3545213169180264508}
     m_Modifications:
+    - target: {fileID: 1539888480146704864, guid: da2d9512844a6924ba052fa8471992d2, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1539888480146704864, guid: da2d9512844a6924ba052fa8471992d2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5860386374310766555, guid: da2d9512844a6924ba052fa8471992d2, type: 3}
       propertyPath: m_Pivot.x
       value: 0

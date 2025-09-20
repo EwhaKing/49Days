@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 
 public class GeneralData
 {
-    public bool tutorialCompleted = false;
     public int money = 0;
     public int week = 1; // 1 ~ 7 주차
     public int day = 1;  // 1 ~ 7 각 주의 일차
@@ -30,15 +29,6 @@ public class GameManager : Singleton<GameManager>
     {
         generalData.money = Math.Clamp(amount + generalData.money, 0, 9999999);
         onMoneyChanged?.Invoke(amount, generalData.money);
-    }
-
-    public bool IsTutorialCompleted()
-    {
-        return generalData.tutorialCompleted;
-    }
-    public void TutorialComplete() 
-    {
-        generalData.tutorialCompleted = true;
     }
 
     /// <summary>
@@ -77,6 +67,14 @@ public class GameManager : Singleton<GameManager>
         }
         onDayChanged?.Invoke();
     }
+
+    public void SetDateZero() // 임시
+    {
+        generalData.week = 1;
+        generalData.day = 0;
+    }
+
+
     // private string timeOfDay = "낮"; // "낮" or "밤"
     // public string GetTimeOfDay() { return timeOfDay; }
     // public void SetTimeOfDay(string timeOfDay)

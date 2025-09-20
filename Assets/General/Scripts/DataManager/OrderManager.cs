@@ -42,6 +42,9 @@ public class OrderManager : SceneSingleton<OrderManager>
     private unlockedTeaList unlockedTeaList = new unlockedTeaList();
     private int dayOrderCount = 0;
 
+    // 주방 넘어가서 실행해야하는 노드
+    public string kitchenNodeTitle = string.Empty;
+
     void Start()
     {
         GameManager.Instance.onWeekChanged += () => { ClearRecentUnlockedTea(); };
@@ -273,7 +276,7 @@ public class OrderManager : SceneSingleton<OrderManager>
         
         if (autoPay)
         {
-            Pay();
+            CoroutineUtil.Instance.RunAfterSeconds(Pay, 1f);
         }
     }
 

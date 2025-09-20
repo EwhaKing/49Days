@@ -3,27 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using Yarn.Unity;
 
-public class KitchenTutorial : MonoBehaviour
+public class KitchenYarnManager : MonoBehaviour
 {
     [SerializeField] DialogueRunner tutorialRunner;
     [SerializeField] Transform transformCyrus;
     [SerializeField] CameraSmoothShift cameraSmoothShift;
 
+    OrderManager orderManager;
+
     void Start()
     {
         tutorialRunner.AddCommandHandler<float, float>("move_cyrus", MoveCyrus);
         tutorialRunner.AddCommandHandler("move_camera", MoveCamera);
+        tutorialRunner.AddCommandHandler<string>("go_teahouse_front", GoTeaHouseFront);
 
-        if(!GameManager.Instance.IsTutorialCompleted())
+        orderManager = OrderManager.Instance;
+
+        if(orderManager.kitchenNodeTitle != string.Empty)
         {
             tutorialRunner.onDialogueComplete.AddListener(() => {
-                UIManager.Instance.BlockingUIOff(tutorialRunner.gameObject);
-                GameManager.Instance.TutorialComplete();
-                tutorialRunner.enabled = false;
+                orderManager.kitchenNodeTitle = string.Empty;
+                tutorialRunner.gameObject.SetActive(false);
             });
 
             tutorialRunner.gameObject.SetActive(true);
-            tutorialRunner.StartDialogue("튜토리얼_주방");
+            tutorialRunner.StartDialogue(orderManager.kitchenNodeTitle);
         }
         else
         {
@@ -40,5 +44,11 @@ public class KitchenTutorial : MonoBehaviour
     {
         cameraSmoothShift.OnMoveCamera();
         yield return cameraSmoothShift.transitionDuration;
+    }
+
+    void GoTeaHouseFront(string nodeTitle)
+    {
+        orderManager.SetAfterNodeTitle(nodeTitle);
+        GameFlowManager.LoadScene(GameFlowManager.TEA_HOUSE_FRONT_SCENE_NAME);
     }
 }

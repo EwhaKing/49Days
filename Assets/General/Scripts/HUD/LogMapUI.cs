@@ -11,18 +11,16 @@ public class LogMapUI : MonoBehaviour
     [SerializeField] private Sprite mapSprite;  // TODO: 맵 아이콘 스프라이트 교체 필요.
     private Image iconImage;
 
-    private string kitchenSceneName = "Kitchen";
-    private string teaHouseFrontSceneName = "TeaHouseFront";
-    private string fieldSceneName = "FieldPoC";
-
     private Button button;
     void Start()
     {
-        if (SceneManager.GetActiveScene().name == kitchenSceneName)
+        if (GameFlowManager.IsInField())
         {
-            logMapIcon.SetActive(false);
+            iconImage = logMapIcon.GetComponent<Image>();
+            iconImage.sprite = mapSprite;
+            logMapIcon.SetActive(true);
         }
-        else if (SceneManager.GetActiveScene().name == teaHouseFrontSceneName)
+        else
         {
             iconImage = logMapIcon.GetComponent<Image>(); 
             iconImage.sprite = logSprite;
@@ -33,15 +31,6 @@ public class LogMapUI : MonoBehaviour
             {
                 DialogueLogManager.Instance.ToggleLog();
             });
-
         }
-        else if (SceneManager.GetActiveScene().name == fieldSceneName)
-        {
-            iconImage = logMapIcon.GetComponent<Image>();
-            iconImage.sprite = mapSprite;
-            logMapIcon.SetActive(true);
-        }
-
-
     }
 }

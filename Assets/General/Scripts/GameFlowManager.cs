@@ -18,20 +18,19 @@ public class GameFlowManager
         switch (GameManager.Instance.testMode)
         {
             case TestMode.무한_주방_모드:
-                sceneName = "Kitchen";
-                GameManager.Instance.TutorialComplete();
+                sceneName = KITCHEN_SCENE_NAME;
                 break;
             case TestMode.일차0_밤_스타트_모드:
-                sceneName = "TeaHouseFront";
+                sceneName = TEA_HOUSE_FRONT_SCENE_NAME;
+                GameManager.Instance.SetDateZero();
                 OrderManager.Instance.SetAfterNodeTitle("일차0_밤");
                 break;
             case TestMode.낮_스타트_모드:
-                sceneName = "TeaHouseFront";
-                GameManager.Instance.TutorialComplete();
+                sceneName = TEA_HOUSE_FRONT_SCENE_NAME;
                 OrderManager.Instance.SetAfterNodeTitle("낮_주문");
                 break;
             case TestMode.필드_스타트_모드:
-                sceneName = "FieldPoC";
+                sceneName = FIELD_SCENE_NAME;
                 break;
         }
 
@@ -42,16 +41,31 @@ public class GameFlowManager
     }
 
     /// <summary>
+    /// 필드 끝내고 찻집으로 돌아갈 때 실행
+    /// </summary>
+    public static void FinishField()
+    {
+        OrderManager.Instance.SetAfterNodeTitle("낮_주문");
+        LoadScene(TEA_HOUSE_FRONT_SCENE_NAME);
+    }
+
+    public static void FinishDay()
+    {
+        GameManager.Instance.NextDay();
+        LoadScene(FIELD_SCENE_NAME);
+    }
+
+    /// <summary>
     /// 주방에서 차 만들고 나올 때 실행
     /// </summary>
     public static void FinishKitchen()
     {
         if (GameManager.Instance.testMode == TestMode.무한_주방_모드)
         {
-            LoadScene("Kitchen");
+            LoadScene(KITCHEN_SCENE_NAME);
             return;
         }
-        LoadScene("TeaHouseFront");
+        LoadScene(TEA_HOUSE_FRONT_SCENE_NAME);
     }
 
     /// <summary>

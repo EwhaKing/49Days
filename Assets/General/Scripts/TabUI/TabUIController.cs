@@ -31,7 +31,7 @@ public class TabUIController : SceneSingleton<TabUIController>
     {
         commonPanel.SetActive(!commonPanel.activeSelf); // 현재 상태 반전
         if (commonPanel.activeSelf)
-            GameManager.Instance.onUIOn.Invoke();
+            GameManager.Instance.onUIOn?.Invoke();
     }
 
     /// <summary>
