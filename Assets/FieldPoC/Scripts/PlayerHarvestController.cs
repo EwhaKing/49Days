@@ -53,10 +53,10 @@ public class PlayerHarvestController : MonoBehaviour
             switch (harvestable.Type)
             {
                 case InteractableType.Tree:
-                    if (harvestTimer > 3f) ResetHarvest();
+                    if (harvestTimer > 5f) ResetHarvest();
                     break;
                 case InteractableType.Root:
-                    if (harvestTimer > 2.5f) ResetHarvest();
+                    if (harvestTimer > 4f) ResetHarvest();
                     break;
             }
         }
@@ -71,7 +71,7 @@ public class PlayerHarvestController : MonoBehaviour
     }
 
 
-    //esc키에 따른 동작
+    //TODO : esc키에 따른 동작
     public void OnCancel()
     {
         ResetHarvest();
@@ -87,7 +87,8 @@ public class PlayerHarvestController : MonoBehaviour
 
         if (pressCount >= 5)
         {
-            h.Harvest(1); // 상태 갱신 // 실제로는 나중에 인게임 날짜를 받아와야 함
+            int currentDay = GameManager.Instance.GetDate();   // 날짜 가져오기
+            h.Harvest(currentDay);
             ResetHarvest();
         }
     }
@@ -126,7 +127,8 @@ public class PlayerHarvestController : MonoBehaviour
 
                 if (pressCount >= 8) // A-D 4쌍
                 {
-                    h.Harvest(1);
+                    int currentDay = GameManager.Instance.GetDate();   // 날짜 가져오기
+                    h.Harvest(currentDay);
                     ResetHarvest();
                 }
             }
@@ -218,7 +220,8 @@ public class PlayerHarvestController : MonoBehaviour
 
         if (h.Type == InteractableType.Flower)
         {
-            h.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함.
+            int currentDay = GameManager.Instance.GetDate();   // 날짜 가져오기
+            h.Harvest(currentDay);
             ResetHarvest();
         }
     }

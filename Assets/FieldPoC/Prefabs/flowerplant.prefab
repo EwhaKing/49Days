@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6031746002658383512}
   - component: {fileID: 4137754222393591988}
   m_Layer: 0
-  m_Name: bushplant
+  m_Name: flowerplant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,9 +103,8 @@ MonoBehaviour:
   dropTable:
   - itemName: "\uC7A5\uBBF8"
     amount: 1
+  cooldownDays: 2
   withoutFruitSprite: {fileID: 0}
-  cooldownDays: 1
-  available: 1
 --- !u!135 &4137754222393591988
 SphereCollider:
   m_ObjectHideFlags: 0

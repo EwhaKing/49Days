@@ -13,16 +13,19 @@ public class Harvestable : Interactable
     private GameObject dropItemPrefab;
 
     [Header("드랍될 아이템 설정")]
-    [SerializeField] private List<DropItem> dropTable; //아이템 이름과 개수
+    [SerializeField] private List<DropItem> dropTable;
+
+    [Header("쿨타임 설정")]
+    public int cooldownDays = 1; // 작물별 리스폰 쿨타임
 
     [Header("나무 전용")]
-    [SerializeField] private Sprite withoutFruitSprite;
+    [SerializeField] private Sprite withoutFruitSprite; // 열매 없는 상태 스프라이트
 
-    [SerializeField] private int cooldownDays = 1; //작물 종류마다 조정 필요. 
-
-    public bool available = true;
+    private bool available = true;
     public bool IsAvailable => available;
+
     private int respawnDay;
+    public int RespawnDay => respawnDay;
 
     void Start()
     {
@@ -30,41 +33,45 @@ public class Harvestable : Interactable
     }
 
     /// <summary>
-    /// 실제로 플레이어가 채집했을 때 호출.
-    /// - available을 false로 전환
+    /// 플레이어가 실제로 채집했을 때 호출.
+    /// - 상태 변경
     /// - respawnDay 갱신
-    /// - 타입별 외형 처리 (사라지거나, 열매 없는 스프라이트로 바뀜)
+    /// - 외형 처리 (Destroy / Sprite 교체)
     /// </summary>
-    public void Harvest(int currentDay) //작물 상태를 변경해줌. 
+    public void Harvest(int currentDay)
     {
-        Debug.Log("Harvest 실행됨, sr=" + sr + " sprite=" + withoutFruitSprite);
-        if (!available) return; // 이미 쿨타임 중이면 무시
+        if (!available) return; // 이미 수확 불가 상태라면 무시
 
         available = false;
         respawnDay = currentDay + cooldownDays;
+
+        // 슬롯 데이터 갱신 (Destroy 전에!)
+        CropManager.Instance.UpdateSlotData(this, respawnDay);
+
 
         switch (type)
         {
             case InteractableType.Flower:
             case InteractableType.Root:
-                // 꽃/뿌리: 오브젝트 자체가 사라진 것처럼 보임
-                gameObject.SetActive(false); //
+                // 꽃/뿌리 → 오브젝트 자체 제거
+                Destroy(gameObject);
                 break;
 
             case InteractableType.Tree:
-                // 나무: 본체는 유지, 열매만 없는 스프라이트로 교체
+                // 나무 → 열매 없는 스프라이트로 교체
                 if (sr != null && withoutFruitSprite != null)
                 {
                     sr.sprite = withoutFruitSprite;
-                    originalSprite = withoutFruitSprite; // 하이라이트 해제 시 원래 스프라이트로 돌아갈 때를 위해 갱신
+                    originalSprite = withoutFruitSprite; // 하이라이트 해제 시 원래 스프라이트를 위해 갱신
                 }
                 break;
         }
-        DropItem();  // 아이템 드랍
+
+        DropItem();
     }
 
     /// <summary>
-    /// 날짜가 바뀔 때마다 호출해서, respawnDay가 되면 다시 활성화/복구.
+    /// 날짜가 바뀔 때마다 호출해서 리스폰 조건 확인.
     /// </summary>
     public void CheckRespawn(int currentDay)
     {
@@ -76,12 +83,12 @@ public class Harvestable : Interactable
             {
                 case InteractableType.Flower:
                 case InteractableType.Root:
-                    // 다시 등장
-                    gameObject.SetActive(true);
+                    // Flower/Root는 Destroy되었으므로 여기서는 아무것도 안 함.
+                    // CropManager.OnDayChanged()에서 Instantiate 처리.
                     break;
 
                 case InteractableType.Tree:
-                    // 열매 있는 상태로 복구
+                    // Tree → 열매 있는 스프라이트로 복구
                     if (sr != null && originalSprite != null)
                         sr.sprite = originalSprite;
                     break;
@@ -90,21 +97,18 @@ public class Harvestable : Interactable
     }
 
     /// <summary>
-    /// 플레이어가 Interact 입력했을 때 호출되는 함수.
-    /// PlayerHarvestController에 자신(Harvestable)을 넘겨서 수확 모드로 진입시킴.
+    /// 플레이어 상호작용 → PlayerHarvestController에게 자신 전달.
     /// </summary>
     public override void Interact(PlayerHarvestController player)
     {
         player.EnterHarvestMode(this);
     }
 
-    //dropitem 원래 playerharvestcontroller에 있었음.
+    // === 아이템 드랍 ===
     private void DropItem()
     {
         foreach (var drop in dropTable)
-        {
             CreateDroppedItem(drop.itemName, drop.amount);
-        }
     }
 
     private void CreateDroppedItem(string itemName, int amount)
@@ -114,7 +118,6 @@ public class Harvestable : Interactable
         for (int i = 0; i < amount; i++)
         {
             ItemData itemData = InventoryManager.Instance.GetItemDataByName(itemName);
-
             GameObject drop = Instantiate(dropItemPrefab, transform.position + Vector3.up, Quaternion.identity);
             drop.GetComponent<DroppedItem>().Initialize(itemData);
         }
@@ -122,4 +125,9 @@ public class Harvestable : Interactable
         Debug.Log($"Dropped: {itemName} x{amount}");
     }
 
+    // 저장/로드용 respawnDay 세터
+    public void SetRespawnDay(int day)
+    {
+        respawnDay = day;
+    }
 }
