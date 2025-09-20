@@ -65,7 +65,7 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
     public void MakeNight()
     {
         // 밤 전환 연출 넣기
-        Action startNightDialogue = () => RunDialogue($"일차0_밤");
+        Action startNightDialogue = () => RunDialogue($"일차{GameManager.Instance.GetDate()}_밤");
         CoroutineUtil.Instance.RunAfterSeconds(startNightDialogue, 1.0f);
     }
 

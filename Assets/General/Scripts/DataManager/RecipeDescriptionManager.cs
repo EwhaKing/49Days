@@ -17,9 +17,6 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
     void Start()
     {
         LoadRecipeDescriptions();
-            //테스트용. 삭제하세요
-            unlockedRecipeNames.Add("New Tea");
-            Debug.Log("[테스트] 'New Tea' 레시피가 강제로 해금되었습니다.");
     }
 
     public void UnlockRecipeDescription(TeaName teaName)
@@ -68,6 +65,9 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
             // TODO: 테스트용. 삭제하세요
             UnlockRecipeDescription(TeaName.GreenTea);
             UnlockRecipeDescription(TeaName.BlackTea);
+            UnlockRecipeDescription(TeaName.WhiteTea);
+            UnlockRecipeDescription(TeaName.OolongTea);
+            UnlockRecipeDescription(TeaName.HotWater);
         }
         else
         {
