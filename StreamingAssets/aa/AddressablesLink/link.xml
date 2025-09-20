@@ -1,7 +1,10 @@
 <linker>
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
-    <type fullname="RecipeDiscription" preserve="all" />
+    <type fullname="CharacterData" preserve="all" />
+    <type fullname="ItemData" preserve="all" />
+    <type fullname="RecipeDescription" preserve="all" />
     <type fullname="TeaRecipe" preserve="all" />
+    <type fullname="CharacterPose" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="Unity.Addressables, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null" preserve="all">
     <type fullname="UnityEngine.AddressableAssets.Addressables" preserve="all" />
@@ -15,5 +18,7 @@
   </assembly>
   <assembly fullname="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.Object" preserve="all" />
+    <type fullname="UnityEngine.Sprite" preserve="all" />
+    <type fullname="UnityEngine.Texture2D" preserve="all" />
   </assembly>
 </linker>
