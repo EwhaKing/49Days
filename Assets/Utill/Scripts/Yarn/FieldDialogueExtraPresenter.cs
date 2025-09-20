@@ -70,8 +70,6 @@ public class FieldDialogueExtraPresenter : DialoguePresenterBase
 
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken cancellationToken)
     {
-        Debug.Log("RunLineAsync 호출됨: " + (line.CharacterName ?? "null"));
-
         ValidateReferences();
 
         isClickedForSkip = false;
@@ -95,7 +93,7 @@ public class FieldDialogueExtraPresenter : DialoguePresenterBase
         PositionNameBox();
 
         // 로그 추가
-        DialogueLogManager.Instance.AddLog(characterName, processedText);
+        // DialogueLogManager.Instance.AddLog(characterName, processedText);
 
         // 타이핑 스킵 입력 대기
         await TypeTextWithSkipAsync(processedText);

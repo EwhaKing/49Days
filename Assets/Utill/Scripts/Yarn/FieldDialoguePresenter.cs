@@ -65,7 +65,7 @@ public class FieldDialoguePresenter : DialoguePresenterBase
         currentCharacterData = data;
     }
 
-    private void ShowCharacter(string characterName, string poseName = "무표정")
+    private void ShowCharacter(string characterName, string poseName = "기본")
     {
         if (currentCharacterData == null)
         {
@@ -94,13 +94,6 @@ public class FieldDialoguePresenter : DialoguePresenterBase
         }
     }
 
-    public void HideCharacterImages()
-    {
-        if (bodyImage != null) bodyImage.enabled = false;
-        if (eyesImage != null) eyesImage.enabled = false;
-    }
-
-
     private void Awake()
     {
         // TMP 설정
@@ -128,23 +121,17 @@ public class FieldDialoguePresenter : DialoguePresenterBase
 
     public override YarnTask OnDialogueStartedAsync()
     {
-        Debug.Log("OnDialogueStartedAsync 호출됨");
         return YarnTask.CompletedTask;
     }
 
     public override YarnTask OnDialogueCompleteAsync()
     {
-        Debug.Log("OnDialogueCompleteAsync 호출됨");
-        HideCharacterImages();
-
         entryCount = 0;
         return YarnTask.CompletedTask;
     }
 
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken cancellationToken)
     {
-        Debug.Log("RunLineAsync 호출됨: " + (line.CharacterName ?? "null"));
-
         ValidateReferences();
 
         isClickedForSkip = false;

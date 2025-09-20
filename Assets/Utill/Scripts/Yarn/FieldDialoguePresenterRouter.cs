@@ -73,7 +73,6 @@ public class FieldDialoguePresenterRouter : DialoguePresenterBase
         }
         else
         {
-            fieldPresenter?.HideCharacterImages();
             targetPresenter = fieldExtraPresenter;
         }
 
@@ -92,6 +91,10 @@ public class FieldDialoguePresenterRouter : DialoguePresenterBase
     }
 
     public override YarnTask OnDialogueStartedAsync() => YarnTask.CompletedTask;
-    public override YarnTask OnDialogueCompleteAsync() => YarnTask.CompletedTask;
 
+    public override YarnTask OnDialogueCompleteAsync()
+    {
+        fieldPresenter?.OnDialogueCompleteAsync();
+        return YarnTask.CompletedTask;
+    }
 }
