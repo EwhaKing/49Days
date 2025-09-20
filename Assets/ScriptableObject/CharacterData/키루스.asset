@@ -22,7 +22,7 @@ MonoBehaviour:
   hasMet: 1
   affinity: 0
   poses:
-  - poseName: "\uAE30\uBCF8"
+  - poseName: "\uBB34\uD45C\uC815"
     bodySprite: {fileID: 21300000, guid: 1204d2feafffa4f45800fe8849cb0106, type: 3}
     eyesOpenSprite: {fileID: 21300000, guid: 1204d2feafffa4f45800fe8849cb0106, type: 3}
     eyesClosedSprite: {fileID: 21300000, guid: 93b2589561cb69341bc4224c474ba30b, type: 3}
