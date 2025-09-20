@@ -66,8 +66,7 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
     void PauseGame()
     {
-        //Time.timeScale = 0f;
-        AudioListener.pause = true; // 전체 오디오 일시정지
+        // AudioListener.pause = true; // 전체 오디오 일시정지
 
         // 벨소리만 계속 들리게
         audioSource.ignoreListenerPause = true;
@@ -78,6 +77,10 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
     {
         isSkipped = true;
         cutScene.SetActive(false);
+        RenderTexture rt = videoPlayer.targetTexture;
+        Graphics.SetRenderTarget(rt);
+        GL.Clear(true, true, Color.black);
+        Graphics.SetRenderTarget(null);
 
         string teaString = makedTea.teaName.ToLowerString();
         if (makedTea.additionalIngredient != IngredientName.None)

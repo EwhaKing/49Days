@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 using UnityEngine;
 using System;
 
@@ -215,7 +214,7 @@ public class OrderManager : SceneSingleton<OrderManager>
         this.afterNodeTitle = afterNodeTitle;
         this.autoPay = autoPay;
 
-        SceneManager.LoadScene("Kitchen");
+        GameFlowManager.LoadScene(GameFlowManager.KITCHEN_SCENE_NAME);
     }
 
     public void Evaluate()  // afterNodeTitle 재생할때 자동으로 채점

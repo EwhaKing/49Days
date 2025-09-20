@@ -62,6 +62,6 @@ public class TeaResultYarnManager : SceneSingleton<TeaResultYarnManager>
         UIManager.Instance.BlockingUIOff(runner.gameObject);
         UIManager.Instance.BlockingUIOff(fadeImage.gameObject);
         
-        GameFlowManager.Instance.FinishKitchen();
+        GameFlowManager.FinishKitchen();
     }
 }

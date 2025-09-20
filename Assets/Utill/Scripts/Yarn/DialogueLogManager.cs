@@ -59,6 +59,8 @@ public class DialogueLogManager : SceneSingleton<DialogueLogManager>
 
     public void ToggleLog()
     {
+        if (GameFlowManager.IsInField()) return;
+
         logPanel.SetActive(!logPanel.activeSelf);
         if (logPanel.activeSelf)
             GameManager.Instance.onUIOn.Invoke();

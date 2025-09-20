@@ -108,7 +108,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        GameFlowManager.Instance.StartGame();
+        GameFlowManager.StartGame();
     }
     public void testSave(){
         SaveLoadManager.Instance.SaveAllByDate(1);

@@ -59,7 +59,7 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
 
         runner.gameObject.SetActive(false);
         
-        GameFlowManager.Instance.StartTeaHouseFront();
+        GameFlowManager.StartTeaHouseFront();
     }
 
     public void MakeNight()

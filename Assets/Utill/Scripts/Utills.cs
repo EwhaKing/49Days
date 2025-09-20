@@ -17,6 +17,11 @@ public static class Utills
 
 public class CoroutineUtil : Singleton<CoroutineUtil>
 {
+    public void RunCoroutine(IEnumerator action)
+    {
+        StartCoroutine(action);
+    }
+
     public void RunAfterFirstFrame(Action action)
     {
         StartCoroutine(AfterFirstFrame(action));

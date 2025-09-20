@@ -410,7 +410,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0dc4e1732ab9f144e98372865a1f2cb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manufacturingCompletedUI: {fileID: 8503842798027854140}
+  manufacturingCompletedUI: {fileID: 9091578494619467619}
   cutScene: {fileID: 741167864062243242}
   skipButton: {fileID: 5515876883340652096}
   highlightSprite: {fileID: 21300000, guid: a334304ce02a34b4eb6b88ef59634617, type: 3}
@@ -528,7 +528,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2378242316124900817
 RectTransform:
   m_ObjectHideFlags: 0
