@@ -25,8 +25,10 @@ public class GameManager : Singleton<GameManager>
     public Action onUIOn;
 
     public int GetMoney() { return generalData.money; }
-    public void AddMoney(int amount) 
+    public void AddMoney(int amount)
     {
+        if (amount == 0) return;
+
         generalData.money = Math.Clamp(amount + generalData.money, 0, 9999999);
         onMoneyChanged?.Invoke(amount, generalData.money);
     }
