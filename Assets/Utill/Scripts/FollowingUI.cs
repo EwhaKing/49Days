@@ -11,12 +11,15 @@ public class FollowingUI : MonoBehaviour
     [SerializeField] GameObject target;
 
     [SerializeField] Vector3 offset;
-    void Update()
+    void LateUpdate()
     {
         Debug.Assert(target != null, $"{this.name}: Target이 설정되지 않았습니다!");
 
         Vector3 targetPosition = Camera.main.WorldToScreenPoint(target.transform.position + offset);
-        transform.position = targetPosition;
+        if(transform.position != targetPosition)
+        {
+            transform.position = targetPosition;
+        }
     }
 
     public void SetTarget(GameObject newTarget)
