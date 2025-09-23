@@ -145,13 +145,16 @@ public class FieldDialogueExtraPresenter : DialoguePresenterBase
     private async YarnTask TypeTextWithSkipAsync(string processedText)
     {
         const float typingSpeed = 0.04f;
+        const float commaPause = 0.3f;
+        const float dotPause = 0.2f;
         dialogueText!.text = "";
 
-        // 상태: 타이핑 중
         phase = Phase.Typing;
 
         bool skipped = false;
-        foreach (char c in processedText)
+        int i = 0;
+        string visibleText = "";
+        while (i < processedText.Length)
         {
             if (skipped)
             {
@@ -159,18 +162,51 @@ public class FieldDialogueExtraPresenter : DialoguePresenterBase
                 break;
             }
 
-            dialogueText.text += c;
+            // < > 태그 즉시 적용
+            if (processedText[i] == '<')
+            {
+                int tagEnd = processedText.IndexOf('>', i);
+                if (tagEnd != -1)
+                {
+                    visibleText += processedText.Substring(i, tagEnd - i + 1);
+                    i = tagEnd + 1;
+                    continue;
+                }
+            }
+
+            // ... 처리
+            if (processedText[i] == '.' && i + 2 < processedText.Length &&
+                processedText[i + 1] == '.' && processedText[i + 2] == '.')
+            {
+                for (int d = 0; d < 3; d++)
+                {
+                    visibleText += ".";
+                    dialogueText.text = visibleText;
+                    i++;
+                    await WaitOrSkipAsync(dotPause, () => skipped = true);
+                    if (skipped) break;
+                }
+                continue;
+            }
+
+            // 쉼표 처리
+            visibleText += processedText[i];
+            dialogueText.text = visibleText;
+            if (processedText[i] == ',')
+            {
+                i++;
+                await WaitOrSkipAsync(commaPause, () => skipped = true);
+                continue;
+            }
+
+            i++;
             await WaitOrSkipAsync(typingSpeed, () => skipped = true);
         }
 
-        // 텍스트 전부 표시
         if (!skipped && dialogueText.text != processedText)
             dialogueText.text = processedText;
 
-        // 상태: 다음 패널 대기
         phase = Phase.AwaitingNext;
-
-        // 클릭 소비
         isClickedForSkip = false;
     }
 

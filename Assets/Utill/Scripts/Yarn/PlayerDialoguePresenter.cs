@@ -38,7 +38,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     public void OnPanelClicked()
     {
-        // Ŭ���� �ǹ̸� ���� �ܰ� �������� ����
         if (phase == Phase.Typing)
             isClickedForSkip = true;
         else
@@ -47,7 +46,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void Awake()
     {
-        // UI �⺻ ��Ÿ���� �� ���� ����
         if (dialogueText != null)
         {
             dialogueText.fontSize = 34;
@@ -85,27 +83,20 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
             ? line.Text.Text
             : line.TextWithoutCharacterName.Text;
 
-        // �ؽ�Ʈ ����
         dialogueText!.text = processedText;
         dialogueText.ForceMeshUpdate();
         nameText!.text = characterName;
         nameText.ForceMeshUpdate();
 
-        // ũ�� ���
         CalculateDialogueBoxSize(processedText);
         CalculateNameBoxSize(characterName);
 
-        // ��ġ ���
         PositionDialogueBox();
         PositionNameBox();
 
-        // �α� �߰�
         DialogueLogManager.Instance.AddLog(characterName, processedText);
 
-        // Ÿ���� ȿ�� (Ŭ�� �� ��ŵ ����)
         await TypeTextWithSkipAsync(processedText);
-
-        // ���� ���� �Ѿ�� �� Ŭ�� ���
         await WaitForClickAsync();
 
         dialogueBox!.gameObject.SetActive(false);
@@ -133,7 +124,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
         float textWidthLimit = maxWidth - (paddingLeft + paddingRight);
 
-        // TMP�� �� ���� ���� �� ���� ���
         var preferredSize = dialogueText!.GetPreferredValues(processedText, textWidthLimit, 0f);
 
         float finalWidth = Mathf.Clamp(preferredSize.x + paddingLeft + paddingRight, minWidth, maxWidth);
@@ -161,7 +151,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void PositionDialogueBox()
     {
-        // ��� �߾� ����
         dialogueBox!.anchorMin = new Vector2(0.5f, 1f);
         dialogueBox.anchorMax = new Vector2(0.5f, 1f);
         dialogueBox.pivot = new Vector2(0.5f, 1f);
@@ -171,7 +160,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void PositionNameBox()
     {
-        // NameBox�� DialogueBox�� �»�ܿ� ���̱�
         nameBox!.SetParent(dialogueBox, false);
         nameBox.anchorMin = new Vector2(0f, 1f);
         nameBox.anchorMax = new Vector2(0f, 1f);
@@ -182,13 +170,16 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     private async YarnTask TypeTextWithSkipAsync(string processedText)
     {
         const float typingSpeed = 0.04f;
+        const float commaPause = 0.3f;
+        const float dotPause = 0.2f;
         dialogueText!.text = "";
 
-        // Ÿ���� �ܰ� ����
         phase = Phase.Typing;
 
         bool skipped = false;
-        foreach (char c in processedText)
+        int i = 0;
+        string visibleText = "";
+        while (i < processedText.Length)
         {
             if (skipped)
             {
@@ -196,18 +187,51 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
                 break;
             }
 
-            dialogueText.text += c;
+            // < > 태그 즉시 적용
+            if (processedText[i] == '<')
+            {
+                int tagEnd = processedText.IndexOf('>', i);
+                if (tagEnd != -1)
+                {
+                    visibleText += processedText.Substring(i, tagEnd - i + 1);
+                    i = tagEnd + 1;
+                    continue;
+                }
+            }
+
+            // ... 처리
+            if (processedText[i] == '.' && i + 2 < processedText.Length &&
+                processedText[i + 1] == '.' && processedText[i + 2] == '.')
+            {
+                for (int d = 0; d < 3; d++)
+                {
+                    visibleText += ".";
+                    dialogueText.text = visibleText;
+                    i++;
+                    await WaitOrSkipAsync(dotPause, () => skipped = true);
+                    if (skipped) break;
+                }
+                continue;
+            }
+
+            // 쉼표 처리
+            visibleText += processedText[i];
+            dialogueText.text = visibleText;
+            if (processedText[i] == ',')
+            {
+                i++;
+                await WaitOrSkipAsync(commaPause, () => skipped = true);
+                continue;
+            }
+
+            i++;
             await WaitOrSkipAsync(typingSpeed, () => skipped = true);
         }
 
-        // Ÿ������ �ڿ� ����� ��쿡�� ��ü ǥ��
         if (!skipped && dialogueText.text != processedText)
             dialogueText.text = processedText;
 
-        // ���� Ŭ�� ��� �ܰ�� ��ȯ
         phase = Phase.AwaitingNext;
-
-        // ��ŵ �÷��״� ���⼭ �ʱ�ȭ
         isClickedForSkip = false;
     }
 
@@ -218,7 +242,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         {
             if (isClickedForSkip)
             {
-                // ��ŵ �Һ�
                 isClickedForSkip = false;
                 onSkip();
                 break;
@@ -243,11 +266,11 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         if (optionPanelController == null)
             throw new System.InvalidOperationException("optionPanelController�� �Ҵ���� �ʾҽ��ϴ�.");
 
-        DialoguePresenterRouter.isOptionPanelActive = true; // �ɼ� �г� Ȱ��ȭ
+        DialoguePresenterRouter.isOptionPanelActive = true;
 
         int selected = await optionPanelController.ShowOptionsAsync(dialogueOptions, cancellationToken);
 
-        DialoguePresenterRouter.isOptionPanelActive = false; // �ɼ� �г� ��Ȱ��ȭ
+        DialoguePresenterRouter.isOptionPanelActive = false;
 
         return dialogueOptions[selected];
     }

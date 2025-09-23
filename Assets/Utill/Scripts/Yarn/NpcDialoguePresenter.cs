@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System.Threading;
 using UnityEngine;
 using TMPro;
@@ -14,8 +14,8 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     public TextMeshProUGUI? nameText;
 
     [Header("NPC Settings")]
-    public Transform? npcTransform;                // NPC ���� ��ǥ (���� �Ҵ�)
-    public Vector2 nameBoxOffset = new(-10f, 20f); // NameBox ������ (�»�� ����)
+    public Transform? npcTransform;
+    public Vector2 nameBoxOffset = new(-10f, 20f);
 
     private bool isClickedForSkip = false;
     private bool isClickedForNext = false;
@@ -41,7 +41,6 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     public void OnPanelClicked()
     {
-        // Ŭ���� �ǹ̸� ���� �ܰ� �������� ����
         if (phase == Phase.Typing)
             isClickedForSkip = true;
         else
@@ -50,7 +49,6 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     private void Awake()
     {
-        // UI �⺻ ��Ÿ���� �� ���� ����
         if (dialogueText != null)
         {
             dialogueText.fontSize = 34;
@@ -88,27 +86,20 @@ public class NpcDialoguePresenter : DialoguePresenterBase
             ? line.TextWithoutCharacterName.Text
             : line.Text.Text;
 
-        // �ؽ�Ʈ ����
         dialogueText!.text = processedText;
         dialogueText.ForceMeshUpdate();
         nameText!.text = characterName;
         nameText.ForceMeshUpdate();
 
-        // ũ�� ���
         CalculateDialogueBoxSize(processedText);
         CalculateNameBoxSize(characterName);
 
-        // ��ġ ���
         PositionDialogueBox();
         PositionNameBox();
 
-        // �α� �߰�
         DialogueLogManager.Instance.AddLog(characterName, processedText);
 
-        // Ÿ���� ȿ�� (Ŭ�� �� ��ŵ ����)
         await TypeTextWithSkipAsync(processedText);
-
-        // ���� ���� �Ѿ�� �� Ŭ�� ���
         await WaitForClickAsync();
 
         dialogueBox!.gameObject.SetActive(false);
@@ -117,15 +108,15 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     private void ValidateReferences()
     {
-        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox�� �Ҵ���� �ʾҽ��ϴ�.");
-        if (nameBox == null) throw new System.InvalidOperationException("nameBox�� �Ҵ���� �ʾҽ��ϴ�.");
-        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText�� �Ҵ���� �ʾҽ��ϴ�.");
-        if (nameText == null) throw new System.InvalidOperationException("nameText�� �Ҵ���� �ʾҽ��ϴ�.");
-        if (npcTransform == null) throw new System.InvalidOperationException("npcTransform�� �Ҵ���� �ʾҽ��ϴ�.");
+        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox가 할당되지 않았습니다.");
+        if (nameBox == null) throw new System.InvalidOperationException("nameBox가 할당되지 않았습니다.");
+        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText가 할당되지 않았습니다.");
+        if (nameText == null) throw new System.InvalidOperationException("nameText가 할당되지 않았습니다.");
+        if (npcTransform == null) throw new System.InvalidOperationException("npcTransform가 할당되지 않았습니다.");
         if (dialogueInputHandler == null) throw new System.InvalidOperationException("dialogueInputHandler가 할당되지 않았습니다.");
 
-        mainCamera = Camera.main ?? throw new System.InvalidOperationException("Main Camera�� ã�� �� �����ϴ�.");
-        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox�� ������ Canvas�� �����ϴ�.");
+        mainCamera = Camera.main ?? throw new System.InvalidOperationException("Main Camera가 할당되지 않았습니다.");
+        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox의 부모인 Canvas가 존재하지 않습니다.");
     }
 
     private void CalculateDialogueBoxSize(string processedText)
@@ -135,7 +126,6 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         float paddingTop = 60f, paddingBottom = 40f;
         float maxWidth = 650f;
 
-        // TMP�� �� ���� ���� �� ���� ���
         var preferredSize = dialogueText!.GetPreferredValues(processedText, maxWidth - (paddingLeft + paddingRight), 0f);
 
         float finalWidth = Mathf.Clamp(preferredSize.x + paddingLeft + paddingRight, minWidth, maxWidth);
@@ -167,7 +157,6 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         Camera? cam = canvas.renderMode == RenderMode.ScreenSpaceOverlay ? null : mainCamera;
         var parentRect = dialogueBox.parent as RectTransform;
 
-        // Anchor/Pivot ��� �߾�
         dialogueBox.anchorMin = new Vector2(0.5f, 1f);
         dialogueBox.anchorMax = new Vector2(0.5f, 1f);
         dialogueBox.pivot = new Vector2(0.5f, 1f);
@@ -175,13 +164,11 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         //Vector3 screenPos = mainCamera!.WorldToScreenPoint(npcTransform!.position);
         //RectTransformUtility.ScreenPointToLocalPointInRectangle(parentRect!, screenPos, cam, out Vector2 canvasPos);
 
-        // NPC �Ӹ� ������ �Ʒ��� 200px
         //dialogueBox.anchoredPosition = canvasPos + new Vector2(0f, -200f);
     }
 
     private void PositionNameBox()
     {
-        // NameBox�� DialogueBox �ڽ����� �ΰ� �»�� ���� ������ ����
         nameBox!.SetParent(dialogueBox, worldPositionStays: false);
         nameBox.anchorMin = new Vector2(0f, 1f);
         nameBox.anchorMax = new Vector2(0f, 1f);
@@ -192,13 +179,16 @@ public class NpcDialoguePresenter : DialoguePresenterBase
     private async YarnTask TypeTextWithSkipAsync(string processedText)
     {
         const float typingSpeed = 0.04f;
+        const float commaPause = 0.3f;
+        const float dotPause = 0.2f;
         dialogueText!.text = "";
 
-        // Ÿ���� �ܰ� ����
         phase = Phase.Typing;
 
         bool skipped = false;
-        foreach (char c in processedText)
+        int i = 0;
+        string visibleText = "";
+        while (i < processedText.Length)
         {
             if (skipped)
             {
@@ -206,18 +196,51 @@ public class NpcDialoguePresenter : DialoguePresenterBase
                 break;
             }
 
-            dialogueText.text += c;
+            // < > 태그 즉시 적용
+            if (processedText[i] == '<')
+            {
+                int tagEnd = processedText.IndexOf('>', i);
+                if (tagEnd != -1)
+                {
+                    visibleText += processedText.Substring(i, tagEnd - i + 1);
+                    i = tagEnd + 1;
+                    continue;
+                }
+            }
+
+            // ... 처리
+            if (processedText[i] == '.' && i + 2 < processedText.Length &&
+                processedText[i + 1] == '.' && processedText[i + 2] == '.')
+            {
+                for (int d = 0; d < 3; d++)
+                {
+                    visibleText += ".";
+                    dialogueText.text = visibleText;
+                    i++;
+                    await WaitOrSkipAsync(dotPause, () => skipped = true);
+                    if (skipped) break;
+                }
+                continue;
+            }
+
+            // 쉼표 처리
+            visibleText += processedText[i];
+            dialogueText.text = visibleText;
+            if (processedText[i] == ',')
+            {
+                i++;
+                await WaitOrSkipAsync(commaPause, () => skipped = true);
+                continue;
+            }
+
+            i++;
             await WaitOrSkipAsync(typingSpeed, () => skipped = true);
         }
 
-        // Ÿ������ �ڿ� ����� ��쿡�� ��ü ǥ��
         if (!skipped && dialogueText.text != processedText)
             dialogueText.text = processedText;
 
-        // ���� Ŭ�� ��� �ܰ�� ��ȯ
         phase = Phase.AwaitingNext;
-
-        // ��ŵ �÷��״� ���⼭ �ʱ�ȭ
         isClickedForSkip = false;
     }
 
@@ -228,7 +251,6 @@ public class NpcDialoguePresenter : DialoguePresenterBase
         {
             if (isClickedForSkip)
             {
-                // ��ŵ �Һ�
                 isClickedForSkip = false;
                 onSkip();
                 break;
