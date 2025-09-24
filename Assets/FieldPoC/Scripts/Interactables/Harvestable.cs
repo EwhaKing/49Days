@@ -16,7 +16,7 @@ public class Harvestable : Interactable
     [SerializeField] private List<DropItem> dropTable;
 
     [Header("쿨타임 설정")]
-    public int cooldownDays = 1; // 작물별 리스폰 쿨타임
+    public int cooldownDays = 2; // 작물별 리스폰 쿨타임
 
     [Header("나무 전용")]
     [SerializeField] private Sprite withoutFruitSprite; // 열매 없는 상태 스프라이트
@@ -26,6 +26,9 @@ public class Harvestable : Interactable
 
     private int respawnDay;
     public int RespawnDay => respawnDay;
+
+    [HideInInspector] public int spawnIndex = -1; // ✅ 수정: 자기 슬롯 인덱스 기억
+    public int slotDataIndex; // <---- 쿨타임 데이터의 인덱스를 저장
 
     void Start()
     {
@@ -73,28 +76,21 @@ public class Harvestable : Interactable
     /// <summary>
     /// 날짜가 바뀔 때마다 호출해서 리스폰 조건 확인.
     /// </summary>
-    public void CheckRespawn(int currentDay)
+
+    public bool CheckRespawn(int currentDay)
     {
         if (!available && currentDay >= respawnDay)
         {
             available = true;
 
-            switch (type)
-            {
-                case InteractableType.Flower:
-                case InteractableType.Root:
-                    // Flower/Root는 Destroy되었으므로 여기서는 아무것도 안 함.
-                    // CropManager.OnDayChanged()에서 Instantiate 처리.
-                    break;
+            if (type == InteractableType.Tree && sr != null && originalSprite != null)
+                sr.sprite = originalSprite;
 
-                case InteractableType.Tree:
-                    // Tree → 열매 있는 스프라이트로 복구
-                    if (sr != null && originalSprite != null)
-                        sr.sprite = originalSprite;
-                    break;
-            }
+            return true; // 리스폰 가능
         }
+        return false; // 아직 불가능
     }
+
 
     /// <summary>
     /// 플레이어 상호작용 → PlayerHarvestController에게 자신 전달.
