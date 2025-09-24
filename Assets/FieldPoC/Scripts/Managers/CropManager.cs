@@ -1,40 +1,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class CropGroup
-{
-    public string cropName;
-    public int maxActive;
-    public GameObject prefab;
-    public List<Transform> spawnPoints;
-
-    [HideInInspector] public List<Harvestable> slots = new List<Harvestable>();
-}
-
 public class CropManager : MonoBehaviour
 {
     public static CropManager Instance { get; private set; }
-
     void Awake()
     {
         if (Instance != null && Instance != this)
         {
-            Destroy(gameObject); // 혹시 중복 생기면 제거
+            Destroy(gameObject);
             return;
         }
         Instance = this;
     }
-
     void OnDestroy()
     {
-        if (Instance == this)
-            Instance = null;
+        if (Instance == this) Instance = null;
+    }
+
+    [System.Serializable]
+    public class CropGroup
+    {
+        public string cropName;
+        public int maxActive;
+        public GameObject prefab;
+        public List<Transform> spawnPoints;
+
+        [HideInInspector] public List<Harvestable> slots = new List<Harvestable>();
     }
 
     [SerializeField] private List<CropGroup> groups;
 
-    void Start()
+    public void Start()
     {
         int currentDay = GameManager.Instance.GetDate();
 
@@ -42,192 +39,170 @@ public class CropManager : MonoBehaviour
         {
             var gData = FieldDataManager.Instance.GetGroupData(g.cropName);
 
-            // 첫날 → 랜덤으로 maxActive 개수 생성
+            // ✅ 수정: 슬롯 리스트를 스폰포인트 개수만큼 null로 초기화 (인덱스=spawnPointIndex 고정)
+            g.slots = new List<Harvestable>(new Harvestable[g.spawnPoints.Count]);
+
             if (currentDay == 1)
             {
-                int spawnCount = g.maxActive; // 생성할 개수
-
-                // 랜덤 스폰 순서 만들기 (Fisher–Yates shuffle)
-                // 1) 스폰 포인트 인덱스 목록 생성
+                // 랜덤 스폰 인덱스 셔플
                 List<int> spawnIndices = new List<int>();
-                for (int pointIndex = 0; pointIndex < g.spawnPoints.Count; pointIndex++)
-                    spawnIndices.Add(pointIndex);
-
-                // 2) 꼬리부터 하나씩 무작위 위치와 스왑
+                for (int i = 0; i < g.spawnPoints.Count; i++) spawnIndices.Add(i);
                 for (int last = spawnIndices.Count - 1; last >= 0; last--)
                 {
-                    int randomIndex = Random.Range(0, last + 1);
-                    (spawnIndices[last], spawnIndices[randomIndex]) = (spawnIndices[randomIndex], spawnIndices[last]);
+                    int r = Random.Range(0, last + 1);
+                    (spawnIndices[last], spawnIndices[r]) = (spawnIndices[r], spawnIndices[last]);
                 }
 
-                // maxActive 개수만큼 생성
-                for (int activeIndex = 0; activeIndex < g.maxActive; activeIndex++)
+                // ✅ 수정: gData.slots를 spawnPointIndex 기준으로 "정렬된 배열"로 재구성
+                var slotArr = new CropSlotData[g.spawnPoints.Count];
+                for (int i = 0; i < slotArr.Length; i++)
                 {
-                    int spawnPointIndex = spawnIndices[activeIndex];
-                    GameObject cropObj = Instantiate(g.prefab, g.spawnPoints[spawnPointIndex].position, Quaternion.identity);
-                    Harvestable harvestable = cropObj.GetComponent<Harvestable>();
-
-                    harvestable.SetRespawnDay(-1);
-                    g.slots.Add(harvestable);
-
-                    gData.slots.Add(new CropSlotData
+                    slotArr[i] = new CropSlotData
                     {
-                        spawnPointIndex = spawnPointIndex,
-                        isAlive = true,
-                        respawnDay = -1 //살아있음. 
-                    });
-                }
-
-                // 나머지 슬롯은 비어 있음(null)
-                for (int emptyIndex = g.maxActive; emptyIndex < g.spawnPoints.Count; emptyIndex++)
-                {
-                    int spawnPointIndex = spawnIndices[emptyIndex];
-                    g.slots.Add(null);
-                    gData.slots.Add(new CropSlotData
-                    {
-                        spawnPointIndex = spawnPointIndex,
+                        spawnPointIndex = i,
                         isAlive = false,
-                        respawnDay = 0
-                    });
+                        respawnDay = int.MaxValue // ✅ 수정: 빈 슬롯은 무한 대기
+                    };
                 }
+
+                // maxActive만큼 생성 → 해당 spawnPointIndex 위치에 배치
+                for (int k = 0; k < Mathf.Min(g.maxActive, g.spawnPoints.Count); k++)
+                {
+                    int si = spawnIndices[k];
+                    var obj = Instantiate(g.prefab, g.spawnPoints[si].position, Quaternion.identity);
+                    var h = obj.GetComponent<Harvestable>();
+                    h.SetRespawnDay(-1);
+                    h.spawnIndex = si;                  // ✅ 수정: 하베스터블에 슬롯 인덱스 기록
+                    g.slots[si] = h;                    // ✅ 수정: Add가 아니라 정확한 인덱스에 배치
+
+                    slotArr[si] = new CropSlotData
+                    {
+                        spawnPointIndex = si,
+                        isAlive = true,
+                        respawnDay = -1
+                    };
+                }
+
+                // ✅ 수정: 정렬된 배열로 List 갱신
+                gData.slots.Clear();
+                gData.slots.AddRange(slotArr);
             }
-            else
+            else // Day > 1
             {
-                // ★ 첫날 이후에는 데이터 기반 복구
+                // ✅ 슬롯 배열 초기화 (spawnPointIndex 기준 정렬)
+                var slotByPoint = new CropSlotData[g.spawnPoints.Count];
+                for (int i = 0; i < slotByPoint.Length; i++)
+                {
+                    slotByPoint[i] = new CropSlotData
+                    {
+                        spawnPointIndex = i,
+                        isAlive = false,
+                        respawnDay = int.MaxValue
+                    };
+                }
+                foreach (var s in gData.slots)
+                {
+                    if (s.spawnPointIndex >= 0 && s.spawnPointIndex < slotByPoint.Length)
+                        slotByPoint[s.spawnPointIndex] = s;
+                }
+
+                int aliveCount = 0;
+                var respawnCandidates = new List<int>();
+
+                // 1) 살아있는 복구 & 후보 수집
                 for (int i = 0; i < g.spawnPoints.Count; i++)
                 {
-                    CropSlotData sData = (i < gData.slots.Count) ? gData.slots[i] : null;
+                    var sData = slotByPoint[i];
 
-                    //비어있는 자리는 일단 초기화
-                    if (sData == null)
-                    {
-                        gData.slots.Add(new CropSlotData
-                        {
-                            spawnPointIndex = i,
-                            isAlive = false,
-                            respawnDay = 0
-                        });
-                        g.slots.Add(null);
-                        continue;
-                    }
-
-                    // 1) 살아있는 슬롯 → 즉시 복구
                     if (sData.isAlive)
-                    {
-                        GameObject obj = Instantiate(g.prefab, g.spawnPoints[i].position, Quaternion.identity);
-                        Harvestable h = obj.GetComponent<Harvestable>();
-                        h.SetRespawnDay(sData.respawnDay); //
-                        g.slots.Add(h);
-
-                    }
-                    // 2) 죽어있는데 쿨타임 끝남 → 리스폰
-                    else if (!sData.isAlive && currentDay >= sData.respawnDay)
-                    { //랜덤 로직 다시 넣기
-
-                        GameObject obj = Instantiate(g.prefab, g.spawnPoints[i].position, Quaternion.identity);
-                        Harvestable h = obj.GetComponent<Harvestable>();
-                        h.SetRespawnDay(-1); // 살아있는 상태
-                        g.slots.Add(h);
-
-                        sData.isAlive = true;
-                        sData.respawnDay = -1; // “살아있다” 표시
-                        gData.slots[i] = sData;
-                    }
-                    // 3) 죽어있고 아직 쿨타임 중 → 비워둠
-                    else
-                    {
-                        g.slots.Add(null);
-                    }
-                }
-            }
-        }
-    }
-
-    // CropManager.cs (class CropManager 내부에 추가)
-    void OnEnable()
-    {
-        // 씬 활성화 시 날짜 이벤트 구독
-        if (GameManager.Instance != null)
-            GameManager.Instance.onDayChanged += OnDayChanged;
-    }
-
-    void OnDisable()
-    {
-        // 비활성화/파괴 시 구독 해제(중복 호출/누수 방지)
-        if (GameManager.Instance != null)
-            GameManager.Instance.onDayChanged -= OnDayChanged;
-    }
-
-    private void OnDayChanged()
-    {
-        int currentDay = GameManager.Instance.GetDate();
-
-        // ▼ 여기부터는 네가 Start()의 “첫날 이후” 분기에서 돌리던 복구/리스폰 루프를 그대로 넣으면 됨.
-        //   (gData 읽고, sData.isAlive면 복구, 아니고 currentDay >= sData.respawnDay면 리스폰, 아니면 null 유지)
-        foreach (var g in groups)
-        {
-            var gData = FieldDataManager.Instance.GetGroupData(g.cropName);
-
-            // g.slots가 비어있다면 길이 맞춰 초기화(인덱스 꼬임 방지)
-            if (g.slots.Count == 0)
-                for (int i = 0; i < g.spawnPoints.Count; i++) g.slots.Add(null);
-
-            for (int i = 0; i < g.spawnPoints.Count; i++)
-            {
-                CropSlotData sData = (i < gData.slots.Count) ? gData.slots[i] : null;
-                if (sData == null) continue;
-
-                if (sData.isAlive)
-                {
-                    if (g.slots[i] == null)
                     {
                         var obj = Instantiate(g.prefab, g.spawnPoints[i].position, Quaternion.identity);
                         var h = obj.GetComponent<Harvestable>();
                         h.SetRespawnDay(sData.respawnDay);
-                        g.slots[i] = h;    // ★ Add 말고 인덱스 대입
-                    }
-                }
-                else if (currentDay >= sData.respawnDay)
-                {
-                    if (g.slots[i] == null)
-                    {
-                        var obj = Instantiate(g.prefab, g.spawnPoints[i].position, Quaternion.identity);
-                        var h = obj.GetComponent<Harvestable>();
-                        h.SetRespawnDay(-1);
-                        g.slots[i] = h;    // ★ Add 말고 인덱스 대입
+                        h.spawnIndex = i;
+                        g.slots[i] = h;
 
-                        sData.isAlive = true;
-                        sData.respawnDay = -1;
-                        gData.slots[i] = sData;
+                        aliveCount++;
+                    }
+                    else if (currentDay >= sData.respawnDay)
+                    {
+                        respawnCandidates.Add(i); // ✅ 성숙했지만 스폰은 여기서 안 함
                     }
                 }
-                // else: 쿨다운 중 → 그대로 null 유지
+
+                // 2) 필요한 개수만큼 랜덤 offset으로 스폰
+                int need = Mathf.Max(0, g.maxActive - aliveCount);
+                for (int n = 0; n < need && respawnCandidates.Count > 0; n++)
+                {
+                    // 랜덤 후보 선택
+                    int baseIndex = respawnCandidates[Random.Range(0, respawnCandidates.Count)];
+                    respawnCandidates.Remove(baseIndex);
+
+                    // 랜덤 offset 계산
+                    int offset = Random.Range(1, g.spawnPoints.Count);
+                    int newIndex = (baseIndex + offset) % g.spawnPoints.Count;
+
+                    // 비어있는 자리 찾을 때까지 +1
+                    int attempts = 0;
+                    while (g.slots[newIndex] != null && attempts < g.spawnPoints.Count)
+                    {
+                        newIndex = (newIndex + 1) % g.spawnPoints.Count;
+                        attempts++;
+                    }
+
+                    if (g.slots[newIndex] == null)
+                    {
+                        var obj = Instantiate(g.prefab, g.spawnPoints[newIndex].position, Quaternion.identity);
+                        var h = obj.GetComponent<Harvestable>();
+                        h.spawnIndex = newIndex;
+                        h.SetRespawnDay(-1);
+
+                        g.slots[newIndex] = h;
+
+                        // 데이터 갱신
+                        slotByPoint[newIndex].isAlive = true;
+                        slotByPoint[newIndex].respawnDay = -1;
+
+                        aliveCount++;
+                    }
+
+                    // ✅ 원래 슬롯은 초기화 (쿨타임 슬롯은 소진 처리)
+                    slotByPoint[baseIndex].isAlive = false;
+                    slotByPoint[baseIndex].respawnDay = int.MaxValue;
+                }
+
+                // 보정된 데이터 저장
+                gData.slots.Clear();
+                gData.slots.AddRange(slotByPoint);
             }
+
         }
     }
 
-
-    //작물이 수확된 후 슬롯 상태를 비우고, 리스폰 예정일을 기록한다
+    // 수확 후 슬롯 상태 갱신
     public void UpdateSlotData(Harvestable h, int respawnDay)
     {
         foreach (var g in groups)
         {
-            for (int i = 0; i < g.slots.Count; i++)
+            //spawnIndex로 정확히 매칭
+            if (h.spawnIndex >= 0 && h.spawnIndex < g.spawnPoints.Count && g.slots[h.spawnIndex] == h)
             {
-                if (g.slots[i] == h)
+                var gData = FieldDataManager.Instance.GetGroupData(g.cropName);
+
+                // gData.slots가 spawnPointIndex 정렬을 보장하므로 인덱스로 접근
+                if (h.spawnIndex < gData.slots.Count)
                 {
-                    var gData = FieldDataManager.Instance.GetGroupData(g.cropName);
-                    if (i >= gData.slots.Count)
-                        gData.slots.Add(new CropSlotData());
-
-                    gData.slots[i].spawnPointIndex = i;
-                    gData.slots[i].isAlive = false;
-                    gData.slots[i].respawnDay = respawnDay;
-
-                    g.slots[i] = null; // 즉시 비워둠
-                    return;
+                    gData.slots[h.spawnIndex].isAlive = false;
+                    gData.slots[h.spawnIndex].respawnDay = respawnDay;
                 }
+
+                g.slots[h.spawnIndex] = null;
+                return;
             }
         }
+
+        // 여기 도달하면 매칭 실패. 필요시 로그 확인.
+        Debug.LogWarning($"UpdateSlotData: matching group/slot not found for {h.name} (spawnIndex={h.spawnIndex})"); // ✅ 수정
     }
 }
+
