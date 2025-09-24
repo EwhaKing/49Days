@@ -10,17 +10,21 @@ public class CropManagerTester : MonoBehaviour
     {
         if (!Application.isPlaying) return;
         if (GameManager.Instance == null) return;
+        if (CropManager.Instance == null) return;
 
         int currentDay = GameManager.Instance.GetDate();
 
         // 앞으로만 날짜 진행
         while (currentDay < testDay)
         {
-            GameManager.Instance.NextDay(); // 이벤트 발행 → CropManager.OnDayChanged() 호출됨
+            GameManager.Instance.NextDay(); // 날짜 증가
             currentDay = GameManager.Instance.GetDate();
+
+            // CropManager.Start() 재실행
+            CropManager.Instance.Start();
         }
 
-        Debug.Log($"==== Day {currentDay} (Tester) ====");
+        Debug.Log($"==== Day {currentDay} (Tester, Start() 반복 실행) ====");
     }
 #endif
 }
