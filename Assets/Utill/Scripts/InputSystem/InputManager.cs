@@ -43,6 +43,13 @@ public class InputManager : Singleton<InputManager>
         handlers.Remove(handler);
     }
 
+    // InputField 켜질 때 임시로 모든 키 입력 막는 용도
+    public bool IsInputBlocked { get; private set; } = false;
+    public void BlockAllInput(bool block)
+    {
+        IsInputBlocked = block;
+    }
+
     /// <summary>
     /// 액션의 입력이 들어오면 호출됨
     /// 핸들러를 순회하며 입력에 대한 적절한 액션 탐색
@@ -50,6 +57,11 @@ public class InputManager : Singleton<InputManager>
     /// </summary>
     private void OnAction(InputAction actionName, InputAction.CallbackContext context)
     {
+        if (IsInputBlocked)
+        {
+            return;
+        }
+
         foreach (var handler in handlers)
         {
             if (handler.HandleInput(actionName, context))

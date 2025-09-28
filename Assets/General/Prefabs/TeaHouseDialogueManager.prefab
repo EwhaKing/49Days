@@ -572,6 +572,7 @@ MonoBehaviour:
   subCamera: {fileID: 4602699839554327704}
   mainVCam: {fileID: 6543287637455642967}
   subVCam: {fileID: 835863218706027145}
+  playerPresenter: {fileID: 8156122224765095444}
 --- !u!1 &2264477532300741561
 GameObject:
   m_ObjectHideFlags: 0
@@ -1871,6 +1872,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: DialogueSystem
       objectReference: {fileID: 0}
+    - target: {fileID: 4949398800113878974, guid: bd5dd963dd192254f9ce543917370231, type: 3}
+      propertyPath: offset.y
+      value: -4
+      objectReference: {fileID: 0}
     - target: {fileID: 8085594706632588909, guid: bd5dd963dd192254f9ce543917370231, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -1894,5 +1899,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4bec29c0a230741bdac901dba8da47ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8156122224765095444 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1019377165422081826, guid: bd5dd963dd192254f9ce543917370231, type: 3}
+  m_PrefabInstance: {fileID: 9157458319494510902}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ccac9f654c0c2c45bc82423ded61485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

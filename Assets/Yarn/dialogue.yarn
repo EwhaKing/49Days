@@ -1,5 +1,6 @@
-title: 일차0_밤
+﻿title: 일차0_밤
 ---
+<<declare $playerName = "">>
 <<change_bgm night_1>>
 <<enter_and_sit 키루스 1 >>
 <<change_sprite 키루스 무표정>>
@@ -132,6 +133,7 @@ title: 일차0_밤1
 키루스: 난 찻집 주인을 계속 '너'라고 부를 만큼 배짱이 좋진 못해서 말이야.
 키루스: 뭐든 좋으니 이름을 적어주면 좋겠는데.
 -> 내 이름은...
+    <<set_player_nickname>>
     <<change_sprite 키루스 미소>>
     키루스: 그래, 고마워.
     키루스: 네 표정을 보니 알겠네. 기억이 전혀 없는 건가?

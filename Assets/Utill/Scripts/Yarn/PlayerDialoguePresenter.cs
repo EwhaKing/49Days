@@ -12,6 +12,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     public RectTransform? nameBox;
     public TextMeshProUGUI? dialogueText;
     public TextMeshProUGUI? nameText;
+    public RectTransform? playerNicknamePanel;
 
     public OptionPanelController? optionPanelController;
 
@@ -23,6 +24,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     private Phase phase = Phase.AwaitingNext;
 
     [SerializeField] private DialogueInputHandler? dialogueInputHandler;
+    [SerializeField] private DialogueRunner? runner;
 
     void OnEnable()
     {
@@ -78,7 +80,8 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         dialogueBox!.gameObject.SetActive(true);
         nameBox!.gameObject.SetActive(true);
 
-        string characterName = line.CharacterName ?? "Player";
+        string characterName = GetPlayerNameFromVariableStorage();
+
         string processedText = string.IsNullOrEmpty(line.TextWithoutCharacterName.Text)
             ? line.Text.Text
             : line.TextWithoutCharacterName.Text;
@@ -105,14 +108,14 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void ValidateReferences()
     {
-        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox�� �Ҵ���� �ʾҽ��ϴ�.");
-        if (nameBox == null) throw new System.InvalidOperationException("nameBox�� �Ҵ���� �ʾҽ��ϴ�.");
-        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText�� �Ҵ���� �ʾҽ��ϴ�.");
-        if (nameText == null) throw new System.InvalidOperationException("nameText�� �Ҵ���� �ʾҽ��ϴ�.");
+        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox가 할당되지 않았습니다.");
+        if (nameBox == null) throw new System.InvalidOperationException("nameBox가 할당되지 않았습니다.");
+        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText가 할당되지 않았습니다.");
+        if (nameText == null) throw new System.InvalidOperationException("nameText가 할당되지 않았습니다.");
         if (dialogueInputHandler == null) throw new System.InvalidOperationException("dialogueInputHandler가 할당되지 않았습니다.");
     
-            mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Camera�� ã�� �� �����ϴ�.");
-        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox�� ������ Canvas�� �����ϴ�.");
+            mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Camera가 할당되지 않았습니다.");
+        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox의 부모인 Canvas가 존재하지 않습니다.");
     }
 
     private void CalculateDialogueBoxSize(string processedText)
@@ -264,7 +267,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     {
         ValidateReferences();
         if (optionPanelController == null)
-            throw new System.InvalidOperationException("optionPanelController�� �Ҵ���� �ʾҽ��ϴ�.");
+            throw new System.InvalidOperationException("optionPanelController가 할당되지 않았습니다.");
 
         DialoguePresenterRouter.isOptionPanelActive = true;
 
@@ -277,4 +280,49 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     public override YarnTask OnDialogueStartedAsync() => YarnTask.CompletedTask;
     public override YarnTask OnDialogueCompleteAsync() => YarnTask.CompletedTask;
+
+    private string GetPlayerNameFromVariableStorage()
+    {
+        if (runner?.VariableStorage == null)
+            return "Player";
+        if (runner.VariableStorage.TryGetValue("$playerName", out object value) && value != null)
+            return value.ToString();
+        return "Player";
+    }
+
+    public void ShowNicknameInputPanel(System.Action<string> onConfirm)
+    {
+        if (playerNicknamePanel == null)
+        {
+            Debug.LogError("playerNicknamePanel이 할당되지 않았습니다.");
+            return;
+        }
+        playerNicknamePanel.gameObject.SetActive(true);
+        InputManager.Instance.BlockAllInput(true);
+
+        var inputField = playerNicknamePanel.GetComponentInChildren<TMPro.TMP_InputField>();
+        var confirmButton = playerNicknamePanel.GetComponentInChildren<Button>();
+
+        if (inputField == null || confirmButton == null)
+        {
+            Debug.LogError("닉네임 입력 UI 구성요소를 찾을 수 없습니다.");
+            return;
+        }
+
+        inputField.characterLimit = 10;
+
+        confirmButton.onClick.RemoveAllListeners();
+        confirmButton.onClick.AddListener(() =>
+        {
+            string nickname = inputField.text.Trim();
+            if (string.IsNullOrEmpty(nickname))
+            {
+                Debug.Log("닉네임이 입력되지 않았습니다.");
+                return;
+            }
+            playerNicknamePanel.gameObject.SetActive(false);
+            InputManager.Instance.BlockAllInput(false);
+            onConfirm?.Invoke(nickname);
+        });
+    }
 }

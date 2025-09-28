@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +17,8 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
 
     [SerializeField] private CinemachineVirtualCamera mainVCam;  // left 
     [SerializeField] private CinemachineVirtualCamera subVCam;  // right
+
+    [SerializeField] private PlayerDialoguePresenter playerPresenter;
 
     void Start()
     {
@@ -58,6 +60,7 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
         runner.AddCommandHandler("reset_day_order_count", ResetDayOrderCount);
         runner.AddCommandHandler<string>("go_to_kitchen", GoToKitchen);
         runner.AddCommandHandler<string>("set_kitchen_node_title", SetKitchenNodeTitle);
+        runner.AddCommandHandler("set_player_nickname", SetPlayerNickname);
 
         runner.gameObject.SetActive(false);
         
@@ -315,5 +318,23 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
     public void ChangeBgm(string bgmName)
     {
         SoundManager.Instance.PlayBgm(bgmName);
+    }
+
+    public IEnumerator SetPlayerNickname()
+    {
+        bool isConfirmed = false;
+        string nickname = "";
+
+        playerPresenter.ShowNicknameInputPanel(input =>
+        {
+            nickname = input;
+            isConfirmed = true;
+        });
+
+        // 닉네임이 확정될 때까지 대기
+        while (!isConfirmed)
+            yield return null;
+
+        runner.VariableStorage.SetValue("$playerName", nickname);
     }
 }
