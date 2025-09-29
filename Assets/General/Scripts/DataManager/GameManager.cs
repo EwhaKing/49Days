@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 
 public class GeneralData
 {
+    public string playerName = "Player";
     public int money = 0;
     public int week = 1; // 1 ~ 7 주차
     public int day = 1;  // 1 ~ 7 각 주의 일차
@@ -23,6 +24,14 @@ public class GameManager : Singleton<GameManager>
     public Action onWeekChanged;
     public Action onDayChanged;
     public Action onUIOn;
+    public Action<string> onPlayerNameChanged;
+
+    public string GetPlayerName() { return generalData.playerName; }
+    public void SetPlayerName(string name)
+    { 
+        generalData.playerName = name;
+        onPlayerNameChanged?.Invoke(name);
+    }
 
     public int GetMoney() { return generalData.money; }
     public void AddMoney(int amount)
