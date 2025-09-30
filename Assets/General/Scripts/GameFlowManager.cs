@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +11,8 @@ public class GameFlowManager
 
     static string currentSceneName;
     public static string GetCurruntSceneName => currentSceneName;
+    public static event Action<string> onSceneLoaded;
+    public static event Action onFinishField;
     
     public static void StartGame()
     {
@@ -34,7 +36,7 @@ public class GameFlowManager
                 break;
         }
 
-        CoroutineUtil.Instance.RunAfterFirstFrame(() => 
+        CoroutineUtil.Instance.RunAfterFirstFrame(() =>
         {
             LoadScene(sceneName);
         });
@@ -45,6 +47,7 @@ public class GameFlowManager
     /// </summary>
     public static void FinishField()
     {
+        onFinishField?.Invoke();
         OrderManager.Instance.SetAfterNodeTitle("낮_주문");
         LoadScene(TEA_HOUSE_FRONT_SCENE_NAME);
     }
@@ -115,6 +118,7 @@ public class GameFlowManager
 
         // 6. 다음 프레임에서 페이드아웃 시작
         yield return null;
+        onSceneLoaded?.Invoke(sceneName);
         GeneralDirection.Instance.FadeOutBlack(1f);
     }
 

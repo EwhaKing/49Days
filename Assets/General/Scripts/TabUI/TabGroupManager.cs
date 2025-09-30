@@ -4,12 +4,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using System;
 
 
 // 뭐하는 스크립트인가요?
 // 현재 어떤 토글(탭)이 선택되어 있는 상태인지 저장/복원하고, 탭 활성화 및 애니메이션 재생을 명령.
 // 토글 그룹(토글들의 부모 오브젝트, TabTags)에 붙여서 사용.
-public class TabGroupManager : MonoBehaviour
+public class TabGroupManager : MonoBehaviour, IDropHandler
 {
     // 개별 탭 하나를 구성하는 UI 요소들의 묶음.
     [System.Serializable]
@@ -26,16 +28,25 @@ public class TabGroupManager : MonoBehaviour
     [SerializeField] private ToggleGroup toggleGroup;
 
     [Header("기본 탭 인덱스 설정")]
-    [SerializeField] private string kitchenSceneName = "KitchenScene";
+    [SerializeField] private string kitchenSceneName = "Kitchen";
+    [SerializeField] private string frontSceneName = "TeaHouseFront";
     [SerializeField] private int kitchenDefaultIndex = 1;
     [SerializeField] private int fieldDefaultIndex = 0;
 
     private static int? lastKnownTabIndex = null;      // 마지막으로 선택한 탭을 기억함.
-    private int _currentTabIndex = -1; 
+    private int isTeaHouseScene => SceneManager.GetActiveScene().name == frontSceneName || SceneManager.GetActiveScene().name == kitchenSceneName ? 1 : 0;
+    private int _currentTabIndex = -1;
 
     // 게임을 시작할 때 static 변수를 초기화, Scene을 다시 로드해도 이전 Tab 열람 기록이 남지 않음.
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStaticData() { lastKnownTabIndex = null; }
+
+    public static event Action OnItemDroppedOnBackground;
+
+    public void OnDrop(PointerEventData eventData)
+    {
+        OnItemDroppedOnBackground?.Invoke();
+    }
 
     void Awake()
     {
@@ -78,7 +89,8 @@ public class TabGroupManager : MonoBehaviour
         else    // 이전에 열람한 기록이 없다면(e.g. 씬 로드)
         {
             string currentScene = SceneManager.GetActiveScene().name;   // 현재 씬 확인 후 탭 결정
-            indexToOpen = (currentScene == kitchenSceneName) ? kitchenDefaultIndex : fieldDefaultIndex; // 주방이라면 레시피, 필드라면 인벤토리
+            // indexToOpen = (currentScene == kitchenSceneName) ? kitchenDefaultIndex : fieldDefaultIndex; // 주방이라면 레시피, 필드라면 인벤토리
+            indexToOpen = isTeaHouseScene == 1 ? kitchenDefaultIndex : fieldDefaultIndex;
         }
         SelectTab(indexToOpen, false);
         StartCoroutine(ReEnableToggleGroupAfterFrame());

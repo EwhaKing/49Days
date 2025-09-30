@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// 인벤토리 UI의 모든 Visual Element와 Interaction을 관리하는 클래스.
@@ -23,8 +24,11 @@ public class InventoryUI : MonoBehaviour
 
     [Header("씬별 특별 설정")]
     [SerializeField] private string kitchenSceneName = "Kitchen";   // 주방 씬에서 토글 비활성화 해야 하니까 이름 넣어둡니다.
+    [SerializeField] private string frontSceneName = "TeaHouseFront"; // 다과회 전경 씬 이름
+
+
     [SerializeField] private Color disabledColor = new Color(0.5f, 0.2f, 0.2f, 1f);     // 비활성화된 토글의 색상
-    [SerializeField] private int kitchenDefaultCategoryIndex = 3;   // 주방 씬에서의 기본 카테고리 인덱스 (2가 퀘스트, 3이 도구)
+    [SerializeField] private int kitchenDefaultCategoryIndex = 3;   // 주방 씬에서의 기본 카테고리 인덱스 (2가 도구, 3이 퀘스트, 4가 기타)
 
 
 
@@ -49,6 +53,7 @@ public class InventoryUI : MonoBehaviour
     {
         // TrashBin 이벤트를 구독 - 아이템이 버려졌을 때를 감지.
         TrashBin.OnItemDroppedOnTrash += HandleTrashDrop;
+        TabGroupManager.OnItemDroppedOnBackground += HandleTrashDrop;
 
         // 자식으로 있는 모든 슬롯 UI를 찾아와 초기화. 그리고 이벤트 연결.
         slotGrid.GetComponentsInChildren(true, uiSlots);
@@ -69,9 +74,9 @@ public class InventoryUI : MonoBehaviour
         }
 
         // 현재 씬에 따라 토글 상태를 업데이트 -> 기본 카테고리를 설정.
-        bool isKitchen = SceneManager.GetActiveScene().name == kitchenSceneName;
-        UpdateCategoryTogglesForScene(isKitchen);
-        ItemType defaultCategory = isKitchen ? (ItemType)kitchenDefaultCategoryIndex : ItemType.Ingredient;
+        bool isTeaHouseScene = SceneManager.GetActiveScene().name == frontSceneName || SceneManager.GetActiveScene().name == kitchenSceneName ? true : false;
+        UpdateCategoryTogglesForScene(isTeaHouseScene);
+        ItemType defaultCategory = isTeaHouseScene ? (ItemType)kitchenDefaultCategoryIndex : ItemType.Ingredient;
         categoryToggles[(int)defaultCategory].isOn = true;
         
         // InventoryManager의 데이터 변경 이벤트 구독.
@@ -102,6 +107,7 @@ public class InventoryUI : MonoBehaviour
     {
         // 오브젝트 파괴 시, 구독했던 모든 이벤트를 해제.
         TrashBin.OnItemDroppedOnTrash -= HandleTrashDrop;
+        TabGroupManager.OnItemDroppedOnBackground -= HandleTrashDrop;
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.OnInventoryChanged -= UpdateInventoryDisplay;
@@ -179,13 +185,13 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// 주방에서 일부 카테고리 토글을 비활성화.
     /// </summary>
-    private void UpdateCategoryTogglesForScene(bool isKitchen)
+    private void UpdateCategoryTogglesForScene(bool isTeaHouseScene)
     {
         for (int i = 0; i < categoryToggles.Length; i++)
         {
             Toggle toggle = categoryToggles[i];
             Image image = toggle.targetGraphic as Image;
-            bool shouldDisable = isKitchen && (i == (int)ItemType.Ingredient || i == (int)ItemType.Topping);
+            bool shouldDisable = isTeaHouseScene && (i == (int)ItemType.Ingredient);
             toggle.interactable = !shouldDisable;
             if (image != null && i < originalToggleColors.Count)
             {
