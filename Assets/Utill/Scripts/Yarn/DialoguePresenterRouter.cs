@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System.Collections;
 using System.Threading;
 using UnityEngine;
@@ -45,19 +45,21 @@ public class DialoguePresenterRouter : DialoguePresenterBase
             SetSpeaker(line.CharacterName);
         }
 
+        Debug.Assert(targetPresenter != null, $"'{line.CharacterName}'에 해당하는 DialoguePresenter가 할당되지 않았습니다.");
         if (targetPresenter == null)
-            throw new System.InvalidOperationException($"'{line.CharacterName}'�� �ش��ϴ� DialoguePresenter�� �Ҵ���� �ʾҽ��ϴ�.");
+            return YarnTask.CompletedTask;
 
         return targetPresenter.RunLineAsync(line, cancellationToken);
     }
 
     public override YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, CancellationToken cancellationToken)
     {
-        // �÷��̾ �ɼ� ó�� ����
+        // 플레이어만 옵션 처리 가능
         if (playerPresenter != null)
             return playerPresenter.RunOptionsAsync(dialogueOptions, cancellationToken);
 
-        throw new System.InvalidOperationException("�ɼ��� ó���� Presenter�� �Ҵ���� �ʾҽ��ϴ�.");
+        Debug.Assert(false, "옵션을 처리할 Presenter가 할당되지 않았습니다.");
+        return YarnTask.FromResult<DialogueOption?>(null);
     }
 
     public override YarnTask OnDialogueStartedAsync() => YarnTask.CompletedTask;

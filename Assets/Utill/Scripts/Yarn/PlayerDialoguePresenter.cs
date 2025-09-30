@@ -80,7 +80,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
         dialogueBox!.gameObject.SetActive(true);
         nameBox!.gameObject.SetActive(true);
 
-        string characterName = GetPlayerNameFromVariableStorage();
+        string characterName = GameManager.Instance.GetPlayerName();
 
         string processedText = string.IsNullOrEmpty(line.TextWithoutCharacterName.Text)
             ? line.Text.Text
@@ -108,14 +108,15 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     private void ValidateReferences()
     {
-        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox가 할당되지 않았습니다.");
-        if (nameBox == null) throw new System.InvalidOperationException("nameBox가 할당되지 않았습니다.");
-        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText가 할당되지 않았습니다.");
-        if (nameText == null) throw new System.InvalidOperationException("nameText가 할당되지 않았습니다.");
-        if (dialogueInputHandler == null) throw new System.InvalidOperationException("dialogueInputHandler가 할당되지 않았습니다.");
-    
-            mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Camera가 할당되지 않았습니다.");
-        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox의 부모인 Canvas가 존재하지 않습니다.");
+        Debug.Assert(dialogueBox != null, "dialogueBox가 할당되지 않았습니다.");
+        Debug.Assert(nameBox != null, "nameBox가 할당되지 않았습니다.");
+        Debug.Assert(dialogueText != null, "dialogueText가 할당되지 않았습니다.");
+        Debug.Assert(nameText != null, "nameText가 할당되지 않았습니다.");
+        Debug.Assert(dialogueInputHandler != null, "dialogueInputHandler가 할당되지 않았습니다.");
+
+        mainCamera ??= Camera.main;
+        Debug.Assert(mainCamera != null, "Main Camera가 할당되지 않았습니다.");
+        Debug.Assert(dialogueBox.GetComponentInParent<Canvas>() != null, "dialogueBox의 부모인 Canvas가 존재하지 않습니다.");
     }
 
     private void CalculateDialogueBoxSize(string processedText)
@@ -266,8 +267,7 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
     public override async YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, CancellationToken cancellationToken)
     {
         ValidateReferences();
-        if (optionPanelController == null)
-            throw new System.InvalidOperationException("optionPanelController가 할당되지 않았습니다.");
+        Debug.Assert(optionPanelController != null, "optionPanelController가 할당되지 않았습니다.");
 
         DialoguePresenterRouter.isOptionPanelActive = true;
 
@@ -280,15 +280,6 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
 
     public override YarnTask OnDialogueStartedAsync() => YarnTask.CompletedTask;
     public override YarnTask OnDialogueCompleteAsync() => YarnTask.CompletedTask;
-
-    private string GetPlayerNameFromVariableStorage()
-    {
-        if (runner?.VariableStorage == null)
-            return "Player";
-        if (runner.VariableStorage.TryGetValue("$playerName", out object value) && value != null)
-            return value.ToString();
-        return "Player";
-    }
 
     public void ShowNicknameInputPanel(System.Action<string> onConfirm)
     {
@@ -320,6 +311,8 @@ public class PlayerDialoguePresenter : DialoguePresenterBase
                 Debug.Log("닉네임이 입력되지 않았습니다.");
                 return;
             }
+            GameManager.Instance.SetPlayerName(nickname);
+
             playerNicknamePanel.gameObject.SetActive(false);
             InputManager.Instance.BlockAllInput(false);
             onConfirm?.Invoke(nickname);

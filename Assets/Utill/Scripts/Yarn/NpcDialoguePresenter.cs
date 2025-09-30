@@ -108,15 +108,16 @@ public class NpcDialoguePresenter : DialoguePresenterBase
 
     private void ValidateReferences()
     {
-        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox가 할당되지 않았습니다.");
-        if (nameBox == null) throw new System.InvalidOperationException("nameBox가 할당되지 않았습니다.");
-        if (dialogueText == null) throw new System.InvalidOperationException("dialogueText가 할당되지 않았습니다.");
-        if (nameText == null) throw new System.InvalidOperationException("nameText가 할당되지 않았습니다.");
-        if (npcTransform == null) throw new System.InvalidOperationException("npcTransform가 할당되지 않았습니다.");
-        if (dialogueInputHandler == null) throw new System.InvalidOperationException("dialogueInputHandler가 할당되지 않았습니다.");
+        Debug.Assert(dialogueBox != null, "dialogueBox가 할당되지 않았습니다.");
+        Debug.Assert(nameBox != null, "nameBox가 할당되지 않았습니다.");
+        Debug.Assert(dialogueText != null, "dialogueText가 할당되지 않았습니다.");
+        Debug.Assert(nameText != null, "nameText가 할당되지 않았습니다.");
+        Debug.Assert(npcTransform != null, "npcTransform가 할당되지 않았습니다.");
+        Debug.Assert(dialogueInputHandler != null, "dialogueInputHandler가 할당되지 않았습니다.");
 
-        mainCamera = Camera.main ?? throw new System.InvalidOperationException("Main Camera가 할당되지 않았습니다.");
-        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox의 부모인 Canvas가 존재하지 않습니다.");
+        mainCamera = Camera.main;
+        Debug.Assert(mainCamera != null, "Main Camera가 할당되지 않았습니다.");
+        Debug.Assert(dialogueBox.GetComponentInParent<Canvas>() != null, "dialogueBox의 부모인 Canvas가 존재하지 않습니다.");
     }
 
     private void CalculateDialogueBoxSize(string processedText)

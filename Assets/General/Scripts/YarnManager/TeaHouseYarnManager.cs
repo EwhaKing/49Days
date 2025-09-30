@@ -28,7 +28,8 @@ public class TeaHouseYarnManager : SceneSingleton<TeaHouseYarnManager>
         fadeImage.transform.parent.gameObject.SetActive(false);
 
         runner.onDialogueComplete.AddListener(EndDialogue);
-        
+        runner.VariableStorage.SetValue("$playerName", GameManager.Instance.GetPlayerName());
+
         runner.AddCommandHandler<string, int>("enter_and_sit", EnterAndSit);
         runner.AddCommandHandler<string>("exit", Exit);
         runner.AddCommandHandler<string, int>("affinity_change", AffinityChange);
