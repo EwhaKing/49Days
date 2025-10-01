@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipeName: "\uB728\uAC70\uC6B4 \uBB3C"
   teaImage: {fileID: -399889401, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
-  simpleRecipeImage: {fileID: 1481713296, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  simpleRecipeImage: {fileID: 1080089956, guid: f85a7d43ec9daa046972c425c4730031, type: 3}
   description: "1. 100\xB0C\uC758 \uBB3C\uC744 \uB2E4\uBCD1\uC5D0 \uBD93\uB294\uB2E4.<br>2.
     \uCC28\uB97C \uB0B8\uB2E4."
   teaName: 1

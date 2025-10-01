@@ -24,33 +24,33 @@ MonoBehaviour:
   poses:
   - poseName: "\uBB34\uD45C\uC815"
     bodySprite: {fileID: 21300000, guid: 1204d2feafffa4f45800fe8849cb0106, type: 3}
-    eyesOpenSprite: {fileID: 21300000, guid: 1204d2feafffa4f45800fe8849cb0106, type: 3}
-    eyesClosedSprite: {fileID: 21300000, guid: 93b2589561cb69341bc4224c474ba30b, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 8f25bdf06fea6cc408055ef02af8ffc7, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 62c30e051d2973b49af03dd6c20cadca, type: 3}
   - poseName: "\uBBF8\uC18C"
     bodySprite: {fileID: 21300000, guid: d824d57c5427fc64ba6a0a4b7442fe09, type: 3}
-    eyesOpenSprite: {fileID: 21300000, guid: d824d57c5427fc64ba6a0a4b7442fe09, type: 3}
-    eyesClosedSprite: {fileID: 21300000, guid: 3579995b4ff7e504196d1dd0b4708937, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 032a696e346bc834d90a9e49bd64f136, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 0d1cd9a6fcaacc84b88e7562e062f13e, type: 3}
   - poseName: "\uAE30\uC068"
     bodySprite: {fileID: 21300000, guid: 7afb7c3d1ab258b4eb8ecc010582822d, type: 3}
-    eyesOpenSprite: {fileID: 21300000, guid: 7afb7c3d1ab258b4eb8ecc010582822d, type: 3}
-    eyesClosedSprite: {fileID: 21300000, guid: 52d4f321992524949b2cb9dd82bae2f3, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 71ddd27b2b0516a4e8bdc0d1c0749d69, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: d1fbd702d32c3fe4b9dbabe928ebe2f1, type: 3}
   - poseName: "\uB180\uB78C"
     bodySprite: {fileID: 21300000, guid: ac138b1deb03283449178b9583ae2955, type: 3}
-    eyesOpenSprite: {fileID: 21300000, guid: ac138b1deb03283449178b9583ae2955, type: 3}
-    eyesClosedSprite: {fileID: 21300000, guid: 67df07f5d3f3a07488447d39db325a0a, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 3569f463d0ee0604f8d70d11314936c5, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 9c3ffac7ee53a8642a00f58d8631f348, type: 3}
   - poseName: "\uC2AC\uD514"
     bodySprite: {fileID: 21300000, guid: 6550cd920b207e14abac5796f3a35abd, type: 3}
-    eyesOpenSprite: {fileID: 21300000, guid: 6550cd920b207e14abac5796f3a35abd, type: 3}
-    eyesClosedSprite: {fileID: 21300000, guid: 161d98207573b8a429dd2e85e8207009, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: bcbe10de40836e646bd55d7ea094ef34, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: e12174e3dff9b6049a9e63bb0cf08c49, type: 3}
   - poseName: "\uBD84\uB178"
     bodySprite: {fileID: 21300000, guid: 1c862a1ff8c791a40a9785296e9e8fee, type: 3}
-    eyesOpenSprite: {fileID: 21300000, guid: 1c862a1ff8c791a40a9785296e9e8fee, type: 3}
-    eyesClosedSprite: {fileID: 21300000, guid: dcc5ae86d185833478fe07641617ad24, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 2d694cb61e0e4d44384d6976380c9fd7, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: aad5fed967e2f014693a1bd5ac33eec2, type: 3}
   - poseName: "\uBD84\uB1782"
     bodySprite: {fileID: 21300000, guid: 3299113b69982c04dafe34c9de38c463, type: 3}
     eyesOpenSprite: {fileID: 21300000, guid: 3299113b69982c04dafe34c9de38c463, type: 3}
     eyesClosedSprite: {fileID: 21300000, guid: 4e25fcdf3821c3c4d8837dc352d44f60, type: 3}
   - poseName: "\uACE4\uB780"
     bodySprite: {fileID: 21300000, guid: 83c9e3b80402bab4bb83bdd693bdc5d4, type: 3}
-    eyesOpenSprite: {fileID: 21300000, guid: 83c9e3b80402bab4bb83bdd693bdc5d4, type: 3}
-    eyesClosedSprite: {fileID: 21300000, guid: 177b937a652f93c408c2078ff55a366c, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 94174a4f75ca97549a2781ba58f117b8, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 8954c846cfc2c65469447f189b474909, type: 3}

@@ -23,17 +23,17 @@ MonoBehaviour:
   affinity: 0
   poses:
   - poseName: "\uBB34\uD45C\uC815"
-    bodySprite: {fileID: -1534276697, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
-    eyesOpenSprite: {fileID: -1534276697, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
-    eyesClosedSprite: {fileID: -498481022, guid: 496c88be514989e4dad3a53a83b61990, type: 3}
+    bodySprite: {fileID: 21300000, guid: 3ab3053d9dedaab4dad35d17ad35e4e8, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 3ab3053d9dedaab4dad35d17ad35e4e8, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 3ab3053d9dedaab4dad35d17ad35e4e8, type: 3}
   - poseName: 
-    bodySprite: {fileID: 0}
-    eyesOpenSprite: {fileID: 0}
-    eyesClosedSprite: {fileID: 0}
+    bodySprite: {fileID: 21300000, guid: 02c18e100bdf6144dbea1f8ca1cd5525, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 02c18e100bdf6144dbea1f8ca1cd5525, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 02c18e100bdf6144dbea1f8ca1cd5525, type: 3}
   - poseName: 
-    bodySprite: {fileID: 0}
-    eyesOpenSprite: {fileID: 0}
-    eyesClosedSprite: {fileID: 0}
+    bodySprite: {fileID: 21300000, guid: 3d4d235d0d43e1543a352cef0f99101a, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 3d4d235d0d43e1543a352cef0f99101a, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 3d4d235d0d43e1543a352cef0f99101a, type: 3}
   - poseName: 
     bodySprite: {fileID: 0}
     eyesOpenSprite: {fileID: 0}
