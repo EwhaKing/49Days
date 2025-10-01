@@ -284,6 +284,8 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Tooltip.Instance.Show("주전자");
+
         if (isPouring) return;  // 물 붓는 중이면 하이라이트 안 보이게
 
         if (Hand.Instance.handIngredient != null)
@@ -293,6 +295,8 @@ public class Kettle : MonoBehaviour, IPointerEnterHandler, IDragHandler, IPointe
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        Tooltip.Instance.Hide();
+        Tooltip.Instance.HideFadeImmidately();
         highlightSprite.SetActive(false);
     }
 

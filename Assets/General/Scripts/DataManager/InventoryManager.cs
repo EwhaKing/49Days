@@ -260,7 +260,7 @@ public class InventoryManager : SceneSingleton<InventoryManager>
         {
             if (slotData != null && slotData.itemData != null)
             {
-                IngredientName name = (IngredientName)Enum.Parse(typeof(IngredientName), slotData.itemData.itemName.ToEnglish());
+                IngredientName name = slotData.itemData.itemName.ToEnglish().ToEnum<IngredientName>();
                 int count = slotData.count;
                 CabinetManager.Instance.AddIngredient(name, count);
             }

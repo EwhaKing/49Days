@@ -43,6 +43,8 @@ public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
     public void OnPointerEnter(PointerEventData e)
     {
+        Tooltip.Instance.Show("산화기");
+
         TeaIngredient ingredient = Hand.Instance.handIngredient;
 
         if (state == OxidizerState.ClosedIdle &&
@@ -79,6 +81,9 @@ public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
     public void OnPointerExit(PointerEventData e)
     {
+        Tooltip.Instance.Hide();
+        Tooltip.Instance.HideFadeImmidately();
+
         if (state == OxidizerState.OpenReady)
         {
             // 산화기 다시 닫기
@@ -98,6 +103,16 @@ public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     {
         switch (state)
         {
+            case OxidizerState.ClosedIdle:
+                if (Hand.Instance.handIngredient == null) break;
+                if (!(Hand.Instance.handIngredient.oxidizedDegree == OxidizedDegree.None
+                    || Hand.Instance.handIngredient.oxidizedDegree == OxidizedDegree.Zero))
+                {
+                    Tooltip.Instance.ShowFade("이미 산화한 재료는 다시 산화할 수 없습니다.");
+                    break;
+                }
+                Tooltip.Instance.ShowFade("이 재료는 산화할 수 없습니다.");
+                break;
             case OxidizerState.OpenReady:
                 TryStartOxidation();        // 산화 시작 시도
                 break;

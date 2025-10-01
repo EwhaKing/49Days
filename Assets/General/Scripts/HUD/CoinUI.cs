@@ -11,6 +11,7 @@ public class CoinUI : MonoBehaviour
     [SerializeField] GameObject floatingTextObj;
     TMP_Text floatingText;
     CanvasGroup floatingCanvasGroup;
+    float duration = 1f;
 
     void Start()
     {
@@ -30,7 +31,7 @@ public class CoinUI : MonoBehaviour
     void AddCoins(int diff, int current)
     {
         ShowFloatingText(diff);
-        DOTween.To(() => current - diff, x => UpdateCoinText(x), current, 0.5f).SetEase(Ease.OutQuad);
+        DOTween.To(() => current - diff, x => UpdateCoinText(x), current, duration).SetEase(Ease.OutQuad);
     }
 
     void UpdateCoinText(int value)
@@ -51,8 +52,8 @@ public class CoinUI : MonoBehaviour
         // 위로 이동 + 페이드 아웃
         floatingTextObj.SetActive(true);
         Sequence seq = DOTween.Sequence();
-        seq.Append(floatingText.rectTransform.DOAnchorPos(floatingText.rectTransform.anchoredPosition + new Vector2(0, 50), 0.7f));
-        seq.Join(floatingCanvasGroup.DOFade(0, 0.7f));
+        seq.Append(floatingText.rectTransform.DOAnchorPos(floatingText.rectTransform.anchoredPosition + new Vector2(0, 50), duration));
+        seq.Join(floatingCanvasGroup.DOFade(0, duration));
         seq.OnComplete(() => floatingTextObj.SetActive(false));
     }
 }

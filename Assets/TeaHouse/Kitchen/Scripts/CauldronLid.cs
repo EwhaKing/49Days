@@ -56,6 +56,8 @@ public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
 
     public void OnPointerEnter(PointerEventData e)
     {
+        Tooltip.Instance.Show("가마솥");
+
         TeaIngredient ingredient = Hand.Instance.handIngredient;
         
         if ((ingredient == null && cauldronState == CauldronState.Roasted) || (ingredient != null && ValidateRoastingCondition() && cauldronState == CauldronState.Idle))
@@ -66,6 +68,8 @@ public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
 
     public void OnPointerExit(PointerEventData e)
     {
+        Tooltip.Instance.Hide();
+        Tooltip.Instance.HideFadeImmidately();
         spriteRenderer.sprite = defaultSprite;
     }
 
@@ -135,7 +139,7 @@ public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         activeIngredients.Clear();
     }
 
-    private bool ValidateRoastingCondition()
+    private bool ValidateRoastingCondition(bool isOnClicked = false)
     {
         TeaIngredient handIngredient = Hand.Instance?.handIngredient;
 
@@ -150,6 +154,7 @@ public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         if (handIngredient.ingredientType == IngredientType.Substitute)
         {
             Debug.Log("대용차 재료는 가마솥에 덖을 수 없습니다.");
+            if (isOnClicked) Tooltip.Instance.ShowFade("이 재료는 덖을 수 없습니다.");
             return false;
         }
 
@@ -157,12 +162,14 @@ public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         if (handIngredient.roasted != ResultStatus.None)
         {
             Debug.Log("이미 덖은 재료는 가마솥에 재차 덖을 수 없습니다.");
+            if (isOnClicked) Tooltip.Instance.ShowFade("이미 덖은 재료는 다시 덖을 수 없습니다.");
             return false;
         }
 
         if ((handIngredient.ingredientType == IngredientType.Flower || handIngredient.ingredientType == IngredientType.Substitute) && handIngredient.isChopped == false)
         {
             Debug.Log("손질되지 않은 재료는 덖을 수 없습니다.");
+            if (isOnClicked) Tooltip.Instance.ShowFade("이 재료는 덖을 수 없습니다.");
             return false;
         }
 
@@ -170,6 +177,7 @@ public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
         if (handIngredient.rolled == ResultStatus.Failed || handIngredient.oxidizedDegree == OxidizedDegree.Over)
         {
             Debug.Log("뭉개짐 상태(유념 실패)이거나, 산화에 실패한 재료는 덖을 수 없습니다.");
+            if (isOnClicked) Tooltip.Instance.ShowFade("이 재료는 덖을 수 없습니다.");
             return false;
         }
 
@@ -179,7 +187,7 @@ public class CauldronLid : MonoBehaviour, IPointerClickHandler, IPointerEnterHan
     
     private void StartRoasting()
     {
-        if (!ValidateRoastingCondition()) return;
+        if (!ValidateRoastingCondition(true)) return;
 
         currentIngredient = Hand.Instance.Drop();
         currentIngredient.SetActive(false);

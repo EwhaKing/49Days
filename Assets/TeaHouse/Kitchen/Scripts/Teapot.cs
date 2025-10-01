@@ -117,6 +117,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
         if (ingredients.Exists(i => i.ingredientName == ing.ingredientName))
         {
             Debug.Log($"{ing.ingredientName}은 이미 추가된 재료입니다.");
+            Tooltip.Instance.ShowFade("이미 추가된 재료입니다.");
             return;
         }
 
@@ -128,6 +129,7 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
         if (currentState == State.Brewing && ing.ingredientType != IngredientType.Additional)
         {
             Debug.Log("우림 중에는 주요 재료를 넣을 수 없습니다.");
+            Tooltip.Instance.ShowFade("우림 중에 넣을 수 없는 재료입니다.");
             return;
         }
 
@@ -324,6 +326,8 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Tooltip.Instance.Show("다병");
+
         IsMouseOver = true;
         var held = Hand.Instance.handIngredient;
 
@@ -358,6 +362,9 @@ public class TeaPot : SceneSingleton<TeaPot>, IPointerClickHandler, IPointerEnte
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        Tooltip.Instance.Hide();
+        Tooltip.Instance.HideFadeImmidately();
+
         IsMouseOver = false;
         highlightSprite.SetActive(false);
 

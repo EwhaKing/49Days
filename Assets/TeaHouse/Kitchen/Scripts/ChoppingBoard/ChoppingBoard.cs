@@ -25,7 +25,7 @@ public class ChoppingBoard : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 
     public void OnPointerClick(PointerEventData e) 
     {
-        if (CanDrop())
+        if (CanDrop(true))
         {
             ingredient = Hand.Instance.handIngredient;
             ingredientObject = Hand.Instance.Drop();
@@ -55,6 +55,8 @@ public class ChoppingBoard : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 
     public void OnPointerEnter(PointerEventData e)
     {
+        Tooltip.Instance.Show("도마");
+
         if (CanDrop())
         {
             spriteRenderer.sprite = highlightSprite;
@@ -63,24 +65,31 @@ public class ChoppingBoard : MonoBehaviour, IPointerClickHandler, IPointerEnterH
 
     public void OnPointerExit(PointerEventData e)
     {
+        Tooltip.Instance.Hide();
+        Tooltip.Instance.HideFadeImmidately();
         spriteRenderer.sprite = originSprite;
     }
 
-    bool CanDrop()
+    bool CanDrop(bool isOnClicked = false)
     {
-        if (Hand.Instance.handIngredient != null)
+        if (Hand.Instance.handIngredient == null) return false;
+
+        TeaIngredient ingredient = Hand.Instance.handIngredient;
+
+        if (ingredient.isChopped == true)
         {
-            TeaIngredient ingredient = Hand.Instance.handIngredient;
-            
-            if ((ingredient.ingredientType == IngredientType.Flower
-            || ingredient.ingredientType == IngredientType.Substitute)
-            && ingredient.isChopped == false)
-            {
-                return true;
-            }
+            if (isOnClicked) Tooltip.Instance.ShowFade("이미 손질한 재료는 다시 손질할 수 없습니다.");
+            return false;
+        }
+        
+        if (!(ingredient.ingredientType == IngredientType.Flower
+        || ingredient.ingredientType == IngredientType.Substitute))
+        {
+            if (isOnClicked) Tooltip.Instance.ShowFade("손질할 수 없는 재료입니다.");
+            return false;
         }
 
-        return false;
+        return true;
     }
     
     void Start()

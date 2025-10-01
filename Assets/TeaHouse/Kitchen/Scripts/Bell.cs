@@ -34,6 +34,8 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
     public void OnPointerEnter(PointerEventData e)
     {
+        Tooltip.Instance.Show("종");
+
         isMouseOver = true;
         if (TeaPot.Instance.GetCurrentState() != TeaPot.State.Brewing) return;
         image.sprite = highlightSprite;
@@ -41,27 +43,28 @@ public class Bell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
     public void OnPointerExit(PointerEventData e)
     {
+        Tooltip.Instance.Hide();
+        Tooltip.Instance.HideFadeImmidately();
         isMouseOver = false;
         image.sprite = originSprite;
     }
 
     public void OnPointerClick(PointerEventData e)
     {
-        if (TeaPot.Instance.GetCurrentState() != TeaPot.State.Brewing) return;
-        tea = TeaPot.Instance.getTea();
-
-        if (tea != null)
+        if (TeaPot.Instance.GetCurrentState() != TeaPot.State.Brewing)
         {
-            UIManager.Instance.BlockingUIOn(manufacturingCompletedUI);
-            PauseGame();
-            makedTea = TeaMaker.MakeTea(tea);
-            StartCoroutine(LatePlayCutScene());
-            image.sprite = originSprite;
-        } 
-        else
-        {
-            Debug.LogError("State가 Brewing인데 차를 가져오지 못함");
+            Tooltip.Instance.ShowFade("지금은 종을 칠 수 없습니다.");
+            return;
         }
+
+        tea = TeaPot.Instance.getTea();
+        Debug.Assert(tea != null, "State가 Brewing인데 차를 가져오지 못함");
+
+        UIManager.Instance.BlockingUIOn(manufacturingCompletedUI);
+        PauseGame();
+        makedTea = TeaMaker.MakeTea(tea);
+        StartCoroutine(LatePlayCutScene());
+        image.sprite = originSprite;
     }
 
     void PauseGame()

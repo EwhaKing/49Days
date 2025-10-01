@@ -133,6 +133,8 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     public void OnPointerEnter(PointerEventData e)
     {
+        Tooltip.Instance.Show("바구니");
+
         TeaIngredient ingredient = Hand.Instance.handIngredient;
         
         if ((ingredient == null && state == RollingState.Rolled) || (ingredient != null && ValidateRollingCondition() && state == RollingState.Idle))
@@ -143,6 +145,8 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     public void OnPointerExit(PointerEventData e)
     {
+        Tooltip.Instance.Hide();
+        Tooltip.Instance.HideFadeImmidately();
         spriteRenderer.sprite = defaultSprite;
     }
 
@@ -184,7 +188,7 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     private void StartRolling()
     {
-        if (!ValidateRollingCondition()) return;
+        if (!ValidateRollingCondition(true)) return;
 
         currentIngredient = Hand.Instance.Drop();
         currentIngredient.transform.position = transform.position;
@@ -197,7 +201,7 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
         SetRollingLeaves();        
     }
 
-    private bool ValidateRollingCondition()
+    private bool ValidateRollingCondition(bool isOnClicked = false)
     {
         TeaIngredient handIngredient = Hand.Instance?.handIngredient;
 
@@ -212,6 +216,7 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
         if (handIngredient.ingredientType != IngredientType.TeaLeaf)
         {
             Debug.LogWarning($"{handIngredient.name}은(는) 찻잎이 아니므로 유념기에 넣을 수 없습니다.");
+            if (isOnClicked) Tooltip.Instance.ShowFade("이 재료는 유념할 수 없습니다.");
             return false;
         }
 
@@ -219,6 +224,7 @@ public class RollingMachine : MonoBehaviour, IPointerClickHandler, IPointerEnter
         if (handIngredient.rolled != ResultStatus.None)
         {
             Debug.LogWarning("이미 유념한 재료는 유념기에 재차 넣을 수 없습니다.");
+            if (isOnClicked) Tooltip.Instance.ShowFade("이미 유념한 재료는 다시 유념할 수 없습니다.");
             return false;
         }
 
