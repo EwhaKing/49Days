@@ -228,7 +228,7 @@ SpriteRenderer:
   m_Size: {x: 25.6, y: 14.4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!95 &1743307250260323067
@@ -264,6 +264,7 @@ GameObject:
   - component: {fileID: 8266425545512643759}
   - component: {fileID: 3281929288166099563}
   - component: {fileID: 2661011016157709517}
+  - component: {fileID: 5915503046347219649}
   m_Layer: 0
   m_Name: Kettle
   m_TagString: Untagged
@@ -307,6 +308,7 @@ MonoBehaviour:
   tempChangePerSec: 2
   pourRadius: 0.7
   hookSnapDistance: 1.2
+  stoveSnapDistance: 0.3
   gaugeNeedle: {fileID: 4412440388784244065}
   stovePosition: {fileID: 0}
   hookPosition: {fileID: 0}
@@ -315,8 +317,12 @@ MonoBehaviour:
   kettleSpoutPosition: {fileID: 1791704690210851084}
   kettleBottomPosition: {fileID: 8568871354713585613}
   smokeFadeSpeed: 0.2
+  highlightSprite: {fileID: 0}
+  hookFrontRenderer: {fileID: 0}
+  hookBackRenderer: {fileID: 0}
   pourDuration: 2
   pourAngle: 15
+  waterParticle: {fileID: 0}
   teapot: {fileID: 0}
 --- !u!212 &3281929288166099563
 SpriteRenderer:
@@ -656,6 +662,18 @@ PolygonCollider2D:
       - {x: -0.6137497, y: 0.29500046}
       - {x: -0.6137497, y: 0.28250048}
   m_UseDelaunayMesh: 0
+--- !u!114 &5915503046347219649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868901004834022102}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08d62d06aba6626459c03784143cbd2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7977318533240237610
 GameObject:
   m_ObjectHideFlags: 0
