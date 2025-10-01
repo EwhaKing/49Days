@@ -3,7 +3,16 @@ guid: a9ffedd747d6203478fb99bbf14a1bc9
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - slotGrid: {instanceID: 0}
+  - itemInfoImage: {instanceID: 0}
+  - itemNameText: {instanceID: 0}
+  - itemDescriptionText: {instanceID: 0}
+  - itemInfoPanel: {instanceID: 0}
+  - dragIcon: {instanceID: 0}
+  - categoryTogglesGroup: {instanceID: 0}
+  - droppedItemPrefab: {fileID: 1544790354499579934, guid: ef426dd9bf30299479a16af783d716a8, type: 3}
+  - playerTransform: {fileID: 8853461538655865707, guid: 904d0b8c28276a64c8101ddedd894d57, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

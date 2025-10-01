@@ -135,12 +135,15 @@ public class InventoryManager : SceneSingleton<InventoryManager>
     {
         SaveLoadManager.Instance.onSave += SaveInventory;
         SaveLoadManager.Instance.onLoad += LoadInventory;
+        GameFlowManager.onFinishField += TransferIngredientsToCabinet;
     }
 
     private void OnDisable()
     {
         SaveLoadManager.Instance.onSave -= SaveInventory;
         SaveLoadManager.Instance.onLoad -= LoadInventory;
+        GameFlowManager.onFinishField -= TransferIngredientsToCabinet;
+
     }
 
     private void SaveInventory()
@@ -241,5 +244,44 @@ public class InventoryManager : SceneSingleton<InventoryManager>
             return inventories[category];
         }
         return null;
+    }
+
+
+    /// <summary>
+    /// 필드 종료 시 호출
+    /// 재료 인벤토리의 모든 아이템을 찬장으로 Transfer 후 재료 탭 Clear
+    /// </summary>
+    public void TransferIngredientsToCabinet()
+    {
+        var ingredientInventory = GetInventory(ItemType.Ingredient);
+        if (ingredientInventory == null) return;
+
+        foreach (var slotData in ingredientInventory)
+        {
+            if (slotData != null && slotData.itemData != null)
+            {
+                IngredientName name = (IngredientName)Enum.Parse(typeof(IngredientName), slotData.itemData.itemName.ToEnglish());
+                int count = slotData.count;
+                CabinetManager.Instance.AddIngredient(name, count);
+            }
+        }
+        ClearInventoryCategory(ItemType.Ingredient);
+        OnInventoryChanged?.Invoke();
+        Debug.Log("필드에서 얻은 재료를 찬장으로 모두 옮겼습니다.");
+    }
+
+    /// <summary>
+    /// 특정 카테고리의 인벤토리를 전부 Clear
+    /// </summary>
+    private void ClearInventoryCategory(ItemType category)
+    {
+        if (inventories.ContainsKey(category))
+        {
+            var targetInventory = inventories[category];
+            for (int i = 0; i < targetInventory.Length; i++)
+            {
+                targetInventory[i] = null;
+            }
+        }
     }
 }

@@ -28,9 +28,10 @@ public class InventoryUI : MonoBehaviour
 
 
     [SerializeField] private Color disabledColor = new Color(0.5f, 0.2f, 0.2f, 1f);     // 비활성화된 토글의 색상
-    [SerializeField] private int kitchenDefaultCategoryIndex = 3;   // 주방 씬에서의 기본 카테고리 인덱스 (2가 도구, 3이 퀘스트, 4가 기타)
+    [SerializeField] private int kitchenDefaultCategoryIndex = 2;   // 주방 씬에서의 기본 카테고리 인덱스 (2가 도구, 3이 퀘스트, 4가 기타)
 
-
+    [SerializeField]private GameObject droppedItemPrefab;
+    [SerializeField]private Transform playerTransform;
 
     private List<InventorySlotUI> uiSlots = new List<InventorySlotUI>();
     private bool isDragging = false;
@@ -41,6 +42,10 @@ public class InventoryUI : MonoBehaviour
 
     private void Awake()
     {
+        droppedItemPrefab = Resources.Load<GameObject>("DroppedItem");
+        var player = GameObject.FindWithTag("Player");
+        if (player != null) playerTransform = player.transform;
+
         // 주방에서 토글 비활성화(색상 변경)하기 전 원래 색상을 저장.
         foreach (var toggle in categoryToggles)
         {
@@ -78,7 +83,7 @@ public class InventoryUI : MonoBehaviour
         UpdateCategoryTogglesForScene(isTeaHouseScene);
         ItemType defaultCategory = isTeaHouseScene ? (ItemType)kitchenDefaultCategoryIndex : ItemType.Ingredient;
         categoryToggles[(int)defaultCategory].isOn = true;
-        
+
         // InventoryManager의 데이터 변경 이벤트 구독.
         if (InventoryManager.Instance != null)
         {
@@ -102,7 +107,7 @@ public class InventoryUI : MonoBehaviour
             dragIcon.transform.position = Mouse.current.position.ReadValue();
         }
     }
-    
+
     private void OnDestroy()
     {
         // 오브젝트 파괴 시, 구독했던 모든 이벤트를 해제.
@@ -117,7 +122,7 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// InventoryManager의 데이터가 변경될 때마다 호출 -> 화면 새로고침.
     /// </summary>
-    private void UpdateInventoryDisplay()
+    public void UpdateInventoryDisplay()
     {
         var inventory = InventoryManager.Instance.GetInventory(currentCategory);
         if (inventory == null) return;
@@ -150,7 +155,7 @@ public class InventoryUI : MonoBehaviour
             return;
         }
         if (itemInfoPanel == null || itemInfoImage == null || itemNameText == null || itemDescriptionText == null) return;
-        
+
         itemInfoImage.sprite = slotData.itemData.itemIcon;
         itemNameText.text = slotData.itemData.itemName;
         itemDescriptionText.text = slotData.itemData.itemDescription;
@@ -165,8 +170,24 @@ public class InventoryUI : MonoBehaviour
     {
         if (isDragging)
         {
-            InventoryManager.Instance.RemoveItem(currentCategory, draggedSlotIndex);
-            dropSuccessful = true;
+            var inventory = InventoryManager.Instance.GetInventory(currentCategory);
+            if (inventory == null || draggedSlotIndex < 0 || draggedSlotIndex >= inventory.Length || inventory[draggedSlotIndex] == null) return;
+            var draggedItemData = inventory[draggedSlotIndex];
+            
+            if (draggedItemData.itemData.itemType == ItemType.Ingredient)
+            {
+                if (GameFlowManager.IsInField())
+                {
+                    SpawnDroppedItem(draggedItemData.itemData, draggedItemData.count);
+                }
+                InventoryManager.Instance.RemoveItem(currentCategory, draggedSlotIndex);
+                dropSuccessful = true;
+            }
+            else
+            {
+                Debug.Log("아이템 타입이 재료가 아니므로 버릴 수 없습니다.");
+            }
+
         }
     }
 
@@ -178,7 +199,7 @@ public class InventoryUI : MonoBehaviour
     private void SetCategory(ItemType newCategory)
     {
         currentCategory = newCategory;
-        if (itemInfoPanel != null) itemInfoPanel.SetActive(false); 
+        if (itemInfoPanel != null) itemInfoPanel.SetActive(false);
         UpdateInventoryDisplay();
     }
 
@@ -209,7 +230,7 @@ public class InventoryUI : MonoBehaviour
     {
         var inv = InventoryManager.Instance.GetInventory(currentCategory);
         if (inv == null || slotIndex < 0 || slotIndex >= inv.Length || inv[slotIndex] == null) return;
-        
+
         dropSuccessful = false;
         draggedSlotIndex = slotIndex;
         isDragging = true;
@@ -220,7 +241,7 @@ public class InventoryUI : MonoBehaviour
             dragIcon.gameObject.SetActive(true);
         }
         if (categoryTogglesGroup != null) categoryTogglesGroup.blocksRaycasts = false;
-        
+
         uiSlots[slotIndex].ClearSlot();
         if (itemInfoPanel != null) itemInfoPanel.SetActive(false);
     }
@@ -255,6 +276,20 @@ public class InventoryUI : MonoBehaviour
             InventoryManager.Instance.SwapItems(currentCategory, draggedSlotIndex, dropSlotIndex);
             dropSuccessful = true;
         }
+    }
+    
+    private void SpawnDroppedItem(ItemData itemData, int amount)
+    {
+        // if (droppedItemPrefab == null || playerTransform == null)
+        // {
+        //     Debug.LogError("DroppedItem Prefab 또는 Player Transform이 InventoryUI에 할당되지 않았습니다.");
+        //     return;
+        // }
+        Vector3 spawnPosition = playerTransform.position; 
+        GameObject drop = Instantiate(droppedItemPrefab, spawnPosition, Quaternion.identity);
+        drop.GetComponent<DroppedItem>().Initialize(itemData, amount);
+
+        Debug.Log($"필드에 드랍된 아이템: {itemData.itemName} x{amount}");
     }
     #endregion
 }

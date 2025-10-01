@@ -3,9 +3,9 @@ using UnityEngine;
 public enum ItemType    // 아이템 분류 Enum
 {
     Ingredient,     // 재료
-    Topping,        // 추가재료 (Additive나 Supplement로 바꾸고 싶으시면... 그러세요.)
     Quest,          // 퀘스트
-    Tool            // 도구
+    Tool,            // 도구
+    Other             // 기타
 }
 
 /// <summary>

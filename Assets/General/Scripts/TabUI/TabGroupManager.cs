@@ -94,6 +94,17 @@ public class TabGroupManager : MonoBehaviour, IDropHandler
         }
         SelectTab(indexToOpen, false);
         StartCoroutine(ReEnableToggleGroupAfterFrame());
+        
+        // UI가 열릴 때마다 인벤토리 UI가 최신 상태를 반영하도록 강제 갱신.
+        var inventoryUI = FindObjectOfType<InventoryUI>();
+        if (inventoryUI != null)
+        {
+            inventoryUI.UpdateInventoryDisplay();
+        }
+        else
+        {
+            Debug.LogWarning("InventoryUI instance not found in the scene.");
+        }
     }
 
     private IEnumerator ReEnableToggleGroupAfterFrame()

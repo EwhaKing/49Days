@@ -5,7 +5,7 @@ public class DroppedItem : Interactable
 {
     private ItemData itemData;
     private SpriteRenderer spriteRenderer;
-    // public int amount;
+    private int amount =  1;
 
     [SerializeField] private float floatingHeight = 0.1f;
     [SerializeField] private float floatingSpeed = 2f;
@@ -23,11 +23,23 @@ public class DroppedItem : Interactable
         DropAnimation();
     }
 
+    public void Initialize(ItemData data, int count)
+    {
+        itemData = data;
+        amount = count;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = data.itemIcon;
+        originalSprite = data.itemIcon;
+        highlightSprite = data.itemIcon;
+        type = InteractableType.DroppedItem;
+        DropAnimation();
+    }
+
     public override void Interact(PlayerHarvestController player)
     {
-        InventoryManager.Instance.AddItem(itemData, 1);
+        InventoryManager.Instance.AddItem(itemData, amount);
         Destroy(gameObject);
-        Debug.Log($"Picked up {itemData.itemName}");
+        Debug.Log($"Picked up {itemData.itemName} x{amount}");
     }
 
     // public void Pickup()

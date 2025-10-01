@@ -83,6 +83,28 @@ public static class NameExtensions
         }
     }
 
+    public static string ToEnglish(this string ingredient)
+    {
+        switch (ingredient)
+        {
+            case "찻잎": return "TeaLeaf";
+            case "장미": return "Rose";
+            case "둥굴레 뿌리": return "SolomonsSeal";
+            case "꿀": return "Honey";
+            case "박하잎": return "Mint";
+            case "연잎": return "LotusLeaf";
+            case "연꽃": return "LotusFlower";
+            case "복숭아": return "Peach";
+            case "설탕": return "Sugar";
+            case "재스민": return "Jasmine";
+            case "망각제": return "ForgetfulnessPotion";
+
+            default:
+                Debug.LogWarning("영어 이름이 없습니다: " + ingredient.ToString()); 
+                return ingredient.ToString();
+        }
+    }
+
     public static bool IsAdditionalIngredient(this IngredientName ingredient)
     {
         switch (ingredient)
