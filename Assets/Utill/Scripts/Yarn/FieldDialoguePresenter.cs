@@ -29,9 +29,9 @@ public class FieldDialoguePresenter : DialoguePresenterBase
     private Phase phase = Phase.AwaitingNext;
 
     [SerializeField] private DialogueInputHandler? dialogueInputHandler;
+    [SerializeField] private DialogueRunner? runner;
 
     [SerializeField] private Image? bodyImage;
-    [SerializeField] private Image? eyesImage;
 
     private CharacterData? currentCharacterData;
     private CharacterPose? currentPose;
@@ -56,12 +56,41 @@ public class FieldDialoguePresenter : DialoguePresenterBase
     {
         // 타이핑 상태에 따라 동작 실행
         if (phase == Phase.Typing)
+        {
             isClickedForSkip = true;
-        else
-            isClickedForNext = true;
+            return;
+        }
+
+        // 옵션 패널이 활성화되어 있고, 첫 진입 상태라면 대화 종료
+        if (ShouldEndDialogue())
+        {
+            EndDialogue();
+            return;
+        }
+
+        // 그 외에는 다음 입력 처리
+        isClickedForNext = true;
     }
 
+    private bool ShouldEndDialogue()
+    {
+        return FieldDialoguePresenterRouter.isOptionPanelActive && entryCount == 0;
+    }
 
+    private void EndDialogue()
+    {
+        dialogueBox?.gameObject.SetActive(false);
+        nameBox?.gameObject.SetActive(false);
+        characterPanel?.gameObject.SetActive(false);
+
+        fieldOptionPanelController?.ForceCloseOptions();
+
+        runner?.Stop();
+    }
+
+    /// <summary>
+    /// Router에서 호출해서 데이터 할당해줌
+    /// </summary>
     public void SetCharacterData(CharacterData? data)
     {
         currentCharacterData = data;
@@ -79,20 +108,25 @@ public class FieldDialoguePresenter : DialoguePresenterBase
 
         if (currentPose != null)
         {
-            bodyImage.sprite = currentPose.bodySprite;
-            eyesImage.sprite = currentPose.eyesOpenSprite;
+            if (bodyImage != null)
+            {
+                bodyImage.sprite = currentPose.bodySprite;
+                bodyImage.preserveAspect = true;
+            }
         }
     }
 
     public void ChangeCharacterPose(string poseName)
     {
-        if (currentCharacterData == null) return;
-        var pose = currentCharacterData.poses.Find(p => p.poseName == poseName);
-        if (pose != null)
+        var newPose = currentCharacterData.poses.Find(p => p.poseName == poseName);
+        if (newPose != null)
         {
-            currentPose = pose;
-            bodyImage.sprite = pose.bodySprite;
-            eyesImage.sprite = pose.eyesOpenSprite;
+            currentPose = newPose;
+            if (bodyImage != null)
+            {
+                bodyImage.sprite = currentPose.bodySprite;
+                bodyImage.preserveAspect = true;
+            }
         }
     }
 
@@ -121,17 +155,6 @@ public class FieldDialoguePresenter : DialoguePresenterBase
             OnPanelClicked();
     }
 
-    public override YarnTask OnDialogueStartedAsync()
-    {
-        return YarnTask.CompletedTask;
-    }
-
-    public override YarnTask OnDialogueCompleteAsync()
-    {
-        entryCount = 0;
-        return YarnTask.CompletedTask;
-    }
-
     public override async YarnTask RunLineAsync(LocalizedLine line, LineCancellationToken cancellationToken)
     {
         ValidateReferences();
@@ -148,21 +171,8 @@ public class FieldDialoguePresenter : DialoguePresenterBase
             ? line.Text.Text
             : line.TextWithoutCharacterName.Text;
 
-
-
-        // TODO: Yarn 포즈 변경 커맨드에 따라서 수정 예정
-        string poseName = "무표정";
-
-        // 캐릭터와 포즈를 UI에 반영
-        if (currentCharacterData == null || currentCharacterData.characterName != characterName)
-        {
-            ShowCharacter(characterName, poseName);
-        }
-        else
-        {
-            ChangeCharacterPose(poseName);
-        }
-
+        string poseName = currentPose?.poseName ?? currentCharacterData.poses[0].poseName;
+        ShowCharacter(characterName, poseName);
 
         // TMP에 텍스트 할당
         dialogueText!.text = processedText;
@@ -174,7 +184,7 @@ public class FieldDialoguePresenter : DialoguePresenterBase
         PositionNameBox();
 
         // 로그 추가
-        DialogueLogManager.Instance.AddLog(characterName, processedText);
+        // DialogueLogManager.Instance.AddLog(characterName, processedText);
 
         // 타이핑 스킵 입력 대기
         await TypeTextWithSkipAsync(processedText);
@@ -194,14 +204,15 @@ public class FieldDialoguePresenter : DialoguePresenterBase
 
     private void ValidateReferences()
     {
-        if (dialogueBox == null) throw new System.InvalidOperationException("dialogueBox가 할당되지 않았습니다.");
-        if (nameBox == null) throw new System.InvalidOperationException("nameBox가 할당되지 않았습니다.");
-        if (dialogueText == null) throw new System.InvalidOperationException("dialogueTex가 할당되지 않았습니다.");
-        if (nameText == null) throw new System.InvalidOperationException("nameText가 할당되지 않았습니다.");
-        if (dialogueInputHandler == null) throw new System.InvalidOperationException("dialogueInputHandler가 할당되지 않았습니다.");
+        Debug.Assert(dialogueBox != null, "dialogueBox가 할당되지 않았습니다.");
+        Debug.Assert(nameBox != null, "nameBox가 할당되지 않았습니다.");
+        Debug.Assert(dialogueText != null, "dialogueText가 할당되지 않았습니다.");
+        Debug.Assert(nameText != null, "nameText가 할당되지 않았습니다.");
+        Debug.Assert(dialogueInputHandler != null, "dialogueInputHandler가 할당되지 않았습니다.");
 
-        mainCamera ??= Camera.main ?? throw new System.InvalidOperationException("Main Camera가 할당되지 않았습니다.");
-        if (dialogueBox.GetComponentInParent<Canvas>() == null) throw new System.InvalidOperationException("dialogueBox가 할당되지 않았습니다.");
+        mainCamera ??= Camera.main;
+        Debug.Assert(mainCamera != null, "Main Camera가 할당되지 않았습니다.");
+        Debug.Assert(dialogueBox.GetComponentInParent<Canvas>() != null, "dialogueBox의 부모인 Canvas가 존재하지 않습니다.");
     }
 
     private void CalculateNameBoxSize(string characterName)
@@ -330,8 +341,7 @@ public class FieldDialoguePresenter : DialoguePresenterBase
     public override async YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, CancellationToken cancellationToken)
     {
         ValidateReferences();
-        if (fieldOptionPanelController == null)
-            throw new System.InvalidOperationException("FieldOptionPanelController가 할당되지 않았습니다.");
+        Debug.Assert(fieldOptionPanelController != null, "FieldOptionPanelController가 할당되지 않았습니다.");
 
         FieldDialoguePresenterRouter.isOptionPanelActive = true;
 
@@ -379,5 +389,13 @@ public class FieldDialoguePresenter : DialoguePresenterBase
     {
         var arr = GetEntryOptionClicked(characterName);
         arr[idx] = true;
+    }
+
+    public override YarnTask OnDialogueStartedAsync() => YarnTask.CompletedTask;
+    public override YarnTask OnDialogueCompleteAsync()
+    {
+        entryCount = 0;
+        ChangeCharacterPose(currentCharacterData.poses[0].poseName);
+        return YarnTask.CompletedTask;
     }
 }

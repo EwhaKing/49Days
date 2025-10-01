@@ -77,17 +77,15 @@ public class FieldDialoguePresenterRouter : DialoguePresenterBase
         }
 
         if (targetPresenter == null)
-            throw new System.InvalidOperationException($"'{line.CharacterName}'에 해당하는 DialoguePresenter가 할당되지 않았습니다.");
+            Debug.Assert(targetPresenter != null, $"'{line.CharacterName}'에 해당하는 DialoguePresenter가 할당되지 않았습니다.");
 
         return targetPresenter.RunLineAsync(line, cancellationToken);
     }
 
     public override YarnTask<DialogueOption?> RunOptionsAsync(DialogueOption[] dialogueOptions, CancellationToken cancellationToken)
     {
-        if (fieldPresenter != null)
-            return fieldPresenter.RunOptionsAsync(dialogueOptions, cancellationToken);
-
-        throw new System.InvalidOperationException("옵션을 처리할 Presenter가 할당되지 않았습니다.");
+        Debug.Assert(fieldPresenter != null, "옵션을 처리할 Presenter가 할당되지 않았습니다.");
+        return fieldPresenter.RunOptionsAsync(dialogueOptions, cancellationToken);
     }
 
     public override YarnTask OnDialogueStartedAsync() => YarnTask.CompletedTask;

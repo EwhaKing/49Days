@@ -110,13 +110,6 @@ public class FieldOptionPanelController : MonoBehaviour
     // 옵션 선택 시 호출 (선택된 인덱스 전달)
     private void OnOptionSelected(int index)
     {
-        // 로그에 저장
-        if (currentOptions != null && index >= 0 && index < currentOptions.Length)
-        {
-            var option = currentOptions[index];
-            DialogueLogManager.Instance.AddLog("", option.Line.TextWithoutCharacterName.Text);
-        }
-
         selectionSource?.TrySetResult(index);
     }
 
@@ -189,5 +182,30 @@ public class FieldOptionPanelController : MonoBehaviour
         }
 
         panel!.gameObject.SetActive(true);
+    }
+
+    /// <summary>
+    /// Entry에서 대화 종료했을 때
+    /// FieldDialoguePresenter가 옵션 종료를 위해 호출하는 메서드
+    /// 커스텀 옵션이기 때문에 리스너 수동 제거 필요
+    /// </summary>
+    public void ForceCloseOptions()
+    {
+        panel?.gameObject.SetActive(false);
+
+        if (panel != null)
+        {
+            foreach (Transform child in panel)
+            {
+                var btn = child.GetComponent<Button>();
+                if (btn != null)
+                    btn.onClick.RemoveAllListeners();
+            }
+        }
+
+        selectionSource?.TrySetCanceled();
+        selectionSource = null;
+
+        OnEntryOptionSelected = null;
     }
 }
