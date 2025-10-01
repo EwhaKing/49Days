@@ -19,7 +19,8 @@ public class Harvestable : Interactable
     public int cooldownDays = 2; // 작물별 리스폰 쿨타임
 
     [Header("나무 전용")]
-    [SerializeField] private Sprite withoutFruitSprite; // 열매 없는 상태 스프라이트
+    [SerializeField] private Sprite fruitSprite;        // 열매 달린 상태
+    [SerializeField] private Sprite withoutFruitSprite; // 열매 없는 상태
 
     private bool available = true;
     public bool IsAvailable => available;
@@ -27,36 +28,141 @@ public class Harvestable : Interactable
     private int respawnDay;
     public int RespawnDay => respawnDay;
 
-    [HideInInspector] public int spawnIndex = -1; // ✅ 수정: 자기 슬롯 인덱스 기억
-    public int slotDataIndex; // <---- 쿨타임 데이터의 인덱스를 저장
+    [HideInInspector] public int spawnIndex = -1; // CropManager 슬롯 인덱스 기억
+    public int slotDataIndex; // 쿨타임 데이터 인덱스 (필요 시)
+
+    [Header("UI 아이콘 프리팹")]
+    [SerializeField] private GameObject KeyIconPrefab;
+    private List<KeyIcon> activeIcons = new List<KeyIcon>();
+
+    [Header("아이콘 오프셋")]
+    [SerializeField] private float verticalOffset = 2f;   // 위쪽 오프셋
+    [SerializeField] private float treeSpacing = 0.5f;    // 좌우 간격
+
+
 
     void Start()
     {
         dropItemPrefab = Resources.Load<GameObject>("DroppedItem");
     }
 
+    //icon 관련 함수들
+    public void ShowEnterIcon()
+    {
+        ClearIcons();
+        SpawnIcon('E', Vector3.up * verticalOffset);
+    }
+
+    private int highlightIndex = 0; // 현재 어떤 아이콘을 강조할지
+
+    public void HighlightNextKey()
+    {
+        if (activeIcons.Count == 0) return;
+
+        // 모든 아이콘 off
+        foreach (var icon in activeIcons)
+            icon.SetHighlight(false);
+
+        // 현재 인덱스 on
+        activeIcons[highlightIndex].SetHighlight(true);
+
+        // 다음 턴 준비 (A → D → A … 번갈아가기)
+        highlightIndex = (highlightIndex + 1) % activeIcons.Count;
+    }
+
+
+    public void ShowHarvestIcons()
+    {
+        ClearIcons();
+        highlightIndex = 0; //초기화
+
+        switch (Type)
+        {
+            case InteractableType.Tree:
+                SpawnIcon('A', new Vector3(-treeSpacing, verticalOffset, 0));
+                SpawnIcon('D', new Vector3(treeSpacing, verticalOffset, 0));
+                break;
+            case InteractableType.Root:
+                SpawnIcon('W', Vector3.up * verticalOffset);
+                break;
+                // Flower는 따로 없음
+        }
+    }
+
+    //[SerializeField] private GameObject KeyIconPrefab;
+    private static Transform keyIconParent;
+
+    void Awake()
+    {
+        base.Awake();  // 부모 초기화 먼저 실행
+        if (keyIconParent == null)
+        {
+            GameObject canvasObj = GameObject.Find("KeyIconCanvas");
+            if (canvasObj != null)
+            {
+                keyIconParent = canvasObj.transform;
+            }
+            else
+            {
+                Debug.LogError("씬에 KeyIconCanvas가 없습니다! World Space Canvas를 미리 배치하세요.");
+            }
+        }
+    }
+
+    private void SpawnIcon(char key, Vector3 offset)
+    {
+        if (keyIconParent == null) return;
+
+        // Canvas 밑에 생성
+        var obj = Instantiate(KeyIconPrefab, keyIconParent);
+        obj.transform.position = transform.position + offset; // 월드 좌표 그대로
+
+        var icon = obj.GetComponent<KeyIcon>();
+        icon.SetKey(key);
+        activeIcons.Add(icon);
+    }
+
+
+    public void ClearIcons()
+    {
+        foreach (var icon in activeIcons)
+        {
+            if (icon != null) Destroy(icon.gameObject);
+        }
+        activeIcons.Clear();
+    }
+
+    public void StartRootHighlight()
+    {
+        if (activeIcons.Count > 0)
+            activeIcons[0].StartBlinkHighlight();
+    }
+
+    public void StopRootHighlight()
+    {
+        if (activeIcons.Count > 0)
+            activeIcons[0].StopBlinkHighlight();
+    }
+
+
     /// <summary>
-    /// 플레이어가 실제로 채집했을 때 호출.
-    /// - 상태 변경
-    /// - respawnDay 갱신
-    /// - 외형 처리 (Destroy / Sprite 교체)
+    /// 플레이어가 실제로 채집했을 때 호출
     /// </summary>
     public void Harvest(int currentDay)
     {
-        if (!available) return; // 이미 수확 불가 상태라면 무시
+        if (!available) return;
 
         available = false;
         respawnDay = currentDay + cooldownDays;
 
-        // 슬롯 데이터 갱신 (Destroy 전에!)
+        // 슬롯 데이터 갱신
         CropManager.Instance.UpdateSlotData(this, respawnDay);
-
 
         switch (type)
         {
             case InteractableType.Flower:
             case InteractableType.Root:
-                // 꽃/뿌리 → 오브젝트 자체 제거
+                // 꽃/뿌리 → 오브젝트 제거
                 Destroy(gameObject);
                 break;
 
@@ -65,7 +171,7 @@ public class Harvestable : Interactable
                 if (sr != null && withoutFruitSprite != null)
                 {
                     sr.sprite = withoutFruitSprite;
-                    originalSprite = withoutFruitSprite; // 하이라이트 해제 시 원래 스프라이트를 위해 갱신
+                    originalSprite = withoutFruitSprite; // 하이라이트 복원용
                 }
                 break;
         }
@@ -74,27 +180,25 @@ public class Harvestable : Interactable
     }
 
     /// <summary>
-    /// 날짜가 바뀔 때마다 호출해서 리스폰 조건 확인.
+    /// 날짜가 바뀔 때 리스폰 여부 체크
     /// </summary>
-
     public bool CheckRespawn(int currentDay)
     {
         if (!available && currentDay >= respawnDay)
         {
             available = true;
 
-            if (type == InteractableType.Tree && sr != null && originalSprite != null)
-                sr.sprite = originalSprite;
+            if (type == InteractableType.Tree && sr != null && fruitSprite != null)
+            {
+                sr.sprite = fruitSprite;       // 열매 복구
+                originalSprite = fruitSprite;  // 하이라이트 복구용
+            }
 
-            return true; // 리스폰 가능
+            return true;
         }
-        return false; // 아직 불가능
+        return false;
     }
 
-
-    /// <summary>
-    /// 플레이어 상호작용 → PlayerHarvestController에게 자신 전달.
-    /// </summary>
     public override void Interact(PlayerHarvestController player)
     {
         player.EnterHarvestMode(this);
@@ -119,6 +223,17 @@ public class Harvestable : Interactable
         }
 
         Debug.Log($"Dropped: {itemName} x{amount}");
+    }
+
+    // 쿨타임 전용: 강제로 열매 없는 상태 세팅
+    public void SetWithoutFruit()
+    {
+        if (sr != null && withoutFruitSprite != null)
+        {
+            sr.sprite = withoutFruitSprite;
+            originalSprite = withoutFruitSprite;
+        }
+        available = false;
     }
 
     // 저장/로드용 respawnDay 세터

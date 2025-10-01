@@ -128,6 +128,21 @@ public class CropManager : MonoBehaviour
                     {
                         respawnCandidates.Add(i); // ✅ 성숙했지만 스폰은 여기서 안 함
                     }
+                    else
+                    {
+                        // 쿨타임 도는 중
+                        if (g.prefab.GetComponent<Harvestable>().type == InteractableType.Tree)
+                        {
+                            // 나무는 본체 유지 + 열매 없는 상태 표시
+                            var obj = Instantiate(g.prefab, g.spawnPoints[i].position, Quaternion.identity);
+                            var h = obj.GetComponent<Harvestable>();
+                            h.SetRespawnDay(sData.respawnDay);
+                            h.spawnIndex = i;
+                            h.SetWithoutFruit(); // 열매 없는 상태
+                            g.slots[i] = h;
+                        }
+                        // Flower/Root는 아무것도 안 함 → 그대로 빈 자리
+                    }
                 }
 
                 // 2) 필요한 개수만큼 랜덤 offset으로 스폰

@@ -45,7 +45,6 @@ public class PlayerHarvestController : MonoBehaviour
     void Update()
     {
         UpdateTargetHighlight();
-
         if (inHarvestMode && target is Harvestable harvestable)
         {
             harvestTimer += Time.deltaTime;
@@ -110,10 +109,18 @@ public class PlayerHarvestController : MonoBehaviour
 
         if (pressCount == 0)
         {
-            // ✅ 첫 입력은 A(-1)든 D(1)든 상관없이 허용
+            if (dir != -1)
+            {
+                Debug.Log("첫 입력은 A여야 함. 무시됨.");
+                return;
+            }
+
             pressCount++;
             lastDir = dir; // 기준 방향 저장
             Debug.Log($"Tree first press {(dir == -1 ? "A" : "D")} count: {pressCount}");
+
+            // 첫 입력 성공 → 하이라이트 갱신
+            h.HighlightNextKey();
         }
         else
         {
@@ -124,6 +131,9 @@ public class PlayerHarvestController : MonoBehaviour
                 pressCount++;
                 lastDir = dir; // 새 기준 업데이트
                 Debug.Log($"Tree press {(dir == -1 ? "A" : "D")} count: {pressCount}");
+
+                // 교차 입력 성공 → 하이라이트 갱신
+                h.HighlightNextKey();
 
                 if (pressCount >= 8) // A-D 4쌍
                 {
@@ -138,70 +148,6 @@ public class PlayerHarvestController : MonoBehaviour
             }
         }
     }
-
-    // public void OnWASD(InputAction.CallbackContext context)
-    // {
-    //     if (!inHarvestMode || target == null) return;
-    //     if (!(target is Harvestable harvestable)) return;
-
-    //     // ==== InputSystem에서 key path 가져오기 ====
-    //     string keyPath = context.control.path;
-    //     char input = '\0';
-    //     if (keyPath.Contains("/w")) input = 'W';
-    //     else if (keyPath.Contains("/a")) input = 'A';
-    //     else if (keyPath.Contains("/s")) input = 'S';
-    //     else if (keyPath.Contains("/d")) input = 'D';
-    //     // ==
-
-    //     if (harvestable.Type == InteractableType.Tree) //AD 교차 입력
-    //     {
-    //         int dir = 0;
-    //         if (input == 'A') dir = -1; // A
-    //         else if (input == 'D') dir = 1; // D
-
-    //         // ✅ 교차 입력만 카운트 (같은 키 연속은 무시)
-    //         if (dir != 0 && dir != lastDir)
-    //         {
-    //             pressCount++;
-    //             lastDir = dir;
-
-    //             if (dir == -1)
-    //             {
-    //                 Debug.Log("Tree press A count: " + pressCount);
-    //             }
-    //             else if (dir == 1)
-    //             {
-    //                 Debug.Log("Tree press D count: " + pressCount);
-    //             }
-
-    //             if (pressCount >= 8) // A-D 4쌍
-    //             {
-    //                 harvestable.Harvest(1);
-    //                 ResetHarvest();
-    //             }
-    //         }
-    //         else if (dir == lastDir)
-    //         {
-    //             // 같은 방향 키가 연속으로 들어올 때 로그 확인용
-    //             Debug.Log("Ignored same key input: " + input);
-    //         }
-    //     }
-
-    //     else if (harvestable.Type == InteractableType.Root)
-    //     {
-    //         if (input == 'W') //W
-    //         {
-    //             pressCount++;
-    //             Debug.Log("Root press count: " + pressCount);
-
-    //             if (pressCount >= 5)
-    //             {
-    //                 harvestable.Harvest(1); // 상태 갱신 //실제로는 나중에 인게임 날짜를 받아와야 함. 
-    //                 ResetHarvest();
-    //             }
-    //         }
-    //     }
-    // }
 
     // ========== 모드 관리 ==========
     public void EnterHarvestMode(Harvestable h)
@@ -223,7 +169,23 @@ public class PlayerHarvestController : MonoBehaviour
             int currentDay = GameManager.Instance.GetDate();   // 날짜 가져오기
             h.Harvest(currentDay);
             ResetHarvest();
+            return;
         }
+
+        // E 아이콘 지우고 → 수확 아이콘 표시
+        h.ClearIcons();
+        h.ShowHarvestIcons();
+
+        // 첫 키 하이라이트는 Tree 전용
+        if (h.Type == InteractableType.Tree)
+        {
+            h.HighlightNextKey();
+        }
+        else if (h.Type == InteractableType.Root)
+        {
+            h.StartRootHighlight();
+        }
+
     }
 
     private void ResetHarvest()
@@ -235,6 +197,9 @@ public class PlayerHarvestController : MonoBehaviour
 
         if (target != null)
         {
+            if (target is Harvestable h)
+                h.ClearIcons();
+
             target.SetHighlight(false);
             target = null;
         }
@@ -243,17 +208,33 @@ public class PlayerHarvestController : MonoBehaviour
     }
 
     // ========== 유틸리티 ==========
-    private void UpdateTargetHighlight()
+    private void UpdateTargetHighlight() //하이라이트 표시
     {
         Interactable closest = FindClosestInteractable();
 
         if (closest != target)
         {
-            if (target != null) target.SetHighlight(false);
-            if (closest != null) closest.SetHighlight(true);
+            // 이전 타겟 처리
+            if (target != null)
+            {
+                target.SetHighlight(false);
+
+                if (target is Harvestable oldH)
+                    oldH.ClearIcons();
+            }
+
+            // 새 타겟 처리
+            if (closest != null)
+            {
+                closest.SetHighlight(true);
+                if (!inHarvestMode && closest is Harvestable newH)
+                    newH.ShowEnterIcon();  // 하이라이트 시점에만 E 표시
+            }
+
             target = closest;
         }
     }
+
 
     private Interactable FindClosestInteractable()
     {
@@ -281,8 +262,24 @@ public class PlayerHarvestController : MonoBehaviour
         return closest;
     }
 
+    // private void UpdateKeyIcons()
+    // {
+    //     if (target is Harvestable h)
+    //     {
+    //         h.ClearIcons();
 
-
+    //         if (!inHarvestMode)
+    //         {
+    //             // 아직 수확 모드 전 → E 키만 표시
+    //             h.ShowEnterIcon();
+    //         }
+    //         else
+    //         {
+    //             // 수확 모드 중 → 타입별 입력 표시
+    //             h.ShowHarvestIcons();
+    //         }
+    //     }
+    // }
 
 }
 

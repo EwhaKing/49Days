@@ -11,7 +11,7 @@ public enum InteractableType
 
 public abstract class Interactable : MonoBehaviour
 {
-    [SerializeField] protected InteractableType type;
+    [SerializeField] public InteractableType type;
     [SerializeField] protected Sprite highlightSprite;
 
     protected SpriteRenderer sr;

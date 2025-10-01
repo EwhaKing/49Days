@@ -104,7 +104,13 @@ MonoBehaviour:
   - itemName: "\uC7A5\uBBF8"
     amount: 1
   cooldownDays: 2
+  fruitSprite: {fileID: 0}
   withoutFruitSprite: {fileID: 0}
+  spawnIndex: -1
+  slotDataIndex: 0
+  KeyIconPrefab: {fileID: 6526477218262605749, guid: dd4e6daec6006644daf3b47ecd9ef3ad, type: 3}
+  verticalOffset: 1
+  treeSpacing: 0.5
 --- !u!135 &4137754222393591988
 SphereCollider:
   m_ObjectHideFlags: 0
