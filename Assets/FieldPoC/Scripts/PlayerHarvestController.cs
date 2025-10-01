@@ -84,6 +84,8 @@ public class PlayerHarvestController : MonoBehaviour
         pressCount++;
         Debug.Log("Root press count: " + pressCount);
 
+        h.AddProgress(); //게이지 바 증가
+
         if (pressCount >= 5)
         {
             int currentDay = GameManager.Instance.GetDate();   // 날짜 가져오기
@@ -119,6 +121,8 @@ public class PlayerHarvestController : MonoBehaviour
             lastDir = dir; // 기준 방향 저장
             Debug.Log($"Tree first press {(dir == -1 ? "A" : "D")} count: {pressCount}");
 
+            //게이지 바 증가
+            h.AddProgress();
             // 첫 입력 성공 → 하이라이트 갱신
             h.HighlightNextKey();
         }
@@ -132,6 +136,8 @@ public class PlayerHarvestController : MonoBehaviour
                 lastDir = dir; // 새 기준 업데이트
                 Debug.Log($"Tree press {(dir == -1 ? "A" : "D")} count: {pressCount}");
 
+                //게이지 바 증가
+                h.AddProgress();
                 // 교차 입력 성공 → 하이라이트 갱신
                 h.HighlightNextKey();
 
@@ -179,10 +185,12 @@ public class PlayerHarvestController : MonoBehaviour
         // 첫 키 하이라이트는 Tree 전용
         if (h.Type == InteractableType.Tree)
         {
+            h.SpawnProgressBar(8);  // 8번 누르면 완료
             h.HighlightNextKey();
         }
         else if (h.Type == InteractableType.Root)
         {
+            h.SpawnProgressBar(5);  // 5번 누르면 완료
             h.StartRootHighlight();
         }
 
@@ -198,7 +206,10 @@ public class PlayerHarvestController : MonoBehaviour
         if (target != null)
         {
             if (target is Harvestable h)
+            {
                 h.ClearIcons();
+                h.ClearProgressBar();
+            }
 
             target.SetHighlight(false);
             target = null;

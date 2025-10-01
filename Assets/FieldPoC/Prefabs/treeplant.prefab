@@ -111,8 +111,9 @@ MonoBehaviour:
   spawnIndex: -1
   slotDataIndex: 0
   KeyIconPrefab: {fileID: 6526477218262605749, guid: dd4e6daec6006644daf3b47ecd9ef3ad, type: 3}
-  verticalOffset: 1
+  verticalOffset: 2
   treeSpacing: 0.5
+  progressBarPrefab: {fileID: 8344846085574214869, guid: 0052f8cf04873ad40af14293db8ab28e, type: 3}
 --- !u!135 &7287269021003418266
 SphereCollider:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class DropItem
@@ -39,7 +40,11 @@ public class Harvestable : Interactable
     [SerializeField] private float verticalOffset = 2f;   // 위쪽 오프셋
     [SerializeField] private float treeSpacing = 0.5f;    // 좌우 간격
 
-
+    //게이지 변수
+    [SerializeField] private GameObject progressBarPrefab;
+    private Slider progressBar;
+    private int progressCount = 0;
+    private int maxProgress = 0;
 
     void Start()
     {
@@ -131,6 +136,44 @@ public class Harvestable : Interactable
         }
         activeIcons.Clear();
     }
+
+    //게이지 생성, 제거 함수
+    public void SpawnProgressBar(int requiredPresses)
+    {
+        if (keyIconParent == null) return;
+
+        GameObject obj = Instantiate(progressBarPrefab, keyIconParent);
+        obj.transform.position = transform.position + new Vector3(0, verticalOffset - 1.0f, 0); // 아이콘보다 아래에 위치.
+
+        progressBar = obj.GetComponent<Slider>();
+        progressBar.value = 0;
+
+        progressCount = 0;
+        maxProgress = requiredPresses; // Tree=8, Root=5
+
+        progressBar.value = 0f;
+    }
+
+    public void ClearProgressBar()
+    {
+        if (progressBar != null)
+        {
+            Destroy(progressBar.gameObject);
+            progressBar = null;
+        }
+    }
+
+    public void AddProgress()
+    {
+        if (progressBar == null) return;
+
+        progressCount++;
+        if (progressCount > maxProgress) progressCount = maxProgress;
+
+        progressBar.value = (float)progressCount / maxProgress;
+    }
+
+
 
     public void StartRootHighlight()
     {
