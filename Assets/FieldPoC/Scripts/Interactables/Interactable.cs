@@ -7,6 +7,8 @@ public enum InteractableType
     Root,
     Tree,
     DroppedItem
+
+    //TODO : NPC
 }
 
 public abstract class Interactable : MonoBehaviour
