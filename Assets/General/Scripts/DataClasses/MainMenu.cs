@@ -7,10 +7,12 @@ public class MainMenu : MonoBehaviour
 {
     public GameObject mainMenu;
     public GameObject slotPanel;
+    public GameObject newSlotPanel;
 
     public void OnclickNewGame()
     {
-        Debug.Log("New Game");
+        mainMenu.SetActive(false);
+        newSlotPanel.SetActive(true);
     }
 
     public void OnclickLoadGame()
