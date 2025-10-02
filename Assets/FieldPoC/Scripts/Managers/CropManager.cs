@@ -24,8 +24,11 @@ public class CropManager : MonoBehaviour
         public string cropName;
         public int maxActive;
         public GameObject prefab;
-        public List<Transform> spawnPoints;
 
+        [Tooltip("부모만 연결하면 자식이 전부 spawnPoint로 잡힘")]
+        public Transform spawnPointParent;
+
+        [HideInInspector] public List<Transform> spawnPoints = new List<Transform>();
         [HideInInspector] public List<Harvestable> slots = new List<Harvestable>();
     }
 
@@ -37,6 +40,14 @@ public class CropManager : MonoBehaviour
 
         foreach (var g in groups)
         {
+            // 부모에서 모든 자식 가져오기
+            g.spawnPoints.Clear();
+            if (g.spawnPointParent != null)
+            {
+                foreach (Transform child in g.spawnPointParent)
+                    g.spawnPoints.Add(child);
+            }
+
             var gData = FieldDataManager.Instance.GetGroupData(g.cropName);
 
             // ✅ 수정: 슬롯 리스트를 스폰포인트 개수만큼 null로 초기화 (인덱스=spawnPointIndex 고정)
