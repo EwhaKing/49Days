@@ -44,11 +44,8 @@ public class SimpleStaticAgent : MonoBehaviour
         {
             Debug.LogError($"{name}에 NavMeshAgent가 없습니다.");
         }
-    }
 
-    void Start()
-    {
-        //agent.SetDestination(target.position);
+        agent.updateRotation = false; // 회전 자동 업데이트 끄기
     }
 
     private void UpdateDestination()
