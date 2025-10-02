@@ -26,8 +26,6 @@ public class GameManager : Singleton<GameManager>
     public Action onUIOn;
     public Action<string> onPlayerNameChanged;
 
-    public static float timeElapsedInField = 0f;
-
     public string GetPlayerName() { return generalData.playerName; }
     public void SetPlayerName(string name)
     { 

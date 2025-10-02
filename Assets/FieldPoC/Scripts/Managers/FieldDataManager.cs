@@ -4,6 +4,7 @@ using UnityEngine;
 public class FieldDataManager : SceneSingleton<FieldDataManager>
 {
     public List<CropGroupData> cropGroups = new List<CropGroupData>();
+    public float timeElapsedInField = 0f;
 
     void OnEnable()
     {

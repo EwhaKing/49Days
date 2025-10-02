@@ -17,7 +17,7 @@ public class FieldTimer : MonoBehaviour
 
     public void StartTimer()
     {
-        GameManager.timeElapsedInField = 0f;
+        FieldDataManager.Instance.timeElapsedInField = 0f;
         isRunning = true;
     }
 
@@ -25,8 +25,8 @@ public class FieldTimer : MonoBehaviour
     {
         if (!isRunning) return;
 
-        GameManager.timeElapsedInField += Time.deltaTime;
-        float progress = Mathf.Clamp01(GameManager.timeElapsedInField / duration);
+        FieldDataManager.Instance.timeElapsedInField += Time.deltaTime;
+        float progress = Mathf.Clamp01(FieldDataManager.Instance.timeElapsedInField / duration);
 
         // 시곗바늘 회전 (시계방향)
         float angle = -360f * progress;  // -360이면 한 바퀴 도는 것
@@ -42,7 +42,6 @@ public class FieldTimer : MonoBehaviour
     public void FinishField()
     {
         Debug.Log("필드 끝! 찻집으로 이동");
-        GameManager.timeElapsedInField = 0f;
         GameFlowManager.FinishField();
     }
 }
