@@ -82,42 +82,36 @@ public class AffinityPanel : MonoBehaviour
         var cm = CharacterManager.Instance;
         if (cm == null) return;
 
-        // 패널에 표시할 캐릭터만 세기
-        int total = 0;
+        // 1. 먼저 표시할 캐릭터만 필터링
+        List<CharacterData> visible = new();
         for (int i = 0; i < cm.Count; i++)
         {
             var data = cm.GetStatic(i);
             if (data.fixedIndex >= 0)
-                total++;
+                visible.Add(data);
         }
 
+        // 2. 페이지 계산
+        int total = visible.Count;
         maxPage = (total == 0) ? 0 : (total - 1) / PageSize;
         page = Mathf.Clamp(page, 0, maxPage);
 
         int start = page * PageSize;
         int count = Mathf.Clamp(total - start, 0, PageSize);
 
+        // 3. 슬롯 확보
         EnsureSlotCount(count);
 
-
+        // 4. 슬롯 채우기
         for (int i = 0; i < count; i++)
         {
-            var data = cm.GetStatic(start + i);
-
-            // AffinityPanel에서 제외할 NPC (fixedIndex < 0)
-            if (data.fixedIndex < 0)
-                continue;
-
+            var data = visible[start + i];
             slots[i].Bind(data, unknownSprite, this);
         }
 
-
+        // 5. 버튼/페이지 표시
         if (prevButton) prevButton.interactable = page > 0;
         if (nextButton) nextButton.interactable = page < maxPage;
-        // //안 눌리면 투명도 0으로 바꿔버리기.
-        // SetButtonAlpha(prevButton, page > 0 ? 1f : 0f);
-        // SetButtonAlpha(nextButton, page < maxPage ? 1f : 0f);
-
 
         if (pageText)
         {

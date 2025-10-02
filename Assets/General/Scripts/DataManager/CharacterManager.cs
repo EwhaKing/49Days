@@ -29,9 +29,7 @@ public class CharacterDB
 public class CharacterManager : SceneSingleton<CharacterManager>
 {
     [Header("Static Character Data (order = fixedIndex)")]
-    //[SerializeField] private List<CharacterData> characters = new(); // 인스펙트 드래그 드롭 형식
     private List<CharacterData> characters = new(); // Addressables로 로드(로딩 후 자동으로 채워지니까 리스트를 빈 상태로)
-
 
     private CharacterDB db = new CharacterDB();
 
@@ -96,6 +94,11 @@ public class CharacterManager : SceneSingleton<CharacterManager>
 
         // CharacterData 고정 인덱스 유지 (에셋에 저장된 값 기준으로 정렬)
         characters.Sort((a, b) => a.fixedIndex.CompareTo(b.fixedIndex));
+
+        // ✅ 여기서 정렬 결과 확인 로그 찍기
+        foreach (var c in characters)
+            Debug.Log($"[CharacterManager] {c.characterName} fixedIndex={c.fixedIndex}");
+
 
         // 저장이 아직 로드되기 전 상황을 고려해, 일단 비어있다면 메모리 상태만 기본 생성
         if (db.list == null || db.list.Count == 0)

@@ -23,12 +23,6 @@ MonoBehaviour:
     m_SerializedLabels:
     - characterdata
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 7ca47cd28e786c04684c5e32a2280816
-    m_Address: Assets/General/CharacterData/data1.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - characterdata
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 90fa1126a560c4145911e67006d36d2a
     m_Address: Assets/General/CharacterData/data3.asset
     m_ReadOnly: 0
@@ -41,6 +35,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - characterdata
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d432308f46e35e84b9188f2d5c602ec6
+    m_Address: Assets/ScriptableObject/CharacterData/data5.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - characterdata
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: da83250b909bb79448e9aec464ee5d4f
     m_Address: Assets/General/CharacterData/data2.asset
     m_ReadOnly: 0
@@ -49,6 +49,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fa495ba3d0361fd41a659387e0b163a7
     m_Address: Assets/General/CharacterData/data4.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - characterdata
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc9033836d42b6748ae12be050cb2248
+    m_Address: Assets/ScriptableObject/CharacterData/data5 1.asset
     m_ReadOnly: 0
     m_SerializedLabels:
     - characterdata
