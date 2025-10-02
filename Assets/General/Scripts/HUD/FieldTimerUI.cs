@@ -4,16 +4,14 @@ using TMPro;
 
 public class FieldTimer : MonoBehaviour
 {
-    private Image timerImage;       // Radial Fill UI 이미지
+    [SerializeField] private RectTransform handTransform; // 시곗바늘 RectTransform
     public float duration = 300f;  // 타이머 총 시간 (초 단위, 5분 = 300초)
     [SerializeField] private TMP_Text dateText;
     private bool isRunning = false;
 
     void Start()
     {
-        timerImage = GetComponent<Image>();
         dateText.text = GameManager.Instance.GetDate().ToString();
-        timerImage.fillAmount = 0f;
         StartTimer();
     }
 
@@ -30,8 +28,9 @@ public class FieldTimer : MonoBehaviour
         GameManager.timeElapsedInField += Time.deltaTime;
         float progress = Mathf.Clamp01(GameManager.timeElapsedInField / duration);
 
-        // 채워지는 방식 (0 → 1)
-        timerImage.fillAmount = progress;
+        // 시곗바늘 회전 (시계방향)
+        float angle = -360f * progress;  // -360이면 한 바퀴 도는 것
+        handTransform.localRotation = Quaternion.Euler(0, 0, angle);
 
         if (progress >= 1f)
         {

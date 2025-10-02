@@ -91,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   logMapIcon: {fileID: 1671148162338886745}
   logSprite: {fileID: 1788184330, guid: 07a87a2158dceac44ae602a99410c0b4, type: 3}
-  mapSprite: {fileID: -1530920363, guid: 07a87a2158dceac44ae602a99410c0b4, type: 3}
+  mapSprite: {fileID: 552905477, guid: 24e20cf15ce16ba43932544297583ac1, type: 3}
 --- !u!114 &417252977801711351
 MonoBehaviour:
   m_ObjectHideFlags: 0
