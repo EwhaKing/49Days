@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 게임 전체에서 사용 가능한 연출
+/// </summary>
 public class GeneralDirection : SceneSingleton<GeneralDirection>
 {
     [SerializeField] private UIFadeInOnEnable blackFadeImage;

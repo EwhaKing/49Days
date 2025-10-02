@@ -34,6 +34,16 @@ public class Cursor : MonoBehaviour
         rectTransform = GetComponent<RectTransform>();
     }
 
+    public void SetCursorVisible()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void SetCursorInvisible()
+    {
+        gameObject.SetActive(false);
+    }
+
     void Start()
     {
         UnityEngine.Cursor.visible = false;

@@ -93,6 +93,7 @@ public class GameFlowManager
     /// <param name="sceneName"></param>
     public static void LoadScene(string sceneName)
     {
+        Cursor.Instance.SetCursorInvisible();
         GeneralDirection.Instance.FadeInBlack(0.5f);
         currentSceneName = sceneName;
         CoroutineUtil.Instance.RunCoroutine(LoadSceneRoutine(sceneName));
@@ -120,6 +121,7 @@ public class GameFlowManager
         yield return null;
         onSceneLoaded?.Invoke(sceneName);
         GeneralDirection.Instance.FadeOutBlack(1f);
+        Cursor.Instance.SetCursorVisible();
     }
 
     public static bool IsInKitchen()
