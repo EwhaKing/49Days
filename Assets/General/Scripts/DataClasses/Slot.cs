@@ -9,19 +9,18 @@ using Unity.VisualScripting;
 /// <summary>
 /// [통합 스크립트] 저장 슬롯의 생성, UI 관리, 클릭 이벤트, 씬 로드 기능을 모두 담당합니다.
 
-public class SaveSlotUI : MonoBehaviour 
+public class SaveSlotUI : MonoBehaviour
 {
     [Header("프리펩 및 UI 설정")]
     [Tooltip("버튼과 두 개의 TextMeshProUGUI 자식 오브젝트를 가진 UI 프리펩")]
-    [SerializeField] private GameObject slotPrefab; 
+    [SerializeField] private GameObject slotPrefab;
     [Tooltip("슬롯 프리펩들이 생성되어 자식으로 들어갈 부모 UI 오브젝트")]
-    [SerializeField] private Transform slotContainer; 
+    [SerializeField] private Transform slotContainer;
     [SerializeField] private int numberOfSlots = 3;
 
     [Header("상호작용할 UI 버튼")]
     [Tooltip("슬롯이 선택되었을 때 활성화될 불러오기 버튼")]
     [SerializeField] private Button loadButton;
-
     [Header("씬 설정")]
     [SerializeField] private string gameScene = "MainGame";
 
@@ -53,7 +52,7 @@ public class SaveSlotUI : MonoBehaviour
         {
             loadButton.interactable = false;
             // 불러오기 버튼에 클릭 이벤트를 연결합니다.
-            loadButton.onClick.AddListener(OnLoadButtonClicked);
+            loadButton.onClick.AddListener(OnLoadClicked);
         }
     }
 
@@ -79,8 +78,15 @@ public class SaveSlotUI : MonoBehaviour
 
             // 2. 슬롯 데이터 생성 및 리스트에 추가
             SlotInfo newSlotInfo = new SlotInfo { SlotNumber = currentSlotNumber };
+            //test
+            if (currentSlotNumber == 2)
+            {
+                newSlotInfo.IsEmpty = false;
+                newSlotInfo.StatusText = "1일차";
+                newSlotInfo.RecentPlayDate = "2025-10-01";
+            }
             slotInfoList.Add(newSlotInfo);
-            
+
             // 3. UI 컴포넌트 가져오기
             // **중요**: 프리펩의 자식 오브젝트 이름이 아래와 같아야 합니다.
             // 슬롯 번호 텍스트 오브젝트 이름: "SlotNumberText"
@@ -92,15 +98,13 @@ public class SaveSlotUI : MonoBehaviour
             // TODO: 나중에 실제 파일 존재 여부를 확인하여 IsEmpty 값을 설정해야 함
             if (newSlotInfo.IsEmpty)
             {
-                if(slotNumberText != null) slotNumberText.text = $"SLOT {currentSlotNumber}";
                 if(statusText != null) statusText.text = "- 비어있음 -";
             }
             else
             {
-                if(slotNumberText != null) slotNumberText.text = $"SLOT {currentSlotNumber}";
-
                 if(statusText != null) statusText.text = $"{newSlotInfo.StatusText}\n최근에 플레이한 날짜\n{newSlotInfo.RecentPlayDate}";
             }
+            if(slotNumberText != null) slotNumberText.text = $"SLOT {currentSlotNumber}";
 
             // 5. 버튼 클릭 이벤트에 리스너(함수) 동적 연결
             Button slotButton = slotInstance.GetComponent<Button>();
@@ -109,9 +113,16 @@ public class SaveSlotUI : MonoBehaviour
                 // 람다식을 사용하여, 버튼이 클릭될 때 OnSlotClicked 함수가 '자신의 슬롯 번호'를 인자로 받도록 설정
                 slotButton.onClick.AddListener(() => OnSlotClicked(currentSlotNumber));
             }
+            Button deleteButtonInPrefab = slotInstance.transform.Find("DeleteButton")?.GetComponent<Button>();
+            if (deleteButtonInPrefab != null)
+            {
+                // 삭제 버튼을 누르면 자신의 슬롯 번호를 인자로 넘겨 함수를 호출
+                deleteButtonInPrefab.onClick.AddListener(() => OnDeleteFromSlotClicked(currentSlotNumber));
+            }
             else
             {
-                Debug.LogError($"슬롯 프리펩({slotPrefab.name})에 Button 컴포넌트가 없습니다.");
+                // 프리펩에 DeleteButton이 없는 경우를 대비한 경고
+                Debug.LogWarning($"슬롯 프리펩({slotPrefab.name}) 내에 'DeleteButton'이라는 이름의 자식 버튼이 없습니다.");
             }
         }
     }
@@ -122,31 +133,62 @@ public class SaveSlotUI : MonoBehaviour
     /// </summary>
     private void OnSlotClicked(int slotNumber)
     {
-        // 리스트에서 클릭된 슬롯 번호에 해당하는 데이터를 찾음 (인덱스는 slotNumber - 1)
-        SlotInfo selectedSlot = slotInfoList[slotNumber - 1];
-        
-        Debug.Log($"슬롯 {selectedSlot.SlotNumber}번이 선택되었습니다. (비어있음: {selectedSlot.IsEmpty})");
+        lastSelectedSlot = slotInfoList[slotNumber - 1];
 
-        if (selectedSlot.IsEmpty)
-        {
-            return;
-        }
-        else
+        Debug.Log($"슬롯 {lastSelectedSlot.SlotNumber}번이 선택되었습니다. (비어있음: {lastSelectedSlot.IsEmpty})");
+
+        if (loadButton != null)
         {
             loadButton.interactable = !lastSelectedSlot.IsEmpty;
         }
     }
-    public void OnLoadButtonClicked()
+
+    public void OnLoadClicked()
     {
-            Debug.Log($"슬롯 {lastSelectedSlot.SlotNumber}번 데이터를 불러옵니다.");
-            SceneManager.LoadScene(gameScene);
+        Debug.Log($"슬롯 {lastSelectedSlot.SlotNumber}번 데이터를 불러옵니다.");
+        SceneManager.LoadScene(gameScene);
+
+    }
+
+/// <summary>
+    /// 슬롯 프리펩 내의 개별 삭제 버튼이 클릭되었을 때 호출되는 함수
+    /// </summary>
+    private void OnDeleteFromSlotClicked(int slotNumber)
+    {
+        Debug.Log($"슬롯 {slotNumber}번의 데이터 삭제를 시도합니다.");
+
+        // 1. 삭제할 슬롯의 정보를 가져옵니다.
+        SlotInfo slotToDelete = slotInfoList[slotNumber - 1];
+
+        // 2. 슬롯이 이미 비어있다면 아무것도 하지 않고 함수를 종료합니다.
+        if (slotToDelete.IsEmpty)
+        {
+            Debug.Log($"슬롯 {slotNumber}번은 이미 비어있습니다.");
+            return;
+        }
+
+        // 3. 메모리상의 데이터를 초기화합니다.
+        slotToDelete.IsEmpty = true;
+        slotToDelete.StatusText = "";
+        slotToDelete.RecentPlayDate = "";
         
+        // TODO: 실제 저장 파일을 삭제하는 로직 (예: File.Delete(...))
+
+        // 4. 만약 삭제한 슬롯이 '마지막으로 선택했던 슬롯'이라면, 선택 상태를 초기화하고 불러오기 버튼을 비활성화합니다.
+        if (lastSelectedSlot == slotToDelete)
+        {
+            lastSelectedSlot = null;
+            if (loadButton != null) loadButton.interactable = false;
+        }
+        
+        // 5. 전체 UI를 새로고침하여 변경사항을 즉시 반영합니다.
+        InitializeSlots();
     }
     /// <summary>
-    /// 새 게임을 시작하고 게임 씬을 로드합니다.
-    // private void StartNewGame()
-    // {
-    //     Debug.Log($"새 게임을 시작합니다.");
-    //     SceneManager.LoadScene(gameScene);
-    // }
-}
+        /// 새 게임을 시작하고 게임 씬을 로드합니다.
+        // private void StartNewGame()
+        // {
+        //     Debug.Log($"새 게임을 시작합니다.");
+        //     SceneManager.LoadScene(gameScene);
+        // }
+    }
