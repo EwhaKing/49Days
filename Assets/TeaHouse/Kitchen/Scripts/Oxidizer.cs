@@ -235,7 +235,11 @@ public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
     IEnumerator DelayedReset()
     {
         // 시각적 리셋
-        backgroundRenderer.sprite = openSprite;
+        if (IsMouseOver())
+            backgroundRenderer.sprite = openHighlightSprite;
+        else
+            backgroundRenderer.sprite = openSprite;
+
         arrowTransform.rotation = Quaternion.Euler(0, 0, 0);
         foreach (var plate in gaugePlates)
             plate.SetActive(false);
@@ -300,6 +304,21 @@ public class Oxidizer : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
         currentIngredient = null;
         elapsedTime = 0f;
         currentTick = 0;
+
+        if (IsMouseOver())
+        {
+            TeaIngredient ingredient = Hand.Instance.handIngredient;
+            if (ingredient != null &&
+                ingredient.ingredientType == IngredientType.TeaLeaf &&
+                (ingredient.oxidizedDegree == OxidizedDegree.None ||
+                 ingredient.oxidizedDegree == OxidizedDegree.Zero) &&
+                !(ingredient.processSequence.Contains(ProcessStep.Roast) ||
+                  ingredient.processSequence.Contains(ProcessStep.Roll)))
+            {
+                state = OxidizerState.OpenReady;
+                backgroundRenderer.sprite = openHighlightSprite;
+            }
+        }
     }
 
 }
