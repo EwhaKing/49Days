@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e7b987e934af584ebc1ef7ba16175d7, type: 3}
+  m_Name: "\uADC0\uC5EC\uC6B4 \uC544\uC800\uC528"
+  m_EditorClassIdentifier: 
+  fixedIndex: -1
+  characterName: "\uC544\uC800\uC528"
+  slotImage: {fileID: 0}
+  profileImage: {fileID: 0}
+  profileText: 
+  likes: 
+  dislikes: 
+  hasMet: 1
+  affinity: 0
+  poses:
+  - poseName: "\uBB34\uD45C\uC815"
+    bodySprite: {fileID: 21300000, guid: 5fefc60268cbcea40b6782ff00a83ac4, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 5fefc60268cbcea40b6782ff00a83ac4, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 5fefc60268cbcea40b6782ff00a83ac4, type: 3}
+  - poseName: 
+    bodySprite: {fileID: 21300000, guid: 02c18e100bdf6144dbea1f8ca1cd5525, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 02c18e100bdf6144dbea1f8ca1cd5525, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 02c18e100bdf6144dbea1f8ca1cd5525, type: 3}
+  - poseName: 
+    bodySprite: {fileID: 21300000, guid: 3d4d235d0d43e1543a352cef0f99101a, type: 3}
+    eyesOpenSprite: {fileID: 21300000, guid: 3d4d235d0d43e1543a352cef0f99101a, type: 3}
+    eyesClosedSprite: {fileID: 21300000, guid: 3d4d235d0d43e1543a352cef0f99101a, type: 3}
+  - poseName: 
+    bodySprite: {fileID: 0}
+    eyesOpenSprite: {fileID: 0}
+    eyesClosedSprite: {fileID: 0}

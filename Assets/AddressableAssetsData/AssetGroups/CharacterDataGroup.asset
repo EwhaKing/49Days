@@ -17,6 +17,12 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: ed6a49f5d3c36d042bbd610cfe5e0b2e
   m_SerializeEntries:
+  - m_GUID: 406761297fcc49745a8c302c8755b929
+    m_Address: "Assets/ScriptableObject/CharacterData/\uADC0\uC5EC\uC6B4 \uC544\uC800\uC528.asset"
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - characterdata
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 72b304dfd262ee8438bd0cfa9154aee3
     m_Address: "Assets/ScriptableObject/CharacterData/\uC190\uB2D8.asset"
     m_ReadOnly: 0
