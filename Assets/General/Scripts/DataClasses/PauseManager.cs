@@ -1,9 +1,10 @@
+using UnityEditor.SearchService;
 using UnityEngine;
-
 public class PauseManager : MonoBehaviour
 {
     public static PauseManager Instance { get; private set; }
     public GameObject pausedPanel;
+    public GameObject mainMenuPanel;
     void Awake()
     {
         if (Instance == null)
@@ -18,6 +19,9 @@ public class PauseManager : MonoBehaviour
     void OnEnable()
     {
         ESCManager.OnCancelPressed += ESCInput;
+        {
+            pausedPanel.SetActive(false);
+        }
     }
     void OnDisable()
     {
@@ -25,17 +29,11 @@ public class PauseManager : MonoBehaviour
     }
     private void ESCInput()
     {
-         Debug.Log("등장");
+        if (mainMenuPanel.activeSelf)
+        {
+            return; 
+        }
         pausedPanel.SetActive(!pausedPanel.activeSelf);
-        if (pausedPanel.activeSelf)
-        {
-            //Time.timeScale = 0f;
-            Debug.Log("일시정지");
-        }
-        else
-        {
-            //Time.timeScale = 1f;
-            Debug.Log("재생");
-        }
+        Debug.Log("일시정지");
     }
 }

@@ -5,6 +5,19 @@ public class ESCManager : MonoBehaviour
 {
     public static ESCManager Instance { get; private set; }
     public static Action OnCancelPressed;
+    private UIInputHandler uiInputHandler;
+
+    void OnEnable()
+    {
+        uiInputHandler = FindObjectOfType<UIInputHandler>();
+        uiInputHandler.OnCloseUIRequested += PauseMenuUI;
+    }
+
+    void OnDisable()
+    {
+        uiInputHandler.OnCloseUIRequested += PauseMenuUI;
+
+    }
 
     void Awake()
     {
@@ -19,11 +32,8 @@ public class ESCManager : MonoBehaviour
         }
     }
 
-    void Update()
+    void PauseMenuUI()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            OnCancelPressed?.Invoke();
-        }
+        OnCancelPressed?.Invoke();
     }
 }

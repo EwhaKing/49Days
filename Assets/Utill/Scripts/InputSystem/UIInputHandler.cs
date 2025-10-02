@@ -14,7 +14,7 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
     // [Header("관리 오브젝트 목록")]
     [SerializeField] private TabUIController tabUIController;
     [SerializeField] private DialogueLogManager dialogueLogManager;
-    // [SerializeField] public GameObject pauseMenu;
+    [SerializeField] private GameObject pauseMenu;
 
     // 액션 동작의 구현부 메서드를 이벤트에 연결해 HandleInput에서 Invoke
     public event System.Action OnToggleUIRequested;
@@ -52,13 +52,11 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
             return true;
         }
 
-        /*
-         * pauseMenu 구현 시 추가
-        if (pauseMenu.activeSelf && actionName != "CloseUI")
+        if (pauseMenu.activeSelf && action.name != "CloseUI")
         {
             return true;
         }
-        */
+        
         if (!tabUIController.IsUIOpen() && action.name == "ToggleLog")
         {
             DialogueLogManager.Instance.ToggleLog();

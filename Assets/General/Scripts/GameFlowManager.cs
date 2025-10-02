@@ -8,12 +8,13 @@ public class GameFlowManager
     public static readonly string KITCHEN_SCENE_NAME = "Kitchen";
     public static readonly string TEA_HOUSE_FRONT_SCENE_NAME = "TeaHouseFront";
     public static readonly string FIELD_SCENE_NAME = "FieldPoC";
+    public static readonly string START_SECENE_NAME = "Beginning";
 
-    static string currentSceneName;
+    static string currentSceneName = START_SECENE_NAME;
     public static string GetCurruntSceneName => currentSceneName;
     public static event Action<string> onSceneLoaded;
     public static event Action onFinishField;
-    
+
     public static void StartGame()
     {
         string sceneName = "";
@@ -76,10 +77,10 @@ public class GameFlowManager
     /// </summary>
     public static void StartTeaHouseFront()
     {
-        if(OrderManager.Instance.GetAfterNodeTitle() != "")
+        if (OrderManager.Instance.GetAfterNodeTitle() != "")
         {
             OrderManager.Instance.Evaluate();
-            CoroutineUtil.Instance.RunAfterFirstFrame(() => 
+            CoroutineUtil.Instance.RunAfterFirstFrame(() =>
             {
                 TeaHouseYarnManager.Instance.RunDialogue(OrderManager.Instance.GetAfterNodeTitle());
                 OrderManager.Instance.SetAfterNodeTitle("");
@@ -137,5 +138,10 @@ public class GameFlowManager
     public static bool IsInField()
     {
         return currentSceneName == FIELD_SCENE_NAME;
+    }
+    
+    public static bool IsInStart()
+    {
+        return currentSceneName == START_SECENE_NAME;
     }
 }
