@@ -50,10 +50,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   customerPrefab: {fileID: 3805692922323950086, guid: 9ac9727c343f59441a65f07163f631b2, type: 3}
-  spawnOffset: {x: 1, y: 1, z: 0}
+  spawnOffset: {x: 1, y: 0, z: 0}
   heartEffectPrefab: {fileID: 4723067067338209930, guid: 291b4778af6ffb1499a2d4a0d7573636, type: 3}
   heartOffset: {x: 0, y: 5, z: 0}
   mainCanvasRectTransform: {fileID: 0}
-  customerDatabase:
-  - {fileID: 11400000, guid: c25c77c3796e584478d2a11a62013757, type: 2}
-  - {fileID: 11400000, guid: 00e436a0683c75a498bab51aa5db8fc4, type: 2}

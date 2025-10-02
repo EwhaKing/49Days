@@ -2454,21 +2454,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4513253638920273132, guid: ae98ca7909336314ea33ea1fa039be61, type: 3}
-      propertyPath: heartOffset.y
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4513253638920273132, guid: ae98ca7909336314ea33ea1fa039be61, type: 3}
-      propertyPath: heartEffectPrefab
-      value: 
-      objectReference: {fileID: 4723067067338209930, guid: 291b4778af6ffb1499a2d4a0d7573636, type: 3}
-    - target: {fileID: 4513253638920273132, guid: ae98ca7909336314ea33ea1fa039be61, type: 3}
       propertyPath: mainCanvasRectTransform
       value: 
       objectReference: {fileID: 947041423}
-    - target: {fileID: 4513253638920273132, guid: ae98ca7909336314ea33ea1fa039be61, type: 3}
-      propertyPath: customerDatabase.Array.size
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 4513253638920273132, guid: ae98ca7909336314ea33ea1fa039be61, type: 3}
       propertyPath: chairTransforms.Array.data[0]
       value: 
@@ -2485,10 +2473,6 @@ PrefabInstance:
       propertyPath: chairTransforms.Array.data[3]
       value: 
       objectReference: {fileID: 352744148}
-    - target: {fileID: 4513253638920273132, guid: ae98ca7909336314ea33ea1fa039be61, type: 3}
-      propertyPath: customerDatabase.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 653c0f3b6086f8747adfec3b672ee9f4, type: 2}
     - target: {fileID: 6928273847544280480, guid: ae98ca7909336314ea33ea1fa039be61, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.4568496

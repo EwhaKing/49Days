@@ -10,7 +10,7 @@ public class CustomerManager : SceneSingleton<CustomerManager>
     [Header("설정")]
     [SerializeField] private List<Transform> chairTransforms;
     [SerializeField] private GameObject customerPrefab;
-    [SerializeField] private Vector3 spawnOffset = new Vector3(1, 1, 0);
+    [SerializeField] private Vector3 spawnOffset = new Vector3(1, 0, 0);
 
 
 
