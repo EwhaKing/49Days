@@ -6,6 +6,8 @@
 <<declare $addtionalIngredient =  "">>
 <<declare $randomSeat = 1>>
 <<declare $randomNum = 0>>
+<<declare $randomorder = 1>>
+<<declare $randomresponse = 1>>
 ===
 
 title: 낮_주문
@@ -32,72 +34,275 @@ title: 낮_주문
 <<set $teaName = get_ordered_tea()>>  // 성공 차 이름 가져오기 
 <<set $addtionalIngredient = get_ordered_additional_ingredient()>>  // 성공 차 추가재료 가져오기
 
-<<set $randomNum = random()>>  // 0 ~ 1 사이의 랜덤 실수 생성
-
-<<if is_recent_unlocked_tea() && $teaName != "녹차">>  // 생성된 성공 차가 최근 해금된 차인지 확인
-    <<jump 최근_해금된_차를_주문했을_경우>>
-<<endif>>
-
-<<if $addtionalIngredient == "없음">>
-    <<if $randomNum < 0.2>>
-    손님: ...
-    손님: {$teaName}로 부탁해.
-    <<elseif $randomNum < 0.5>>
-    손님: 안녕~
-    손님: 오늘은 {$teaName}가 좋겠어.
+<<set $randomorder = dice(5)>>
+<<if $teaName == "뜨거운물">>
+    <<if $randomorder == 1>>
+    손님: 아무것도 넣지 말고, 따뜻하게 주세요.
+    <<elseif $randomorder == 2>>
+    손님: 요즘은 담백한 게 좋더라고요. 물 주세요.
+    <<elseif $randomorder == 3>>
+    손님: 텅 빈 잔에 투명하고 따뜻한 것만 채워주실래요?
+    <<elseif $randomorder == 4>>
+    손님: 왜 자꾸 물에 무언가를 우리려고 하는걸까요? 물이 제일 맛있는데 말이죠.
     <<else>>
-    손님: 흠... {$teaName} 주문할게요.
+    손님: 오늘은 차를 먹고 싶지 않아요. 차 말고 다른 걸로 주세요.
     <<endif>>
-<<else>>
-    <<if $randomNum < 0.2>>
-    손님: ...
-    손님: {$teaName}에 {$addtionalIngredient}을 넣어서 줘.
-    <<elseif $randomNum < 0.5>>
-    손님: 안녕, 사장님.
-    손님: {$addtionalIngredient} 가득 넣어서 {$teaName}! 알지?
+<<elseif $teaName == "녹차">>
+    <<if $randomorder == 1>>
+    손님: 녹차 한 잔 주세요.
+    <<elseif $randomorder == 2>>
+    손님: 유명한 녹색 차 있잖아요, 그거 주세요.
+    <<elseif $randomorder == 3>>
+    손님: 은은한 향이 나는 게 좋아요. 역시 녹차로 할게요.
+    <<elseif $randomorder == 4>>
+    손님: 저는 녹차밖에 못 먹어요.
     <<else>>
-    손님: 메뉴가 별로 없네요.
-    손님: {$teaName}에 {$addtionalIngredient} 주문할게요.
+    손님: 전 녹차의 떫은 맛이 참 좋더라고요.
+    <<endif>>
+<<elseif $teaName == "마그레브민트">>
+    <<if $randomorder == 1>>
+    손님: 녹차에다 향긋한 박하잎을 넣어주실래요? 설탕도 잊지 말아주세요.
+    <<elseif $randomorder == 2>>
+    손님: 입안이 청량해지는 게 필요해요. 마그레브 민트 주세요.
+    <<elseif $randomorder == 3>>
+    손님: 은은한 녹차와 달달한 설탕, 시원한 민트의 조합은 언제나 최고죠.
+    <<elseif $randomorder == 4>>
+    손님: 유명한 속담이 있었는데... 세 번째 잔은 죽음처럼 씁쓸하다고 했었나요?
+    <<else>>
+    손님: 녹차와 박하잎, 설탕을 함께 먹을 수 있는 차가 있다던데요.
+    <<endif>>
+<<elseif $teaName == "백차">>
+    <<if $randomorder == 1>>
+    손님: 살짝만 말린 부드러운 백차 주실래요?
+    <<elseif $randomorder == 2>>
+    손님: 순하고 맑은 백차로 부탁드릴게요.
+    <<elseif $randomorder == 3>>
+    손님: 백차가 좋아요. 가벼우면서도 묘하게 달콤하거든요.
+    <<elseif $randomorder == 4>>
+    손님: 덖지도, 유념하지도 않는 찻잎 차로 만든 백차 하나요.
+    <<else>>
+    손님: 백차는 흰색이어서 백차인 걸까요?
+    <<endif>>
+<<elseif $teaName == "우롱차">>
+    <<if $randomorder == 1>>
+    손님: 우롱차 한 잔 주세요.
+    <<elseif $randomorder == 2>>
+    손님: 가볍지도 무겁지도 않은 중간 맛을 느끼고 싶네요.
+    <<elseif $randomorder == 3>>
+    손님: 초록색도 빨간색도 아닌 그 색깔을 원해요. 뭔지 아시죠?
+    <<elseif $randomorder == 4>>
+    손님: 다이어트에 우롱차가 좋다던데요?
+    <<else>>
+    손님: 기분이 뒤숭숭해요. 오묘한 맛이 나는 우롱차가 먹고싶네요.
+    <<endif>>
+<<elseif $teaName == "홍차">>
+    <<if $randomorder == 1>>
+    손님: 우유랑 같이 먹어도 좋은 차가 있지 않나요? 그걸로 할게요.
+    <<elseif $randomorder == 2>>
+    손님: 가볍지 않고 확실한 맛이 좋아요. 홍차를 주세요.
+    <<elseif $randomorder == 3>>
+    손님: 옛날엔 귀한 사람들만 홍차를 마셨다죠? 지금은 제 차례네요.
+    <<elseif $randomorder == 4>>
+    손님: 검은 차...? 아니, 붉은 차 하나요.
+    <<else>>
+    손님: 찻잎을 최대로 산화시키면 무슨 맛이 날까요? 제가 한 번 먹어보려고요.
+    <<endif>>
+<<elseif $teaName == "박하차">>
+    <<if $randomorder == 1>>
+    손님: 박하잎을 뜨겁게 우려 마시면 어떨까요?
+    <<elseif $randomorder == 2>>
+    손님: 상쾌한 차가 마시고 싶은 기분이에요.
+    <<elseif $randomorder == 3>>
+    손님: 코끝까지 시원해지는 박하차 주세요!
+    <<elseif $randomorder == 4>>
+    손님: 치약향 나는 차 있죠? 그걸로 주문할게요.
+    <<else>>
+    손님: 박하잎을 물에 우려낸 차 주세요.
+    <<endif>>
+<<elseif $teaName == "연잎차">>
+    <<if $randomorder == 1>>
+    손님: 연잎으로 만드는 차가 있다면서요?
+    <<elseif $randomorder == 2>>
+    손님: 화려하지 않아도 괜찮아요. 연잎만 있으면 충분하죠.
+    <<elseif $randomorder == 3>>
+    손님: 향은 가볍고 끝맛은 깔끔한 연잎차로 부탁해요.
+    <<elseif $randomorder == 4>>
+    손님: 찻잎 말고 다른 잎으로 만든 차는 없을까요? 이를테면 연잎 같은 거요.
+    <<else>>
+    손님: 연잎차는 무슨 맛인가요? 한번 마셔볼게요.
+    <<endif>>
+<<elseif $teaName == "연꽃차">>
+    <<if $randomorder == 1>>
+    손님: 연잎차... 아니, 그건 좀 심심하네요. 오늘은 꽃 향기도 추가해주세요!
+    <<elseif $randomorder == 2>>
+    손님: 새롭게 시작하는 길에 연꽃 향을 더하고 싶어요.
+    <<elseif $randomorder == 3>>
+    손님: 차 안에서 활짝 피어나는 연꽃을 보고 싶어요.
+    <<elseif $randomorder == 4>>
+    손님: 부처님... 생각나는 꽃 있죠? 그걸 넣어 만든 차가 있다면서요?
+    <<else>>
+    손님: 오는 길에 연꽃을 봤어요. 차로 만들어 마시면 좋지 않을까요?
+    <<endif>>
+<<elseif $teaName == "장미차">>
+    <<if $randomorder == 1>>
+    손님: 붉은 꽃의 여왕을 제 찻잔에 모시고 싶네요.
+    <<elseif $randomorder == 2>>
+    손님: 마시기도 전에 붉은 빛에 빠져버렸어요. 장미차로 주세요.
+    <<elseif $randomorder == 3>>
+    손님: 눈과 입이 동시에 즐거운, 그게 바로 장미차 아닐까요?
+    <<elseif $randomorder == 4>>
+    손님: 제가 제일 좋아하는 꽃은 장미랍니다. 장미차 하나 주문할게요.
+    <<else>>
+    손님: 어제 장미잎을 먹어봤는데 뭔가 이상했어요. 역시 차로 끓여먹어야 할까봐요.
+    <<endif>>
+<<elseif $teaName == "둥굴레차">>
+    <<if $randomorder == 1>>
+    손님: 마시고 나면 속이 편안해지는 둥굴레차가 좋아요.
+    <<elseif $randomorder == 2>>
+    손님: 부드럽고 고소한 맛, 둥굴레차로 부탁드려요.
+    <<elseif $randomorder == 3>>
+    손님: 솔로몬의... 뭐였더라. 모르겠다. 둥굴레차 하나 주문할게요!
+    <<elseif $randomorder == 4>>
+    손님: 둥굴레차가 숙취 해소에 좋다던데, 맞나요?
+    <<else>>
+    손님: 둥글게, 둥글게! 앗, 죄송합니다.
+    <<endif>>
+<<endif>>
+<<set $randomorder = dice(3)>>
+<<if $addtionalIngredient == "복숭아">>
+    <<if $randomorder == 1>>
+    손님: 그리고 복숭아 향도 살짝 더해주시고요.
+    <<elseif $randomorder == 2>>
+    손님: 아, 그리고 저는 복숭아를 정말 좋아해요.
+    <<else>>
+    손님: 복숭아를 얹는다면 더 맛있겠네요.
+    <<endif>>
+<<elseif $addtionalIngredient == "꿀">>
+    <<if $randomorder == 1>>
+    손님: 근데 전 꿀 없으면 못 마셔요.
+    <<elseif $randomorder == 2>>
+    손님: 앗, 꿀도 넣어주세요.
+    <<else>>
+    손님: 달콤하게 꿀 한 스푼도 부탁해요.
+    <<endif>>
+<<elseif $addtionalIngredient == "설탕">>
+    <<if $randomorder == 1>>
+    손님: 설탕도 꼭 넣어주세요.
+    <<elseif $randomorder == 2>>
+    손님: 앗, 설탕도 듬뿍 넣어주세요.
+    <<else>>
+    손님: 혈당 관리는 내일부터. 설탕도 넣어주세요.
+    <<endif>>
+<<elseif $addtionalIngredient == "재스민">>
+    <<if $randomorder == 1>>
+    손님: 재스민도 곁들여 주세요.
+    <<elseif $randomorder == 2>>
+    손님: 은은한 재스민 향도 함께 부탁드려요.
+    <<else>>
+    손님: 재스민 꽃도 띄워주세요.
     <<endif>>
 <<endif>>
 
 <<order 낮_결과>>
 ===
 
-title: 최근_해금된_차를_주문했을_경우
----
-<<if $addtionalIngredient == "없음">>
-    <<if $randomNum < 0.2>>
-    손님: ... 새로운 메뉴가 생겼네?
-    손님: {$teaName}로 부탁해.
-    <<elseif $randomNum < 0.5>>
-    손님: 안녕~
-    손님: {$teaName}? 이제 이런 것도 팔아?
-    손님: 맛있을 것 같은데! {$teaName}로 부탁해.
-    <<else>>
-    손님: 오... 이제야 이걸 파는군요. {$teaName} 주문할게요.
-    <<endif>>
-<<else>>
-    <<if $randomNum < 0.2>>
-    손님: ... 새로운 메뉴가 생겼네?
-    손님: {$teaName}에 {$addtionalIngredient} 넣은 걸로 부탁해.
-    <<elseif $randomNum < 0.5>>
-    손님: 안녕, 사장님.
-    손님: 오! 이건 처음 보는 메뉴 같은데?
-    손님: {$addtionalIngredient} 가득 넣은 {$teaName}로 부탁해!
-    <<else>>
-    손님: 드디어 새로운 게 생겼네요.
-    손님: {$teaName}에 {$addtionalIngredient} 주문할게요.
-    <<endif>>
-<<endif>>
-
-<<order 낮_결과>>
-===
 
 title: 낮_결과
 ---
-손님: (반응)
-손님: 평가: {get_evaluation_result()}, 만든 차: {get_tea_name()}, 추가 재료:{get_additional_ingredient()}, 온도 차: {get_temperature_gap()}, 우린 시간 차: {get_brew_time_gap()}
+//손님: (반응)
+//손님: 평가: {get_evaluation_result()}, 만든 차: {get_tea_name()}, 추가 재료:{get_additional_ingredient()}, 온도 차: {get_temperature_gap()}, 우린 시간 차: {get_brew_time_gap()}
+<<play_sfx gulp>>
+<<wait 1>>
+<<if get_evaluation_result() == "완벽">>
+<<set $randomresponse = dice(14)>>
+    <<if $randomresponse == 1>>
+    손님: 당신은 차의 신인가요?
+    <<elseif $randomresponse == 2>>
+    손님: 환생하기 전에 이런 차를 마실 수 있다니... 고마워요.
+    <<elseif $randomresponse == 3>>
+    손님: 완벽하네요. 평생 마실 수 있다면 좋겠어요.
+    <<elseif $randomresponse == 4>>
+    손님: 촤하하핫. 정말 멋지네요! 받으세요! 팁입니다!
+    <<elseif $randomresponse == 5>>
+    손님: 그럴 수만 있다면, 제가 가진 모든 은화를 드리고 싶어요.
+    <<elseif $randomresponse == 6>>
+    손님: 정말 최고로 beauTEAful!!!
+    <<elseif $randomresponse == 7>>
+    손님: 이 차를 주문한 저는 정말 똑똑한 것 같아요. 
+    <<elseif $randomresponse == 8>>
+    손님: 저 그냥 환생 안 할게요. 매일 이 차를 마셔야 하거든요.
+    <<elseif $randomresponse == 9>>
+    손님: 말로 다 표현할 수 없어요. 예술의 경지예요!
+    <<elseif $randomresponse == 10>>
+    손님: 이 차 한 잔으로 제 하루가 행복해졌어요.
+    <<elseif $randomresponse == 11>>
+    손님: 마법 같은 한 잔이네요!
+    <<elseif $randomresponse == 12>>
+    손님: 마음까지 따뜻하게 데워주는 한 잔이네요.
+    <<elseif $randomresponse == 13>>
+    손님: 당신을 '차'랑해도 될까요?
+    <<else>>
+    손님: 매일 아침 당신이 내려주는 차를 마시고 싶어요.
+    <<endif>>
+<<elseif get_evaluation_result() == "보통">>
+<<set $randomresponse = dice(13)>>
+    <<if $randomresponse == 1>>
+    손님: 나쁘지 않네요. ...안녕히계세요.
+    <<elseif $randomresponse == 2>>
+    손님: 음, 한마디로 좋지도 나쁘지도 않아요!
+    <<elseif $randomresponse == 3>>
+    손님: 감사합니다. 딱 이 가격만큼의 맛이에요.
+    <<elseif $randomresponse == 4>>
+    손님: 잘 마셨어요.
+    <<elseif $randomresponse == 5>>
+    손님: ...'차'린 건 없지만 그냥 들게요.
+    <<elseif $randomresponse == 6>>
+    손님: 여기 커피는 안 파나요?
+    <<elseif $randomresponse == 7>>
+    손님: 무난하게 마시기 좋네요.
+    <<elseif $randomresponse == 8>>
+    손님: 제 차분한 일상과 잘 맞는 차네요.
+    <<elseif $randomresponse == 9>>
+    손님: 뭐, 마시기에는 괜찮네요.
+    <<elseif $randomresponse == 10>>
+    손님: 다음엔 다른 걸 마셔볼게요.
+    <<elseif $randomresponse == 11>>
+    손님: 소문으로만 들었는데, 그럭저럭 마실 만하네요.
+    <<elseif $randomresponse == 12>>
+    손님: 여기 은화 드릴게요. 잘 마셨어요.
+    <<else>>
+    손님: 평범한 차 맛이네요. 고마워요.
+    <<endif>>
+<<elseif get_evaluation_result() == "나쁨">>
+<<set $randomresponse = dice(13)>>
+    <<if $randomresponse == 1>>
+    손님: 이걸 마시라고 준 거예요?
+    <<elseif $randomresponse == 2>>
+    손님: 음, 이건 주문한 것과 전혀 다르네요. 
+    <<elseif $randomresponse == 3>>
+    손님: 우웨에에에에에엑....
+    <<elseif $randomresponse == 4>>
+    손님: 구역질이 나올 것 같네요.
+    <<elseif $randomresponse == 5>>
+    손님: ...'차'단할게요.
+    <<elseif $randomresponse == 6>>
+    손님: 단언할게요. 이건 제 인생의 유일한 오'차'예요.
+    <<elseif $randomresponse == 7>>
+    손님: 에이씨, 차라리 커피를 마시고 말지.
+    <<elseif $randomresponse == 8>>
+    손님: 한 모금에 모든 기대가 사라졌어요.
+    <<elseif $randomresponse == 9>>
+    손님: 제가 낸 은화의 대가가 이거라면, 여기가 지옥인가 보네요.
+    <<elseif $randomresponse == 10>>
+    손님: 이거 정말 안전한 거 맞나요?
+    <<elseif $randomresponse == 11>>
+    손님: 독극물을 파시면 어떡해요?
+    <<elseif $randomresponse == 12>>
+    손님: 차, 차사 불러 당장! 고소할거야!
+    <<else>>
+    손님: 실망스럽네요. 그래도 마셔볼게요.
+    <<endif>>
+<<endif>>
 <<exit 손님>>
 
 <<if get_day_order_count() == 2>>
