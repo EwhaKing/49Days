@@ -7,8 +7,6 @@ public class FieldTimer : MonoBehaviour
     private Image timerImage;       // Radial Fill UI 이미지
     public float duration = 300f;  // 타이머 총 시간 (초 단위, 5분 = 300초)
     [SerializeField] private TMP_Text dateText;
-
-    private float timeElapsed = 0f;
     private bool isRunning = false;
 
     void Start()
@@ -21,7 +19,7 @@ public class FieldTimer : MonoBehaviour
 
     public void StartTimer()
     {
-        timeElapsed = 0f;
+        GameManager.timeElapsedInField = 0f;
         isRunning = true;
     }
 
@@ -29,8 +27,8 @@ public class FieldTimer : MonoBehaviour
     {
         if (!isRunning) return;
 
-        timeElapsed += Time.deltaTime;
-        float progress = Mathf.Clamp01(timeElapsed / duration);
+        GameManager.timeElapsedInField += Time.deltaTime;
+        float progress = Mathf.Clamp01(GameManager.timeElapsedInField / duration);
 
         // 채워지는 방식 (0 → 1)
         timerImage.fillAmount = progress;
@@ -45,6 +43,7 @@ public class FieldTimer : MonoBehaviour
     public void FinishField()
     {
         Debug.Log("필드 끝! 찻집으로 이동");
+        GameManager.timeElapsedInField = 0f;
         GameFlowManager.FinishField();
     }
 }
