@@ -1,13 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Yarn.Unity;
 
 public class FieldYarnManager : SceneSingleton<FieldYarnManager>
 {
     [SerializeField] DialogueRunner runner;
-
     [SerializeField] FieldDialoguePresenter fieldDialoguePresenter;
+
+    public event Action onDialogueStart;
+    public event Action onDialogueEnd;
 
     void Start()
     {
@@ -19,6 +21,7 @@ public class FieldYarnManager : SceneSingleton<FieldYarnManager>
 
     public void RunDialogue(string nodeTitle)
     {
+        onDialogueStart?.Invoke();
         GameManager.Instance.onUIOn?.Invoke();
         runner.gameObject.SetActive(true);
         Debug.Log($"FieldYarnManager: RunDialogue {nodeTitle}");
@@ -27,6 +30,7 @@ public class FieldYarnManager : SceneSingleton<FieldYarnManager>
 
     void EndDialogue()
     {
+        onDialogueEnd?.Invoke();
         runner.gameObject.SetActive(false);
     }
 

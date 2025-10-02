@@ -5,37 +5,17 @@ using UnityEngine.AI;
 
 public class SimpleStaticAgent : MonoBehaviour
 {
-    //[SerializeField] Transform target;
-
     //TODO : 시간에 따라 이동하는 걸로 바꿔야함. / 임시로 날짜에 따라 이동하고 있음.
     [System.Serializable]
     public class Schedule
     {
-        public int week;          // 몇 주차
-        public int day;           // 몇 요일
+        public float time;
         public Transform target;  // 가야 할 목적지
     }
 
     [SerializeField] private Schedule[] schedules; // NPC의 이동 스케줄
     private NavMeshAgent agent;
-
-    //TODO : 시간에 따른 이동으로 바꿔야함..
-    private void OnDayChanged()
-    {
-        UpdateDestination();
-    }
-
-    void OnEnable()
-    {
-        GameManager.Instance.onDayChanged += OnDayChanged;
-    }
-
-    void OnDisable()
-    {
-        if (GameManager.Instance != null)
-            GameManager.Instance.onDayChanged -= OnDayChanged;
-    }
-
+    private int currentIndex = -1;
 
     void Awake()
     {
@@ -48,23 +28,70 @@ public class SimpleStaticAgent : MonoBehaviour
         agent.updateRotation = false; // 회전 자동 업데이트 끄기
     }
 
-    private void UpdateDestination()
+    void OnEnable()
     {
-        int currentWeek = GameManager.Instance.GetWeek();
-        int currentDay = GameManager.Instance.GetDay();
-
-        foreach (var schedule in schedules)
+        // 대화 이벤트 구독
+        if (FieldYarnManager.Instance != null)
         {
-            if (schedule.week == currentWeek && schedule.day == currentDay)
+            FieldYarnManager.Instance.onDialogueStart += PauseMovement;
+            FieldYarnManager.Instance.onDialogueEnd += ResumeMovement;
+        }
+    }
+
+    void OnDisable()
+    {
+        // 이벤트 구독 해제
+        if (FieldYarnManager.Instance != null)
+        {
+            FieldYarnManager.Instance.onDialogueStart -= PauseMovement;
+            FieldYarnManager.Instance.onDialogueEnd -= ResumeMovement;
+        }
+    }
+
+    private void PauseMovement()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = true;
+            Debug.Log($"{name} 이동 멈춤 (대화 시작)");
+        }
+    }
+
+    private void ResumeMovement()
+    {
+        if (agent != null)
+        {
+            agent.isStopped = false;
+            Debug.Log($"{name} 이동 재개 (대화 종료)");
+        }
+    }
+
+
+    void Update()
+    {
+        float elapsed = FieldDataManager.Instance.timeElapsedInField;
+
+        // 아직 안 간 스케줄 중 다음 순서를 찾음
+        for (int i = currentIndex + 1; i < schedules.Length; i++)
+        {
+            if (elapsed >= schedules[i].time)
             {
-                if (schedule.target != null)
-                {
-                    agent.SetDestination(schedule.target.position);
-                    Debug.Log($"{name} → {schedule.target.name} 로 이동");
-                }
-                return;
+                MoveTo(i);
             }
         }
+    }
+
+    private void MoveTo(int index)
+    {
+        if (index < 0 || index >= schedules.Length) return;
+
+        var schedule = schedules[index];
+        if (schedule.target != null)
+        {
+            agent.SetDestination(schedule.target.position);
+            Debug.Log($"{name} → {schedule.target.name} 로 이동 (time={schedule.time})");
+        }
+        currentIndex = index;
     }
 
 }

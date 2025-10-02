@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class FieldDataManager : SceneSingleton<FieldDataManager>
 {
+    public static readonly float duration = 300f;  // 타이머 총 시간 (초 단위, 5분 = 300초)
     public List<CropGroupData> cropGroups = new List<CropGroupData>();
     public float timeElapsedInField = 0f;
 

@@ -5,7 +5,6 @@ using TMPro;
 public class FieldTimer : MonoBehaviour
 {
     [SerializeField] private RectTransform handTransform; // 시곗바늘 RectTransform
-    public float duration = 300f;  // 타이머 총 시간 (초 단위, 5분 = 300초)
     [SerializeField] private TMP_Text dateText;
     private bool isRunning = false;
 
@@ -26,7 +25,7 @@ public class FieldTimer : MonoBehaviour
         if (!isRunning) return;
 
         FieldDataManager.Instance.timeElapsedInField += Time.deltaTime;
-        float progress = Mathf.Clamp01(FieldDataManager.Instance.timeElapsedInField / duration);
+        float progress = Mathf.Clamp01(FieldDataManager.Instance.timeElapsedInField / FieldDataManager.duration);
 
         // 시곗바늘 회전 (시계방향)
         float angle = -360f * progress;  // -360이면 한 바퀴 도는 것
