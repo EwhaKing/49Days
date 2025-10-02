@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e7b987e934af584ebc1ef7ba16175d7, type: 3}
   m_Name: "\uD0A4\uB8E8\uC2A4"
   m_EditorClassIdentifier: 
-  fixedIndex: 4
+  fixedIndex: 1
   characterName: "\uD0A4\uB8E8\uC2A4"
-  slotImage: {fileID: 0}
-  profileImage: {fileID: 0}
+  slotImage: {fileID: 1278540046, guid: b4a0456305edf254dab03de39b108e10, type: 3}
+  profileImage: {fileID: 21300000, guid: 8f25bdf06fea6cc408055ef02af8ffc7, type: 3}
   profileText: 
   likes: 
   dislikes: 
   hasMet: 1
-  affinity: 0
+  affinity: 20
   poses:
   - poseName: "\uBB34\uD45C\uC815"
     bodySprite: {fileID: 21300000, guid: 1204d2feafffa4f45800fe8849cb0106, type: 3}

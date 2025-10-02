@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fixedIndex: 2
   characterName: no meet
-  slotImage: {fileID: 470070843, guid: 2360b06b8acfed3429af0af9f82d7d7c, type: 3}
-  profileImage: {fileID: 1252376294, guid: 8d9c0c64622454d439e00bb0b699344a, type: 3}
+  slotImage: {fileID: 1278540046, guid: b4a0456305edf254dab03de39b108e10, type: 3}
+  profileImage: {fileID: 1278540046, guid: b4a0456305edf254dab03de39b108e10, type: 3}
   profileText: can't meet..
   likes: 
   dislikes: 
   hasMet: 0
   affinity: 47
+  poses: []
