@@ -42,14 +42,13 @@ public class FieldDialoguePresenter : DialoguePresenterBase
 
     void OnEnable()
     {
-        if (dialogueInputHandler != null)
-            dialogueInputHandler.OnDialogueContinueRequested += OnDialogueContinue;
+        dialogueInputHandler = FindObjectOfType<DialogueInputHandler>();
+        dialogueInputHandler.OnDialogueContinueRequested += OnDialogueContinue;
     }
 
     void OnDestroy()
     {
-        if (dialogueInputHandler != null)
-            dialogueInputHandler.OnDialogueContinueRequested -= OnDialogueContinue;
+        dialogueInputHandler.OnDialogueContinueRequested -= OnDialogueContinue;
     }
 
     public void OnPanelClicked()
@@ -96,7 +95,7 @@ public class FieldDialoguePresenter : DialoguePresenterBase
         currentCharacterData = data;
     }
 
-    private void ShowCharacter(string characterName, string poseName = "기본")
+    private void ShowCharacter(string characterName, string poseName = "무표정")
     {
         if (currentCharacterData == null)
         {
@@ -110,7 +109,7 @@ public class FieldDialoguePresenter : DialoguePresenterBase
         {
             if (bodyImage != null)
             {
-                bodyImage.sprite = currentPose.bodySprite;
+                bodyImage.sprite = currentPose.eyesOpenSprite;
                 bodyImage.preserveAspect = true;
             }
         }
@@ -124,7 +123,7 @@ public class FieldDialoguePresenter : DialoguePresenterBase
             currentPose = newPose;
             if (bodyImage != null)
             {
-                bodyImage.sprite = currentPose.bodySprite;
+                bodyImage.sprite = currentPose.eyesOpenSprite;
                 bodyImage.preserveAspect = true;
             }
         }
@@ -355,7 +354,8 @@ public class FieldDialoguePresenter : DialoguePresenterBase
             Action<int> entryHandler = null!;
             var tcs = new TaskCompletionSource<int>();
 
-            entryHandler = (selectedIdx) => {
+            entryHandler = (selectedIdx) =>
+            {
                 SetEntryOptionClicked(characterName, selectedIdx); // 클릭 상태 저장
                 tcs.TrySetResult(selectedIdx);
                 fieldOptionPanelController.OnEntryOptionSelected -= entryHandler;

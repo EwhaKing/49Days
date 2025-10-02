@@ -28,7 +28,7 @@ public class Cursor : MonoBehaviour
 
         // 이 오브젝트(Image)가 아닌, 최상위 부모(Canvas)를 파괴하지 않도록 설정
         DontDestroyOnLoad(transform.root.gameObject);
-        
+
         // --- 나머지 초기화 코드 ---
         cursorImage = GetComponent<Image>();
         rectTransform = GetComponent<RectTransform>();
@@ -51,7 +51,6 @@ public class Cursor : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("커서 업데이트 실행! 시간: " + Time.time);
         // 2. 마우스 위치 따라가는 코드를 새로운 방식으로 변경
         // rectTransform.position = Input.mousePosition; (기존 코드)
         rectTransform.position = Mouse.current.position.ReadValue(); // (새로운 코드)

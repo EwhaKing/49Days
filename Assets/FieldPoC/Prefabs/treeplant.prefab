@@ -100,10 +100,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 2
   highlightSprite: {fileID: -1530920363, guid: 07a87a2158dceac44ae602a99410c0b4, type: 3}
-  dropTable: []
+  dropTable:
+  - itemName: "\uAFC0"
+    amount: 2
+  - itemName: "\uCC3B\uC78E"
+    amount: 1
+  cooldownDays: 3
+  fruitSprite: {fileID: 21300000, guid: 29e85614d801a91438ba8870d9828ae8, type: 3}
   withoutFruitSprite: {fileID: 21300000, guid: 356177d6f1954374ea255a026accfc43, type: 3}
-  cooldownDays: 1
-  available: 1
+  spawnIndex: -1
+  slotDataIndex: 0
+  KeyIconPrefab: {fileID: 6526477218262605749, guid: dd4e6daec6006644daf3b47ecd9ef3ad, type: 3}
+  verticalOffset: 2
+  treeSpacing: 0.5
+  progressBarPrefab: {fileID: 8344846085574214869, guid: 0052f8cf04873ad40af14293db8ab28e, type: 3}
 --- !u!135 &7287269021003418266
 SphereCollider:
   m_ObjectHideFlags: 0

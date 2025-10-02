@@ -123,6 +123,7 @@ MonoBehaviour:
     animator: {fileID: 0}
   toggleGroup: {fileID: 9044369363830267838}
   kitchenSceneName: Kitchen
+  frontSceneName: TeaHouseFront
   kitchenDefaultIndex: 1
   fieldDefaultIndex: 0
 --- !u!1 &38420750502142850
@@ -231,6 +232,7 @@ MonoBehaviour:
     animator: {fileID: 0}
   toggleGroup: {fileID: 9044369363830267838}
   kitchenSceneName: KitchenScene
+  frontSceneName: TeaHouseFront
   kitchenDefaultIndex: 1
   fieldDefaultIndex: 0
 --- !u!1 &997116946859585774
@@ -1667,6 +1669,18 @@ PrefabInstance:
     - target: {fileID: 1209273685638466103, guid: 885a9699d9c357e4aaf4e158e920502f, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1327527064282627137, guid: 885a9699d9c357e4aaf4e158e920502f, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.18823531
+      objectReference: {fileID: 0}
+    - target: {fileID: 1327527064282627137, guid: 885a9699d9c357e4aaf4e158e920502f, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.2392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 1327527064282627137, guid: 885a9699d9c357e4aaf4e158e920502f, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.29803923
       objectReference: {fileID: 0}
     - target: {fileID: 1364153816514026870, guid: 885a9699d9c357e4aaf4e158e920502f, type: 3}
       propertyPath: m_AnchorMax.y
