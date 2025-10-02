@@ -49,6 +49,7 @@ MonoBehaviour:
   - cropName: flower
     maxActive: 2
     prefab: {fileID: 8432696442442149189, guid: bfbbc9fee7831114686d6c72b407c679, type: 3}
+    spawnPointParent: {fileID: 168309144962415002, guid: 52599825d0bc24c4fbcbc74d972cb274, type: 3}
     spawnPoints:
     - {fileID: 0}
     - {fileID: 0}
@@ -59,6 +60,7 @@ MonoBehaviour:
   - cropName: tree
     maxActive: 3
     prefab: {fileID: 625465400131796761, guid: ab613e955e4bdef43a25386da6511807, type: 3}
+    spawnPointParent: {fileID: 6177024198824455110, guid: c5bd531e2a47e9240bc87a34e3390693, type: 3}
     spawnPoints:
     - {fileID: 0}
     - {fileID: 0}
@@ -67,6 +69,7 @@ MonoBehaviour:
   - cropName: root
     maxActive: 1
     prefab: {fileID: 6501577142243342613, guid: 1b271cd16a2760e4d83364d9611ab672, type: 3}
+    spawnPointParent: {fileID: 4984674281980226228, guid: 08763e9417fc5054493c7d9186fd8c04, type: 3}
     spawnPoints:
     - {fileID: 0}
     - {fileID: 0}

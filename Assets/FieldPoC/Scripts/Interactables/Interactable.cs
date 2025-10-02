@@ -6,9 +6,8 @@ public enum InteractableType
     Flower,
     Root,
     Tree,
-    DroppedItem
-
-    //TODO : NPC
+    DroppedItem,
+    NPC
 }
 
 public abstract class Interactable : MonoBehaviour
@@ -31,8 +30,8 @@ public abstract class Interactable : MonoBehaviour
     // 채집 모드 on/off 시 하이라이트 ↔ 원래 스프라이트 교체
     public void SetHighlight(bool on)
     {
+        if (highlightSprite == null) return;
         sr.sprite = on ? highlightSprite : originalSprite;
-        //
     }
 
     // 구체 행동은 파생 클래스가 구현

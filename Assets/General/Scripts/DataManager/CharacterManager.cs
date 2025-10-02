@@ -57,6 +57,11 @@ public class CharacterManager : SceneSingleton<CharacterManager>
         p.affinity = Mathf.Clamp(p.affinity + delta, 0, 100);
     }
 
+    public CharacterData GetCharacterData(string name)
+    {
+        return characters.Find(c => c.characterName == name);
+    }
+
     //비동기 로드
     private async Task LoadCharactersAsync()
     {

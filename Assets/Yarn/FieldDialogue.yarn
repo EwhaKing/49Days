@@ -1,0 +1,12 @@
+﻿title: NPC_프링글스아저씨
+---
+This is an example of a Yarn Spinner script. Write your dialogue here!
+===
+title: NPC_키루스
+---
+키루스: 안녕?
+ -> 대화하기
+    키루스: 그래.
+ -> 선물하기
+    키루스: 나 주는거야?
+===

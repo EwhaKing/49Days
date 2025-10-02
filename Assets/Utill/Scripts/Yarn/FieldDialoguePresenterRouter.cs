@@ -25,7 +25,6 @@ public class FieldDialoguePresenterRouter : DialoguePresenterBase
     public FieldDialoguePresenter? fieldPresenter;
     public FieldDialogueExtraPresenter? fieldExtraPresenter;
 
-    // CharacterData 리스트를 인스펙터에서 할당
     public List<CharacterData>? characterDataList;
     private CharacterData? currentCharacterData;
 
@@ -39,15 +38,8 @@ public class FieldDialoguePresenterRouter : DialoguePresenterBase
             return;
         }
 
-        if (characterDataList != null)
-        {
-            var found = characterDataList.Find(c => c.characterName == speaker);
-            currentCharacterData = found;
-        }
-        else
-        {
-            currentCharacterData = null;
-        }
+        currentCharacterData = CharacterManager.Instance.GetCharacterData(speaker);
+        Debug.Assert(currentCharacterData != null, $"'{speaker}'에 해당하는 CharacterData가 없습니다.");
     }
 
     /// <summary>

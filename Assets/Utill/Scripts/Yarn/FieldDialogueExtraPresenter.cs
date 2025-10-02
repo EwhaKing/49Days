@@ -24,14 +24,13 @@ public class FieldDialogueExtraPresenter : DialoguePresenterBase
 
     void OnEnable()
     {
-        if (dialogueInputHandler != null)
-            dialogueInputHandler.OnDialogueContinueRequested += OnDialogueContinue;
+        dialogueInputHandler = FindObjectOfType<DialogueInputHandler>();
+        dialogueInputHandler.OnDialogueContinueRequested += OnDialogueContinue;
     }
 
     void OnDestroy()
     {
-        if (dialogueInputHandler != null)
-            dialogueInputHandler.OnDialogueContinueRequested -= OnDialogueContinue;
+        dialogueInputHandler.OnDialogueContinueRequested -= OnDialogueContinue;
     }
 
     public void OnPanelClicked()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: data5 1
   m_EditorClassIdentifier: 
   fixedIndex: 5
-  characterName: 
+  characterName: some
   slotImage: {fileID: 0}
   profileImage: {fileID: 0}
   profileText: 

@@ -11,7 +11,23 @@ public class FieldYarnManager : SceneSingleton<FieldYarnManager>
 
     void Start()
     {
+        runner = FindObjectOfType<DialogueRunner>();
+        fieldDialoguePresenter = FindObjectOfType<FieldDialoguePresenter>();
         runner.AddCommandHandler<string, string>("change_sprite", ChangeNpcSprite);
+        runner.onDialogueComplete.AddListener(EndDialogue);
+    }
+
+    public void RunDialogue(string nodeTitle)
+    {
+        GameManager.Instance.onUIOn?.Invoke();
+        runner.gameObject.SetActive(true);
+        Debug.Log($"FieldYarnManager: RunDialogue {nodeTitle}");
+        runner.StartDialogue(nodeTitle);
+    }
+
+    void EndDialogue()
+    {
+        runner.gameObject.SetActive(false);
     }
 
     public void ChangeNpcSprite(string npcName, string poseName)
