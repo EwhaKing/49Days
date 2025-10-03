@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
+using System.Collections.Generic; // Queue
 
 public class PlayerHarvestController : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class PlayerHarvestController : MonoBehaviour
 
     InteractableInputHandler interactableInputHandler;
     GameInputHandler gameInputHandler;
+
+    //빠른 입력 시 먹통 되는 문제 때문에 > 큐 사용
+    private Queue<int> inputQueue = new Queue<int>(); // A/D 입력 버퍼
 
     void OnEnable()
     {
@@ -48,6 +52,13 @@ public class PlayerHarvestController : MonoBehaviour
         if (inHarvestMode && target is Harvestable harvestable)
         {
             harvestTimer += Time.deltaTime;
+
+            // === 큐 처리 ===
+            if (inputQueue.Count > 0)
+            {
+                int dir = inputQueue.Dequeue();
+                HandleTreeInput(dir);
+            }
 
             switch (harvestable.Type)
             {
@@ -96,12 +107,18 @@ public class PlayerHarvestController : MonoBehaviour
 
     private void OnA(InputAction.CallbackContext ctx)
     {
-        HandleTreeInput(-1); // A = -1
+        if (!inHarvestMode || !(target is Harvestable h)) return;
+        if (h.Type != InteractableType.Tree) return;
+
+        inputQueue.Enqueue(-1); // A
     }
 
     private void OnD(InputAction.CallbackContext ctx)
     {
-        HandleTreeInput(1);  // D = 1
+        if (!inHarvestMode || !(target is Harvestable h)) return;
+        if (h.Type != InteractableType.Tree) return;
+
+        inputQueue.Enqueue(1); // D
     }
 
     private void HandleTreeInput(int dir)
