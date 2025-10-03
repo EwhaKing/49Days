@@ -15,7 +15,15 @@ public class InputManager : Singleton<InputManager>
     private List<IInputHandler> handlers = new List<IInputHandler>();
     [SerializeField] public InputActionAsset inputActions;
 
-    private List<System.Action<InputAction.CallbackContext>> cachedHandler;
+    public systemActions systemActions;
+
+    private List<System.Action<InputAction.CallbackContext>> cachedHandler = new List<System.Action<InputAction.CallbackContext>>();
+
+    void Awake()
+    {
+        systemActions = new systemActions();
+        systemActions.Enable();
+    }
 
     void Start()
     {
