@@ -58,7 +58,7 @@ public class InventoryUI : MonoBehaviour
     {
         // TrashBin 이벤트를 구독 - 아이템이 버려졌을 때를 감지.
         TrashBin.OnItemDroppedOnTrash += HandleTrashDrop;
-        TabGroupManager.OnItemDroppedOnBackground += HandleTrashDrop;
+        ItemDropZone.OnItemDroppedOnBackground += HandleTrashDrop;
 
         // 자식으로 있는 모든 슬롯 UI를 찾아와 초기화. 그리고 이벤트 연결.
         slotGrid.GetComponentsInChildren(true, uiSlots);
@@ -112,7 +112,7 @@ public class InventoryUI : MonoBehaviour
     {
         // 오브젝트 파괴 시, 구독했던 모든 이벤트를 해제.
         TrashBin.OnItemDroppedOnTrash -= HandleTrashDrop;
-        TabGroupManager.OnItemDroppedOnBackground -= HandleTrashDrop;
+        ItemDropZone.OnItemDroppedOnBackground -= HandleTrashDrop;
         if (InventoryManager.Instance != null)
         {
             InventoryManager.Instance.OnInventoryChanged -= UpdateInventoryDisplay;

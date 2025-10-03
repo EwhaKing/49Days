@@ -11,7 +11,7 @@ using System;
 // 뭐하는 스크립트인가요?
 // 현재 어떤 토글(탭)이 선택되어 있는 상태인지 저장/복원하고, 탭 활성화 및 애니메이션 재생을 명령.
 // 토글 그룹(토글들의 부모 오브젝트, TabTags)에 붙여서 사용.
-public class TabGroupManager : MonoBehaviour, IDropHandler
+public class TabGroupManager : MonoBehaviour
 {
     // 개별 탭 하나를 구성하는 UI 요소들의 묶음.
     [System.Serializable]
@@ -41,12 +41,12 @@ public class TabGroupManager : MonoBehaviour, IDropHandler
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStaticData() { lastKnownTabIndex = null; }
 
-    public static event Action OnItemDroppedOnBackground;
+    // public static event Action OnItemDroppedOnBackground;
 
-    public void OnDrop(PointerEventData eventData)
-    {
-        OnItemDroppedOnBackground?.Invoke();
-    }
+    // public void OnDrop(PointerEventData eventData)
+    // {
+    //     OnItemDroppedOnBackground?.Invoke();
+    // }
 
     void Awake()
     {
@@ -81,20 +81,27 @@ public class TabGroupManager : MonoBehaviour, IDropHandler
         // 토글-패널 간섭을 방지하기 위해 비활성화
         toggleGroup.enabled = false;
         int indexToOpen;
+        string currentScene = SceneManager.GetActiveScene().name;
 
-        if (lastKnownTabIndex.HasValue) // 이전에 탭을 열람한 기록이 있다면, 해당 탭을 표시
+        if (currentScene == "Kitchen" || currentScene == "TeaHouseFront")
         {
-            indexToOpen = lastKnownTabIndex.Value;
+            SelectTab(1, false);
         }
-        else    // 이전에 열람한 기록이 없다면(e.g. 씬 로드)
-        {
-            string currentScene = SceneManager.GetActiveScene().name;   // 현재 씬 확인 후 탭 결정
-            // indexToOpen = (currentScene == kitchenSceneName) ? kitchenDefaultIndex : fieldDefaultIndex; // 주방이라면 레시피, 필드라면 인벤토리
-            indexToOpen = isTeaHouseScene == 1 ? kitchenDefaultIndex : fieldDefaultIndex;
-        }
-        SelectTab(indexToOpen, false);
+        else { SelectTab(0, false); }
+
+        // if (lastKnownTabIndex.HasValue) // 이전에 탭을 열람한 기록이 있다면, 해당 탭을 표시
+        // {
+        //     indexToOpen = lastKnownTabIndex.Value;
+        // }
+        // else    // 이전에 열람한 기록이 없다면(e.g. 씬 로드)
+        // {
+        //     // indexToOpen = (currentScene == kitchenSceneName) ? kitchenDefaultIndex : fieldDefaultIndex; // 주방이라면 레시피, 필드라면 인벤토리
+        //     // indexToOpen = isTeaHouseScene == 1 ? kitchenDefaultIndex : fieldDefaultIndex;
+        //     indexToOpen = (currentScene == kitchenSceneName || currentScene == frontSceneName) ? kitchenDefaultIndex : fieldDefaultIndex;
+        // }
+        // SelectTab(indexToOpen, false);
         StartCoroutine(ReEnableToggleGroupAfterFrame());
-        
+
         // UI가 열릴 때마다 인벤토리 UI가 최신 상태를 반영하도록 강제 갱신.
         var inventoryUI = FindObjectOfType<InventoryUI>();
         if (inventoryUI != null)
@@ -105,6 +112,7 @@ public class TabGroupManager : MonoBehaviour, IDropHandler
         {
             Debug.LogWarning("InventoryUI instance not found in the scene.");
         }
+        Debug.Log($"[탭 확인] OnEnable 시작. lastKnownTabIndex의 현재 값: {lastKnownTabIndex}");
     }
 
     private IEnumerator ReEnableToggleGroupAfterFrame()
