@@ -60,4 +60,25 @@ public class KeyIcon : MonoBehaviour
         }
     }
 
+    //==NPC==
+    private Transform target;
+    private Vector3 offset;
+    private bool isNPC = false;   // 기본은 false → 작물은 그대로
+
+    // NPC에서만 호출: target + offset + NPC 여부
+    public void SetTarget(Transform t, Vector3 o, bool npc = false)
+    {
+        target = t;
+        offset = o;
+        isNPC = npc;
+    }
+
+    void LateUpdate()
+    {
+        if (isNPC && target != null)
+        {
+            transform.position = target.position + offset;
+        }
+    }
+
 }

@@ -141,8 +141,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77af9ab9f6c7cf14eb7f4530254a4526, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 4
   highlightSprite: {fileID: 0}
+  KeyIconPrefab: {fileID: 6526477218262605749, guid: dd4e6daec6006644daf3b47ecd9ef3ad, type: 3}
+  verticalOffset: 5
 --- !u!136 &3841512158689269455
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -808,8 +810,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77af9ab9f6c7cf14eb7f4530254a4526, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 4
   highlightSprite: {fileID: 0}
+  KeyIconPrefab: {fileID: 6526477218262605749, guid: dd4e6daec6006644daf3b47ecd9ef3ad, type: 3}
+  verticalOffset: 5
 --- !u!136 &3618330909375446701
 CapsuleCollider:
   m_ObjectHideFlags: 0

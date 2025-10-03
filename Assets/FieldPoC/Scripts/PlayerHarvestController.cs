@@ -232,14 +232,21 @@ public class PlayerHarvestController : MonoBehaviour
 
                 if (target is Harvestable oldH)
                     oldH.ClearIcons();
+
+                if (target is NPC oldNpc)
+                    oldNpc.ClearIcon();
             }
 
             // 새 타겟 처리
             if (closest != null)
             {
                 closest.SetHighlight(true);
+
                 if (!inHarvestMode && closest is Harvestable newH)
                     newH.ShowEnterIcon();  // 하이라이트 시점에만 E 표시
+
+                if (closest is NPC newNpc)
+                    newNpc.ShowEnterIcon(); // E 아이콘
             }
 
             target = closest;
