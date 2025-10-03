@@ -23,7 +23,6 @@ public class SaveLoadManager : SceneSingleton<SaveLoadManager>
         string json = File.ReadAllText($"{saveDirectory}/{typeof(T).Name}");
         return JsonConvert.DeserializeObject<T>(json);
     }
-
     public void SaveAllByDate(int date)
     {
         this.date = date;
@@ -32,7 +31,7 @@ public class SaveLoadManager : SceneSingleton<SaveLoadManager>
         {
             Directory.CreateDirectory(saveDirectory);
         }
-        
+
         onSave?.Invoke();
         Debug.Log($"데이터 저장됨: {saveDirectory}");
     }
@@ -48,13 +47,12 @@ public class SaveLoadManager : SceneSingleton<SaveLoadManager>
 
     private string GetSaveDirectory()
     {
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         // 프로젝트 폴더 밑에 저장 (Assets 폴더와 같은 레벨)
         return Path.Combine(Application.dataPath, "SaveData", date.ToString());
-    #else
+#else
         // 빌드 환경에서는 persistentDataPath
         return Path.Combine(Application.persistentDataPath, date.ToString());
-    #endif
+#endif
     }
-
 }

@@ -29,6 +29,8 @@ public class TabUIController : SceneSingleton<TabUIController>
     /// </summary>
     public void ToggleUI()
     {
+        if (GameFlowManager.IsInStart()) return;
+
         commonPanel.SetActive(!commonPanel.activeSelf); // 현재 상태 반전
         if (commonPanel.activeSelf)
             GameManager.Instance.onUIOn?.Invoke();

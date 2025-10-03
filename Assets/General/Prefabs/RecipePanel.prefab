@@ -1544,6 +1544,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   recipePanel: {fileID: 7480005844552550073}
+  tabUIController: {fileID: 0}
   recipeSlotPrefab: {fileID: 5295548621722455246, guid: d4d956c0f88c68247abb828e67064c56, type: 3}
   nextButton: {fileID: 8781091871242009438}
   prevButton: {fileID: 5971198371491789406}
