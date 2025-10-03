@@ -140,6 +140,7 @@ public class RecipePanel : MonoBehaviour
 
     public void ShowRecipeDetails(RecipeDescription data)
     {
+        currentSelectedRecipe = data;
         recipeImage.enabled = true;
         simpleRecipeImage.enabled = true;
         // 해금 여부를 확인
