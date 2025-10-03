@@ -36,7 +36,7 @@ public class RecipeSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         if (isUnlocked)
         {
             // 해금 시: 실제 이미지와 이름 표시
-            if (recipeImage != null) recipeImage.sprite = data.simpleRecipeImage; // slot에 맞는 simple 이미지로 변경 권장
+            if (recipeImage != null) recipeImage.sprite = data.teaImage;
             if (recipeNameText != null) recipeNameText.text = data.recipeName;
         }
         else
