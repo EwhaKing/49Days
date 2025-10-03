@@ -1381,7 +1381,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2830756491775970711, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 52.43
       objectReference: {fileID: 0}
     - target: {fileID: 2830756491775970711, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2427,7 +2427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff27c48bd2a0de342a6ca5ee8098ac42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerDialogueBox: {fileID: 1041341765409112779}
+  playerDialogueBox: {fileID: 7300249714262244869}
   npcDialogueBox: {fileID: 1041341765409112779}
 --- !u!1 &1435320834
 GameObject:
@@ -3107,6 +3107,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75f54a87d2df3e940a2f3aa774a79c09, type: 3}
+--- !u!1 &7300249714262244869 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 678553076324797085, guid: 75f54a87d2df3e940a2f3aa774a79c09, type: 3}
+  m_PrefabInstance: {fileID: 7300249714262244868}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8497572236291807680
 PrefabInstance:
   m_ObjectHideFlags: 0

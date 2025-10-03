@@ -58,11 +58,10 @@ public class CabinetManager : SceneSingleton<CabinetManager>
 
     void Start()
     {
-        // 테스트
-        foreach (IngredientName ingredientName in Utills.GetValues<IngredientName>())
-        {
-            AddIngredient(ingredientName, 5);
-        }
+        // 유니콘 제출 빌드용
+        AddIngredient(IngredientName.TeaLeaf, 15);
+        AddIngredient(IngredientName.Rose, 15);
+        AddIngredient(IngredientName.SolomonsSeal, 15);
 
         Debug.Log("Cabinet 초기화");
     }
