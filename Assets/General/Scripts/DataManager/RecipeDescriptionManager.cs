@@ -60,6 +60,13 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
                 }
             }
             IsLoaded = true;
+
+            // 초기 해금 차 5가지
+            UnlockRecipeDescription(TeaName.GreenTea);
+            UnlockRecipeDescription(TeaName.BlackTea);
+            UnlockRecipeDescription(TeaName.WhiteTea);
+            UnlockRecipeDescription(TeaName.OolongTea);
+            UnlockRecipeDescription(TeaName.HotWater);
         }
         else
         {
