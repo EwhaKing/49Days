@@ -23,7 +23,7 @@ public class RecipePanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI recipeNameText;
     [SerializeField] TextMeshProUGUI recipeDescriptionText;
     [SerializeField] Button recipeButton;
-
+    private Vector2 forcedImageSize = new Vector2(345f, 316f);
     private SpriteRenderer targetRecipeRenderer;
     private List<RecipeSlot> slots = new List<RecipeSlot>();
     private const int PageSize = 9;
@@ -32,46 +32,41 @@ public class RecipePanel : MonoBehaviour
     private RecipeDescription currentSelectedRecipe;
     private Vector3 targetInitialPosition;
 
-void Start()
-{
-        // 시작할 때 레시피 버튼을 비활성화하고, 클릭 이벤트를 연결
-    Debug.Assert(recipeButton != null, "Recipe Button is not assigned in the inspector.");
-    Debug.Assert(rightPanel != null, "Recipe Panel is not assigned in the inspector.");
-
-    recipeButton.gameObject.SetActive(false);
-    recipeButton.onClick.AddListener(OnRecipeButtonClick);
-    
-    rightPanel.SetActive(false);
-
-    if (SceneManager.GetActiveScene().name != "Kitchen") return;  // 주방에서만 코르크보드 찾음
-
-    // "Recipes" 라는 이름의 GameObject를 Scene에서 찾습니다.
-    GameObject recipeObject = GameObject.Find("Recipes");
-
-    // recipeObject를 성공적으로 찾았는지 확인합니다.
-    if (recipeObject != null)
+    void Start()
     {
-        // 찾은 GameObject에서 SpriteRenderer 컴포넌트를 가져옵니다.
-        targetRecipeRenderer = recipeObject.GetComponent<SpriteRenderer>();
+        recipeButton.gameObject.SetActive(false);
+        recipeButton.onClick.AddListener(OnRecipeButtonClick);
 
-        // SpriteRenderer 컴포넌트를 성공적으로 가져왔는지 확인합니다.
-        if (targetRecipeRenderer != null)
+        if (SceneManager.GetActiveScene().name != "Kitchen") return;  // 주방에서만 코르크보드 찾음
+
+        // "Recipes" 라는 이름의 GameObject를 Scene에서 찾습니다.
+        GameObject recipeObject = GameObject.Find("Recipes");
+
+        // recipeObject를 성공적으로 찾았는지 확인합니다.
+        if (recipeObject != null)
         {
-            // 초기 위치를 저장합니다.
-            targetInitialPosition = targetRecipeRenderer.transform.position;
+            // 찾은 GameObject에서 SpriteRenderer 컴포넌트를 가져옵니다.
+            targetRecipeRenderer = recipeObject.GetComponent<SpriteRenderer>();
+
+            // SpriteRenderer 컴포넌트를 성공적으로 가져왔는지 확인합니다.
+            if (targetRecipeRenderer != null)
+            {
+                // 초기 위치를 저장합니다.
+                targetInitialPosition = targetRecipeRenderer.transform.position;
+            }
+            else
+            {
+                Debug.LogError("'Recipes' GameObject에 SpriteRenderer 컴포넌트가 없습니다.");
+            }
         }
         else
         {
-            Debug.LogError("'Recipes' GameObject에 SpriteRenderer 컴포넌트가 없습니다.");
+            Debug.LogError("Scene에서 'Recipes' GameObject를 찾을 수 없습니다.");
         }
     }
-    else
-    {
-        Debug.LogError("Scene에서 'Recipes' GameObject를 찾을 수 없습니다.");
-    }
-}
     void OnEnable()
     {
+        ClearRightPanel();
         if (RecipeDescriptionManager.Instance != null && RecipeDescriptionManager.Instance.IsLoaded)
         {
             RefreshPanel();
@@ -145,13 +140,10 @@ void Start()
 
     public void ShowRecipeDetails(RecipeDescription data)
     {
-        currentSelectedRecipe = data;
+        recipeImage.enabled = true;
+        simpleRecipeImage.enabled = true;
         // 해금 여부를 확인
         bool isUnlocked = RecipeDescriptionManager.Instance.IsRecipeUnlocked(data.recipeName);
-
-        // 오른쪽 상세 정보 패널을 활성화
-        rightPanel.SetActive(true);
-
         if (isUnlocked)
         {
             // [해금된 경우] 실제 레시피 정보를 표시합니다.
@@ -168,10 +160,8 @@ void Start()
             if (recipeNameText) recipeNameText.text = "???";
             if (recipeDescriptionText) recipeDescriptionText.text = "???";
         }
-
-        recipeImage.SetNativeSize();
-        simpleRecipeImage.SetNativeSize();
-
+        // 이미지 크기를 강제로 설정
+        recipeImage.rectTransform.sizeDelta = forcedImageSize;
         // 해금된 레시피, 주방 씬일 때만 recipeButton을 활성화
         if (isUnlocked && SceneManager.GetActiveScene().name == "Kitchen")
         {
@@ -210,5 +200,12 @@ void Start()
             Debug.LogError("타겟 렌더러가 없거나 전달된 Sprite가 null입니다.");
         }
     }
-
+    private void ClearRightPanel()
+    {
+        if (recipeImage) recipeImage.enabled = false;
+        if (simpleRecipeImage) simpleRecipeImage.enabled = false;
+        if (recipeNameText) recipeNameText.text = "";
+        if (recipeDescriptionText) recipeDescriptionText.text = "";
+        if (recipeButton) recipeButton.gameObject.SetActive(false);
+    }
 }

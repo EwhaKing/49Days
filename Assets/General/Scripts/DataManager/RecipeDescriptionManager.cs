@@ -59,15 +59,7 @@ public class RecipeDescriptionManager : SceneSingleton<RecipeDescriptionManager>
                     recipeDescriptionDict.Add(recipe.recipeName, recipe);
                 }
             }
-            
             IsLoaded = true;
-
-            // TODO: 테스트용. 삭제하세요
-            UnlockRecipeDescription(TeaName.GreenTea);
-            UnlockRecipeDescription(TeaName.BlackTea);
-            UnlockRecipeDescription(TeaName.WhiteTea);
-            UnlockRecipeDescription(TeaName.OolongTea);
-            UnlockRecipeDescription(TeaName.HotWater);
         }
         else
         {
