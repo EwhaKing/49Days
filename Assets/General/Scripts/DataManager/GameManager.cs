@@ -115,10 +115,10 @@ public class GameManager : Singleton<GameManager>
 
     public TestMode testMode;
 
-    private void Start()
-    {
-        GameFlowManager.StartGame();
-    }
+    // private void Start()
+    // {
+    //     GameFlowManager.StartGame();
+    // }
     public void testSave(){
         SaveLoadManager.Instance.SaveAllByDate(1);
     }

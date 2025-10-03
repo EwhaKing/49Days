@@ -11,8 +11,11 @@ public class MainMenu : MonoBehaviour
 
     public void OnclickNewGame()
     {
-        mainMenu.SetActive(false);
-        newSlotPanel.SetActive(true);
+        // 유니콘 빌드 제출용
+        GameFlowManager.StartGame();
+
+        // mainMenu.SetActive(false);
+        // newSlotPanel.SetActive(true);
     }
 
     public void OnclickLoadGame()
@@ -25,6 +28,8 @@ public class MainMenu : MonoBehaviour
     {
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
+#else
+    Application.Quit();
 #endif
     }
 }

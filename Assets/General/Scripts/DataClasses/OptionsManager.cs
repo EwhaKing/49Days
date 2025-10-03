@@ -1,25 +1,22 @@
 using UnityEngine;
 
-public class OptionsManager : Singleton<OptionsManager>
+public class OptionsManager : MonoBehaviour
 {
     public GameObject optionsPanel;
-    void OnEnable()
+    private UIInputHandler uiInputHandler;
+
+    void Start()
     {
-        ESCManager.OnCancelPressed += ESCInput;
+        uiInputHandler = FindObjectOfType<UIInputHandler>();
+        uiInputHandler.OnCloseUIRequested += CloseOptionsPanel;
+        optionsPanel.SetActive(false);
     }
 
-    void OnDisable()
+    void OnDestroy()
     {
-        ESCManager.OnCancelPressed -= ESCInput;
+        uiInputHandler.OnCloseUIRequested -= CloseOptionsPanel;
     }
 
-    private void ESCInput()
-    {
-        if (optionsPanel.activeSelf)
-        {
-            CloseOptionsPanel();
-        }
-    }
     public void OpenOptionsPanel()
     {
         optionsPanel.SetActive(true);

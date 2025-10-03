@@ -2,38 +2,25 @@ using UnityEditor.SearchService;
 using UnityEngine;
 public class PauseManager : MonoBehaviour
 {
-    public static PauseManager Instance { get; private set; }
     public GameObject pausedPanel;
-    public GameObject mainMenuPanel;
-    void Awake()
+    private UIInputHandler uiInputHandler;
+
+    void Start()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        uiInputHandler = FindObjectOfType<UIInputHandler>();
+        uiInputHandler.OnCloseUIRequested += PauseMenuUI;
+        pausedPanel.SetActive(false);
     }
-    void OnEnable()
+    void OnDestroy()
     {
-        ESCManager.OnCancelPressed += ESCInput;
-        {
-            pausedPanel.SetActive(false);
-        }
+        uiInputHandler.OnCloseUIRequested -= PauseMenuUI;
     }
-    void OnDisable()
+    public void PauseMenuUI()
     {
-        ESCManager.OnCancelPressed -= ESCInput;
-    }
-    private void ESCInput()
-    {
-        if (mainMenuPanel.activeSelf)
-        {
-            return; 
-        }
         pausedPanel.SetActive(!pausedPanel.activeSelf);
-        Debug.Log("일시정지");
+    }
+    public void GotoMainMenu()
+    {
+        GameFlowManager.LoadScene(GameFlowManager.START_SECENE_NAME);
     }
 }
