@@ -55,7 +55,7 @@ public class GameFlowManager
 
     public static void FinishDay()
     {
-        if (GameManager.Instance.GetDate() == 2)
+        if (GameManager.Instance.GetDate() == 1)
         {
             var panelController = UnityEngine.Object.FindObjectOfType<ReviewPanel>(true); 
             panelController.ShowReviewPanel();
