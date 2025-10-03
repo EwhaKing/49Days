@@ -107,6 +107,7 @@ public class PlayerHarvestController : MonoBehaviour
 
     private void OnA(InputAction.CallbackContext ctx)
     {
+        Debug.Log("OnA 호출");
         if (!inHarvestMode || !(target is Harvestable h)) return;
         if (h.Type != InteractableType.Tree) return;
 
@@ -115,6 +116,7 @@ public class PlayerHarvestController : MonoBehaviour
 
     private void OnD(InputAction.CallbackContext ctx)
     {
+        Debug.Log("OnD 호출");
         if (!inHarvestMode || !(target is Harvestable h)) return;
         if (h.Type != InteractableType.Tree) return;
 
