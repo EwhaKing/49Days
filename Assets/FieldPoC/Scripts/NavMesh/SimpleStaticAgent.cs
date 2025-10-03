@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class SimpleStaticAgent : MonoBehaviour
 {
-    //TODO : 시간에 따라 이동하는 걸로 바꿔야함. / 임시로 날짜에 따라 이동하고 있음.
     [System.Serializable]
     public class Schedule
     {
@@ -48,18 +47,18 @@ public class SimpleStaticAgent : MonoBehaviour
         }
     }
 
-    private void PauseMovement()
+    private void PauseMovement(SimpleStaticAgent target)
     {
-        if (agent != null)
+        if (target == this)
         {
             agent.isStopped = true;
             Debug.Log($"{name} 이동 멈춤 (대화 시작)");
         }
     }
 
-    private void ResumeMovement()
+    private void ResumeMovement(SimpleStaticAgent target)
     {
-        if (agent != null)
+        if (target == this)
         {
             agent.isStopped = false;
             Debug.Log($"{name} 이동 재개 (대화 종료)");

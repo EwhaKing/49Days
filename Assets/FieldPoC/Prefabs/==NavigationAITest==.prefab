@@ -101,10 +101,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   schedules:
-  - time: 5
+  - time: 10
     target: {fileID: 8609193674311685680}
-  - time: 25
+  - time: 20
     target: {fileID: 3698070763666783560}
+  - time: 30
+    target: {fileID: 2968655270832859225}
 --- !u!195 &5793491706094785037
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -504,6 +506,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2455904435220349426}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5595512398730503349
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2968655270832859225}
+  m_Layer: 0
+  m_Name: dst5
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2968655270832859225
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5595512398730503349}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -15.9, y: -1.2285991, z: 1.77}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2455904435220349426}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5615964843263228932
 GameObject:
   m_ObjectHideFlags: 0
@@ -537,6 +570,7 @@ Transform:
   - {fileID: 3698070763666783560}
   - {fileID: 8748468959086136242}
   - {fileID: 3702978870781858732}
+  - {fileID: 2968655270832859225}
   m_Father: {fileID: 5497721268994142227}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6952372111097006485
@@ -756,11 +790,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   schedules:
-  - time: 30
+  - time: 10
     target: {fileID: 8748468959086136242}
-  - time: 60
+  - time: 20
     target: {fileID: 3702978870781858732}
-  - time: 90
+  - time: 30
     target: {fileID: 8609193674311685680}
 --- !u!114 &5805391063495838056
 MonoBehaviour:

@@ -8,8 +8,10 @@ public class FieldYarnManager : SceneSingleton<FieldYarnManager>
     [SerializeField] DialogueRunner runner;
     [SerializeField] FieldDialoguePresenter fieldDialoguePresenter;
 
-    public event Action onDialogueStart;
-    public event Action onDialogueEnd;
+public event Action<SimpleStaticAgent> onDialogueStart;
+public event Action<SimpleStaticAgent> onDialogueEnd;
+
+
 
     void Start()
     {
@@ -19,9 +21,10 @@ public class FieldYarnManager : SceneSingleton<FieldYarnManager>
         runner.onDialogueComplete.AddListener(EndDialogue);
     }
 
-    public void RunDialogue(string nodeTitle)
+    public void RunDialogue(string nodeTitle, SimpleStaticAgent target)
     {
-        onDialogueStart?.Invoke();
+        CurrentTarget = target;
+        onDialogueStart?.Invoke(target);
         GameManager.Instance.onUIOn?.Invoke();
         runner.gameObject.SetActive(true);
         Debug.Log($"FieldYarnManager: RunDialogue {nodeTitle}");
@@ -30,9 +33,11 @@ public class FieldYarnManager : SceneSingleton<FieldYarnManager>
 
     void EndDialogue()
     {
-        onDialogueEnd?.Invoke();
+        onDialogueEnd?.Invoke(CurrentTarget);
         runner.gameObject.SetActive(false);
     }
+
+    public SimpleStaticAgent CurrentTarget { get; private set; }
 
     public void ChangeNpcSprite(string npcName, string poseName)
     {
