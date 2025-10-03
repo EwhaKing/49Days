@@ -2559,7 +2559,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1410975608109067649, guid: 2d318626992b53b46b956b3dcb7306c3, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1662130173444849437, guid: 2d318626992b53b46b956b3dcb7306c3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2605,6 +2605,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FieldDialogueSystem Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 7144587779648740082, guid: 2d318626992b53b46b956b3dcb7306c3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2617,7 +2621,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2023469663 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 1815321822496038810, guid: 2d318626992b53b46b956b3dcb7306c3, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7144587779648740082, guid: 2d318626992b53b46b956b3dcb7306c3, type: 3}
   m_PrefabInstance: {fileID: 2023469661}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2025877924
