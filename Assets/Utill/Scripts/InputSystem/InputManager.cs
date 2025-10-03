@@ -15,14 +15,18 @@ public class InputManager : Singleton<InputManager>
     private List<IInputHandler> handlers = new List<IInputHandler>();
     [SerializeField] public InputActionAsset inputActions;
 
+    private List<System.Action<InputAction.CallbackContext>> cachedHandler;
+
     void Start()
     {
+        inputActions.Enable();
         // 모든 액션에 콜백 등록
         foreach (var map in inputActions.actionMaps)
         {
             foreach (var action in map.actions)
             {
-                action.performed += ctx => OnAction(action, ctx);
+                cachedHandler.Add(ctx => OnAction(action, ctx));
+                action.performed += cachedHandler.Last();
             }
         }
         inputActions.Enable();

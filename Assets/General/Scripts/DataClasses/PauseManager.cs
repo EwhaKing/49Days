@@ -1,4 +1,3 @@
-using UnityEditor.SearchService;
 using UnityEngine;
 public class PauseManager : MonoBehaviour
 {

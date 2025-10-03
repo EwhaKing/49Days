@@ -107,6 +107,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - itemdata
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b2800eb361aa3bf469114d40ade00c09
+    m_Address: Assets/InputActions/SystemActions.inputactions
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c2676d3299a2e674cba077170342f1bb
     m_Address: Assets/ScriptableObject/ItemDescriptions/ingredient_solomon.asset
     m_ReadOnly: 0
