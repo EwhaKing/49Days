@@ -1751,6 +1751,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 537974796559203832, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2418094512128810286, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2418094512128810286, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2418094512128810286, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 95b1be97cca21494c8e1bcdeb3d5d580, type: 2}
     - target: {fileID: 2843888944195805022, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
       propertyPath: m_Name
       value: ==NavigationAITest==
@@ -1795,6 +1811,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6828302290035061118, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6828302290035061118, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6828302290035061118, guid: 9263da183718cc147ab3e68e1031381b, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 95b1be97cca21494c8e1bcdeb3d5d580, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
