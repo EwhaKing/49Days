@@ -12,18 +12,21 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
     public int Priority => 100;
 
     // [Header("관리 오브젝트 목록")]
-    [SerializeField] private TabUIController tabUIController;
-    [SerializeField] private DialogueLogManager dialogueLogManager;
+    private TabUIController tabUIController;
+    private DialogueLogManager dialogueLogManager;
     [SerializeField] private GameObject pauseMenu;
+    private OptionsManager optionsManager;
 
     // 액션 동작의 구현부 메서드를 이벤트에 연결해 HandleInput에서 Invoke
     public event System.Action OnToggleUIRequested;
     public event System.Action OnCloseUIRequested;
+    public event System.Action OnPauseGameRequested;
 
     void Start()
     {
         tabUIController = TabUIController.Instance;
         dialogueLogManager = DialogueLogManager.Instance;
+        optionsManager = FindObjectOfType<OptionsManager>(true);
         Debug.Assert(tabUIController != null, "TabUIController instance is missing in the scene.");
         Debug.Assert(dialogueLogManager != null, "DialogueLogManager instance is missing in the scene.");
     }
@@ -52,7 +55,7 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
             return true;
         }
 
-        if (pauseMenu.activeSelf && action.name != "CloseUI")
+        if ((pauseMenu.activeSelf || optionsManager.IsOpened()) && action.name != "CloseUI")
         {
             return true;
         }
@@ -71,7 +74,12 @@ public class UIInputHandler : MonoBehaviour, IInputHandler
 
         if (action.name == "CloseUI")
         {
-            OnCloseUIRequested?.Invoke();
+            if (tabUIController.IsUIOpen() || dialogueLogManager.IsLogPanelOpen() || optionsManager.IsOpened())
+            {
+                OnCloseUIRequested?.Invoke();
+                return true;
+            }
+            OnPauseGameRequested?.Invoke();
             return true;
         }
 

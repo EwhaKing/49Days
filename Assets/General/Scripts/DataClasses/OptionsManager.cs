@@ -25,4 +25,8 @@ public class OptionsManager : MonoBehaviour
     {
         optionsPanel.SetActive(false);
     }
+    public bool IsOpened()
+    {
+        return optionsPanel.activeSelf;
+    }
 }

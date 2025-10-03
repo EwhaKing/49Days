@@ -8,12 +8,12 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         uiInputHandler = FindObjectOfType<UIInputHandler>();
-        uiInputHandler.OnCloseUIRequested += PauseMenuUI;
+        uiInputHandler.OnPauseGameRequested += PauseMenuUI;
         pausedPanel.SetActive(false);
     }
     void OnDestroy()
     {
-        uiInputHandler.OnCloseUIRequested -= PauseMenuUI;
+        uiInputHandler.OnPauseGameRequested -= PauseMenuUI;
     }
     public void PauseMenuUI()
     {
