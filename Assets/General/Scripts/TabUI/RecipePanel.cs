@@ -23,7 +23,7 @@ public class RecipePanel : MonoBehaviour
     [SerializeField] TextMeshProUGUI recipeNameText;
     [SerializeField] TextMeshProUGUI recipeDescriptionText;
     [SerializeField] Button recipeButton;
-    private Vector2 forcedImageSize = new Vector2(310.5f, 284.4f);
+    private Vector2 forcedImageSize = new Vector2(276f, 252.8f);
     private SpriteRenderer targetRecipeRenderer;
     private List<RecipeSlot> slots = new List<RecipeSlot>();
     private const int PageSize = 9;

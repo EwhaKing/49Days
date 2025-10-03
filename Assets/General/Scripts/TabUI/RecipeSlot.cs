@@ -10,6 +10,7 @@ public class RecipeSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
     [SerializeField] private Image recipeImage;
     [SerializeField] private Image highlight; 
     [SerializeField] private TextMeshProUGUI recipeNameText;
+    private Vector2 forcedImageSize = new Vector2(126f, 108f);
     private RecipeDescription boundData;
     private RecipePanel panel;
     private bool isUnlocked; 
@@ -36,7 +37,11 @@ public class RecipeSlot : MonoBehaviour, IPointerClickHandler, IPointerEnterHand
         if (isUnlocked)
         {
             // 해금 시: 실제 이미지와 이름 표시
-            if (recipeImage != null) recipeImage.sprite = data.teaImage;
+            if (recipeImage != null)
+            {
+                recipeImage.rectTransform.sizeDelta = forcedImageSize;
+                recipeImage.sprite = data.teaImage;
+            }
             if (recipeNameText != null) recipeNameText.text = data.recipeName;
         }
         else

@@ -288,8 +288,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -151, y: 0}
-  m_SizeDelta: {x: 310.5, y: 284.4}
+  m_AnchoredPosition: {x: -150, y: -8}
+  m_SizeDelta: {x: 276, y: 252.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6490624680441267605
 CanvasRenderer:
@@ -442,7 +442,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -385, y: 316}
+  m_AnchoredPosition: {x: -391.5, y: 326}
   m_SizeDelta: {x: 783, y: 488}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2415825531594296671
@@ -1549,7 +1549,7 @@ MonoBehaviour:
   nextButton: {fileID: 8781091871242009438}
   prevButton: {fileID: 5971198371491789406}
   recipeGrid: {fileID: 5875751470221502463}
-  unknownRecipeSprite: {fileID: -399889401, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  unknownRecipeSprite: {fileID: -1644720427, guid: 8d9c0c64622454d439e00bb0b699344a, type: 3}
   rightPanel: {fileID: 8104170598421529070}
   recipeImage: {fileID: 9146664369859156491}
   simpleRecipeImage: {fileID: 5842589291228329772}
