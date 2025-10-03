@@ -140,7 +140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2830756491775970711, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 52.43
       objectReference: {fileID: 0}
     - target: {fileID: 2830756491775970711, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -215,24 +215,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dafa287312e742a4ab074150bc747e1a, type: 3}
---- !u!1 &73456664 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 831871661685938554, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
-  m_PrefabInstance: {fileID: 3051498619947449479}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &73456669
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 73456664}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 534e4a589bdc57f4685dd1e28ef45a99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  reviewPanel: {fileID: 73456664}
 --- !u!1001 &138655635
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2118,6 +2100,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InputHandler
       objectReference: {fileID: 0}
+    - target: {fileID: 2178059072315222215, guid: 1702514961957c44da530bb99e245a37, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2546575623297386786, guid: 1702514961957c44da530bb99e245a37, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1506.2091
@@ -2817,10 +2803,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ReviewCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 831871661685938554, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1149546657720482853, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2901,29 +2883,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8291969467106593190, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 73456669}
-    - target: {fileID: 8291969467106593190, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: GoToBeginningScene
+    - target: {fileID: 8604332479086003011, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
+      propertyPath: m_FillMethod
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8291969467106593190, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ReviewPanel, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 8291969467106593190, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+    - target: {fileID: 8604332479086003011, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 831871661685938554, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 73456669}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d3f7fad2d4b32b4583acac4054a206b, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
