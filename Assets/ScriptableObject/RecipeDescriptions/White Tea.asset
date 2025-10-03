@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: White Tea
   m_EditorClassIdentifier: 
   recipeName: "\uBC31\uCC28"
-  teaImage: {fileID: -399889401, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  teaImage: {fileID: 1350354370, guid: 90376e469b59e7f42928c7bab9440ed0, type: 3}
   simpleRecipeImage: {fileID: 768390876, guid: f85a7d43ec9daa046972c425c4730031, type: 3}
   description: "1. \uCC3B\uC78E\uC744 \uC900\uBE44\uD55C\uB2E4.<br>2. \uCC3B\uC78E\uC744
     2\uB2E8\uACC4(15%) \uC0B0\uD654\uC2DC\uD0A8\uB2E4.<br>3. \uCC3B\uC78E\uC744 \uB2E4\uBCD1\uC5D0

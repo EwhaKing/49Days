@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Solomon's Seal Tea
   m_EditorClassIdentifier: 
   recipeName: "\uB465\uAD74\uB808\uCC28"
-  teaImage: {fileID: -399889401, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
+  teaImage: {fileID: -1202112461, guid: 16d0c5eb12bc9ad4eae565aa4bfb2cc9, type: 3}
   simpleRecipeImage: {fileID: 1481713296, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
   description: "\uB465\uAD74\uB808 \uB465\uAD74\uB808~"
   teaName: 6
