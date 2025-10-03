@@ -263,7 +263,10 @@ public class PlayerHarvestController : MonoBehaviour
                     newH.ShowEnterIcon();  // 하이라이트 시점에만 E 표시
 
                 if (closest is NPC newNpc)
-                    newNpc.ShowEnterIcon(); // E 아이콘
+                {
+                    if (!FieldYarnManager.Instance.IsDialogueRunning) //대화 중엔 표시 안 함
+                        newNpc.ShowEnterIcon();
+                }
             }
 
             target = closest;

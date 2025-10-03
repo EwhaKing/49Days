@@ -11,7 +11,8 @@ public class FieldYarnManager : SceneSingleton<FieldYarnManager>
 public event Action<SimpleStaticAgent> onDialogueStart;
 public event Action<SimpleStaticAgent> onDialogueEnd;
 
-
+//대화의 시작/끝 알리는 플래그 변수
+    public bool IsDialogueRunning { get; private set; } = false;
 
     void Start()
     {
@@ -24,6 +25,7 @@ public event Action<SimpleStaticAgent> onDialogueEnd;
     public void RunDialogue(string nodeTitle, SimpleStaticAgent target)
     {
         CurrentTarget = target;
+        IsDialogueRunning = true;  //대화 시작 플래그
         onDialogueStart?.Invoke(target);
         GameManager.Instance.onUIOn?.Invoke();
         runner.gameObject.SetActive(true);
@@ -35,6 +37,7 @@ public event Action<SimpleStaticAgent> onDialogueEnd;
     {
         onDialogueEnd?.Invoke(CurrentTarget);
         runner.gameObject.SetActive(false);
+        IsDialogueRunning = false; //대화 종료 플래그
     }
 
     public SimpleStaticAgent CurrentTarget { get; private set; }

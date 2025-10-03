@@ -13,6 +13,30 @@ public class NPC : Interactable
     [Header("아이콘 오프셋")]
     [SerializeField] private float verticalOffset = 2f;
 
+//아이콘 띄우기 > fieldyarnmanager 구독
+    void OnEnable()
+    {
+        if (FieldYarnManager.Instance != null)
+            FieldYarnManager.Instance.onDialogueEnd += OnDialogueEnd;
+    }
+
+    void OnDisable()
+    {
+        if (FieldYarnManager.Instance != null)
+            FieldYarnManager.Instance.onDialogueEnd -= OnDialogueEnd;
+    }
+
+    private void OnDialogueEnd(SimpleStaticAgent agent)
+    {
+        // 이 NPC 자신일 때만 아이콘 다시 띄움
+        var selfAgent = GetComponent<SimpleStaticAgent>();
+        if (selfAgent == agent)
+        {
+            ShowEnterIcon();
+        }
+    }
+
+
     void Awake()
     {
         base.Awake(); // Interactable 기본 초기화
@@ -59,6 +83,10 @@ public class NPC : Interactable
     public override void Interact(PlayerHarvestController player)
     {
         Debug.Log("NPC와 상호작용");
+
+        // 아이콘 닫기
+        ClearIcon();
+
         // 대화 시스템 호출 등
         SimpleStaticAgent agent = GetComponent<SimpleStaticAgent>();
         FieldYarnManager.Instance.RunDialogue($"NPC_{name}", agent);
