@@ -15,15 +15,6 @@ public class InputManager : Singleton<InputManager>
     private List<IInputHandler> handlers = new List<IInputHandler>();
     [SerializeField] public InputActionAsset inputActions;
 
-    public systemActions systemActions;
-
-    private List<System.Action<InputAction.CallbackContext>> cachedHandler = new List<System.Action<InputAction.CallbackContext>>();
-
-    void Awake()
-    {
-        systemActions = new systemActions();
-        systemActions.Enable();
-    }
 
     void Start()
     {
@@ -33,8 +24,7 @@ public class InputManager : Singleton<InputManager>
         {
             foreach (var action in map.actions)
             {
-                cachedHandler.Add(ctx => OnAction(action, ctx));
-                action.performed += cachedHandler.Last();
+                action.performed += ctx => OnAction(action, ctx);
             }
         }
         inputActions.Enable();

@@ -10,7 +10,7 @@ public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     public void Awake()
     {
         if(Init())
-            Destroy(gameObject);
+            if(_instance != this) Destroy(gameObject);
     }
 
     static bool Init()
