@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Rose Tea
   m_EditorClassIdentifier: 
   recipeName: "\uC7A5\uBBF8\uCC28"
-  teaImage: {fileID: 21300000, guid: ee4b46d49c784f64ba50c35f26ad31ed, type: 3}
+  teaImage: {fileID: 1021080523, guid: ee4b46d49c784f64ba50c35f26ad31ed, type: 3}
   simpleRecipeImage: {fileID: 1481713296, guid: 85a1e33c9dbcd394c98f57d4bfa21c54, type: 3}
   description: "\uC7A5\uBBF8\uC57C! \uC0AC\uB791\uD574!"
   teaName: 5
