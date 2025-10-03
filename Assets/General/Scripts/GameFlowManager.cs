@@ -55,6 +55,13 @@ public class GameFlowManager
 
     public static void FinishDay()
     {
+        if (GameManager.Instance.GetDate() == 2)
+        {
+            var panelController = UnityEngine.Object.FindObjectOfType<ReviewPanel>(true); 
+            panelController.ShowReviewPanel();
+            Debug.Log("테스트 분량 종료.");
+            return;
+        }
         GameManager.Instance.NextDay();
         LoadScene(FIELD_SCENE_NAME);
     }
